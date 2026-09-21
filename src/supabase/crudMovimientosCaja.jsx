@@ -1,0 +1,46 @@
+import { supabase } from "./supabase.config";
+const tabla = "movimientos_caja";
+
+export async function InsertarMovCaja(p) {
+  const { error } = await supabase.from(tabla).insert(p);
+  if (error) {
+    throw Error(error.message);
+  }
+}
+export async function MostrarEfectivoSinVentasMovCierreCaja(p) {
+  const { data, error } = await supabase.rpc(
+    "sumarefectivosinventasmovcierrecaja",
+    p,
+  );
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function MostrarVentasMetodoPagoMovCaja(p) {
+  const { data, error } = await supabase.rpc(
+    "sumarventasmetodopagomovcierrecaja",
+    p,
+  );
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function MostrarMovimientosCajaLive(p) {
+  const { data, error } = await supabase.rpc("mostrarmovimientoscajalive", p);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function MostrarMovimientosCajaXEmpresYFecha(p) {
+  const { data, error } = await supabase.rpc(
+    "mostrar_movimientos_caja_por_fecha",
+    p,
+  );
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}

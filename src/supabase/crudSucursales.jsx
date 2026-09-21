@@ -1,0 +1,48 @@
+import { supabase } from "../index";
+const tabla = "sucursales";
+
+export async function MostrarSucursales(p) {
+  const { data, error } = await supabase
+    .from(tabla)
+    .select()
+    .eq("id_empresa", p.id_empresa)
+    .order("id", { ascending: true });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function MostrarCajasPorSucursal(p) {
+  const { data, error } = await supabase
+    .from(tabla)
+    .select(`*, caja(*)`)
+    .eq("id_empresa", p.id_empresa)
+    .order("id", { ascending: true });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function InsertarSucursal(p) {
+  const { error, data } = await supabase
+    .from(tabla)
+    .insert(p)
+    .select()
+    .single();
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function EditarSucursal(p) {
+  const { error } = await supabase.from(tabla).update(p).eq("id", p.id);
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+export async function EliminarSucursal(p) {
+  const { error } = await supabase.from(tabla).delete(p).eq("id", p.id);
+  if (error) {
+    throw new Error(error.message);
+  }
+}

@@ -1,0 +1,42 @@
+import { supabase } from "./supabase.config";
+const tabla = "clientes_proveedores";
+
+export async function InsertarClientesProveedores(p) {
+  const { error, data } = await supabase.rpc("insertarclientesproveedores", p);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function MostrarClientesProveedores(p) {
+  const { data, error } = await supabase
+    .from(tabla)
+    .select()
+    .eq("id_empresa", p.id_empresa)
+    .eq("tipo", p.tipo);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+export async function BuscarClientesProveedores(p) {
+  const { data } = await supabase
+    .from(tabla)
+    .select()
+    .eq("id_empresa", p.id_empresa)
+    .eq("tipo", p.tipo)
+    .ilike("nombres", "%" + p.buscador + "%");
+  return data;
+}
+export async function EliminarClientesProveedores(p) {
+  const { error } = await supabase.from(tabla).delete().eq("id", p.id);
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+export async function EditarClientesProveedores(p) {
+  const { error } = await supabase.rpc("editarclientesproveedores", p);
+  if (error) {
+    throw new Error(error.message);
+  }
+}
