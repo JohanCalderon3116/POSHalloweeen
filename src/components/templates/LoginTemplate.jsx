@@ -1,5 +1,4 @@
 import halloween from "../../assets/Frankenstein.json";
-import halloween2 from "../../assets/halloween pumpkin.json";
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import {
   Btn1,
@@ -28,6 +27,15 @@ import {
   useIniciarSesionConEmailMutationStack,
   useMostrarContraseñaQueryStack,
 } from "../../tanstack/LoginStack";
+
+const PALETA = {
+  dark: {
+    superadmin: "#9a3412", // naranja quemado
+    empleado: "#7f1d1d", // rojo sangre
+    invitado: "#14532d", // verde oscuro
+  },
+};
+
 export const LoginTemplate = () => {
   const [stateModos, setStateModos] = useState(true);
   const [stateModo, setStateModo] = useState(null);
@@ -54,6 +62,7 @@ export const LoginTemplate = () => {
   const manejadorEmailSesionTester = (data) => {
     mutate({ email: "tester1@gmail.com", password: "123456" });
   };
+  const colores = PALETA.dark;
   return (
     <Container>
       <link
@@ -92,8 +101,8 @@ export const LoginTemplate = () => {
             <CardModos
               title={"Super admin"}
               subtitle={"Crea y gestiona tu empresa."}
-              bgcolor={"#5b21b6"}
-              img={"https://i.ibb.co/v6c45GD9/admin.png"}
+              bgcolor={colores.superadmin}
+              img={"https://i.ibb.co/Wp7FPzZQ/jack-o-linterna.png"}
               funcion={() => {
                 setStateModo("superadmin");
                 setStateModos(!stateModos);
@@ -102,8 +111,8 @@ export const LoginTemplate = () => {
             <CardModos
               title={"Empleado"}
               subtitle={"Vende y haz crecer tu negocio."}
-              bgcolor={"#c2410c"}
-              img={"https://i.ibb.co/xqyKYrX6/trabajando.png"}
+              bgcolor={colores.empleado}
+              img={"https://i.ibb.co/XkttsY0J/fantasma.png"}
               funcion={() => {
                 setStateModo("empleado");
                 setStateModos(!stateModos);
@@ -112,8 +121,8 @@ export const LoginTemplate = () => {
             <CardModos
               title={"Invitado"}
               subtitle={"Obten una prueba de 30 días gratis."}
-              bgcolor={"#166534"}
-              img={"https://i.ibb.co/SDphqvqL/damas-de-honor.png"}
+              bgcolor={colores.invitado}
+              img={"https://i.ibb.co/DDqXMfYP/ataud.png"}
               funcion={() => {
                 setStateModo("invitado");
                 setStateModos(!stateModos);
@@ -197,7 +206,7 @@ export const LoginTemplate = () => {
               border="2px"
               funcion={manejadorEmailSesionTester}
               titulo="Invitado"
-              bgcolor="#7c3aed"
+              bgcolor="#9a3412"
             />
           </PanelModo>
         )}
@@ -230,11 +239,10 @@ const girar = keyframes`
 const titilar = keyframes`
   0%, 100% {
     opacity: 1;
-    text-shadow: 0 0 8px rgba(255, 122, 24, 0.9), 0 0 24px rgba(255, 122, 24, 0.55),
-      0 0 48px rgba(139, 92, 246, 0.5);
+    text-shadow: 0 0 4px rgba(255, 122, 24, 0.45), 0 0 12px rgba(255, 122, 24, 0.2);
   }
   46% { opacity: 0.9; }
-  50% { opacity: 0.5; text-shadow: 0 0 4px rgba(255, 122, 24, 0.5); }
+  50% { opacity: 0.5; text-shadow: none; }
   54% { opacity: 1; }
   78% { opacity: 0.85; }
 `;
@@ -266,12 +274,12 @@ const Container = styled.div`
   flex-direction: column;
   padding: 20px;
   overflow-x: hidden;
-  color: #f4ecd8;
+  color: #d8d0bc;
   background: radial-gradient(
     ellipse at 50% -10%,
-    #341659 0%,
-    #170b29 42%,
-    #07030d 100%
+    #140803 0%,
+    #060302 45%,
+    #000000 100%
   );
 
   .card {
@@ -286,16 +294,16 @@ const Container = styled.div`
     border-radius: 24px;
     background: linear-gradient(
       160deg,
-      rgba(38, 18, 62, 0.82),
-      rgba(14, 7, 24, 0.9)
+      rgba(12, 6, 3, 0.92),
+      rgba(2, 1, 1, 0.96)
     );
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid rgba(139, 92, 246, 0.28);
+    border: 1px solid rgba(255, 122, 24, 0.15);
     box-shadow:
-      0 30px 80px -20px rgba(0, 0, 0, 0.85),
-      0 0 60px rgba(255, 122, 24, 0.16),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      0 30px 80px -20px rgba(0, 0, 0, 1),
+      0 0 30px rgba(255, 122, 24, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
     animation: ${surgir} 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 
     /* borde de luz giratorio */
@@ -306,11 +314,12 @@ const Container = styled.div`
       padding: 1.5px;
       border-radius: 25.5px;
       pointer-events: none;
+      opacity: 0.55;
       background: conic-gradient(
         from var(--ang),
         transparent 0 55%,
         #ff7a18 72%,
-        #8b5cf6 88%,
+        #c2570f 88%,
         transparent 100%
       );
       -webkit-mask:
@@ -344,7 +353,7 @@ const CardWeb = styled.div`
   position: absolute;
   top: 0;
   width: 96px;
-  color: rgba(244, 236, 216, 0.3);
+  color: rgba(244, 236, 216, 0.15);
   overflow: hidden;
   pointer-events: none;
   border-top-left-radius: 24px;
@@ -374,7 +383,7 @@ const ContentLogo = styled.section`
   }
   img {
     width: 46px;
-    filter: drop-shadow(0 0 10px rgba(255, 122, 24, 0.65));
+    filter: drop-shadow(0 0 4px rgba(255, 122, 24, 0.25));
     animation: ${respirar} 3.6s ease-in-out infinite;
   }
   .sombrero {
@@ -389,7 +398,7 @@ const ContentLogo = styled.section`
     font-family: "Creepster", cursive;
     font-size: 24px;
     letter-spacing: 2px;
-    background: linear-gradient(90deg, #ff8a2b, #c084fc);
+    background: linear-gradient(90deg, #ff8a2b, #ffb347);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -403,7 +412,7 @@ const TituloWrap = styled.div`
     font-weight: 400;
     line-height: 1.1;
     letter-spacing: 3px;
-    color: #ff8a2b;
+    color: #e07a26;
     animation: ${titilar} 4.5s infinite;
   }
 `;
@@ -422,14 +431,16 @@ const LottieHalo = styled.div`
     border-radius: 50%;
     background: radial-gradient(
       circle,
-      rgba(255, 122, 24, 0.38),
-      rgba(139, 92, 246, 0.15) 45%,
+      rgba(255, 122, 24, 0.1),
+      rgba(255, 122, 24, 0.04) 45%,
       transparent 70%
     );
     animation: ${latido} 3.2s ease-in-out infinite;
   }
   > * {
     position: relative;
+    /* el saco morado del Lottie vive dentro del JSON: se corrige con filtro */
+    filter: saturate(0.8) hue-rotate(-40deg) brightness(0.85);
   }
 `;
 
@@ -455,7 +466,7 @@ const ContentModos = styled.div`
   }
   > *:hover {
     transform: translateY(-4px) scale(1.02);
-    filter: drop-shadow(0 10px 20px rgba(255, 122, 24, 0.35));
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.7));
   }
 `;
 
@@ -469,14 +480,14 @@ const PanelModo = styled.div`
     font-family: "Creepster", cursive;
     font-size: 28px;
     letter-spacing: 2px;
-    color: #ff8a2b;
-    text-shadow: 0 0 14px rgba(255, 122, 24, 0.6);
+    color: #e07a26;
+    text-shadow: 0 0 6px rgba(255, 122, 24, 0.2);
   }
 
   .form__field {
-    color: #f4ecd8 !important;
-    background: rgba(255, 255, 255, 0.06) !important;
-    border: 1px solid rgba(139, 92, 246, 0.5) !important;
+    color: #d8d0bc !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 122, 24, 0.25) !important;
     border-radius: 12px;
     transition:
       border-color 0.2s ease,
@@ -487,10 +498,8 @@ const PanelModo = styled.div`
     }
     &:focus {
       outline: none;
-      border-color: #ff7a18 !important;
-      box-shadow:
-        0 0 0 3px rgba(255, 122, 24, 0.25),
-        0 0 22px rgba(255, 122, 24, 0.3);
+      border-color: #c2570f !important;
+      box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.12);
     }
   }
 
@@ -500,7 +509,7 @@ const PanelModo = styled.div`
       filter 0.15s ease;
     &:hover {
       transform: translateY(-2px);
-      filter: drop-shadow(0 6px 14px rgba(255, 122, 24, 0.4));
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
     }
     &:active {
       transform: scale(0.98);
@@ -511,7 +520,7 @@ const PanelModo = styled.div`
 const FooterWrap = styled.div`
   position: relative;
   z-index: 2;
-  color: #cbb8ff;
+  color: #b8a58c;
   opacity: 0.8;
   a {
     color: #ff8a2b;

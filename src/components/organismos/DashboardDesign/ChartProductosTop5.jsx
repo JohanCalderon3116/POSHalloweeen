@@ -8,21 +8,19 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import {
-  ConvertirCapitalize,
-} from "../../../utils/Conversiones";
-import { useThemeStore } from "../../../store/ThemeStore";
+import { ConvertirCapitalize } from "../../../utils/Conversiones";
 import { BarLoader } from "react-spinners";
 import { Lottieanimation } from "../../atomos/Lottieanimation";
 import animacionvacio from "../../../assets/vacioanimation.json.json";
 import { useMostrarTop5MasVendidosXCantidadQueryStack } from "../../../tanstack/VentasStack";
+
 export const ChartProductosTop5 = () => {
-  const { themeStyle } = useThemeStore();
-  const { data, isLoading } =
-    useMostrarTop5MasVendidosXCantidadQueryStack();
+  const { data, isLoading } = useMostrarTop5MasVendidosXCantidadQueryStack();
+
   if (isLoading) {
-    return <BarLoader color="#6d6d6d"></BarLoader>;
+    return <BarLoader color="#ff7a18" />;
   }
+
   return (
     <Container>
       <Header>
@@ -37,29 +35,33 @@ export const ChartProductosTop5 = () => {
                 <NameContent>
                   <Name>{ConvertirCapitalize(item.nombre_producto)}</Name>
                 </NameContent>
-                <Stats> {item.total_vendido} </Stats>
-                <Percentage> {item.porcentaje} %</Percentage>
+                <Stats>{item.total_vendido}</Stats>
+                <Percentage>{item.porcentaje} %</Percentage>
               </Row>
             );
           })}
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={260}>
             <BarChart
               width={500}
               height={400}
               data={data}
               margin={{
-                top: 10,
+                top: 15,
                 right: 0,
                 left: 0,
                 bottom: 0,
               }}
             >
-              <CartesianGrid strokeOpacity={0.2} vertical={false} />
+              <CartesianGrid
+                strokeOpacity={0.15}
+                stroke="#ff7a18"
+                vertical={false}
+              />
               <XAxis
                 dataKey="nombre_producto"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: "#9CA3AF" }}
+                tick={{ fontSize: 11, fill: "#9CA3AF" }}
               />
               <YAxis hide />
               <Tooltip content={<CustomTooltip />} />
@@ -67,20 +69,16 @@ export const ChartProductosTop5 = () => {
                 strokeWidth={1.5}
                 type="monotone"
                 dataKey="total_vendido"
-                fill={themeStyle.text}
+                fill="#ff7a18"
                 activeDot={{ r: 6 }}
-                fillOpacity={1}
-                radius={[10, 10, 0, 0]}
+                fillOpacity={0.9}
+                radius={[8, 8, 0, 0]}
               />
             </BarChart>
           </ResponsiveContainer>
         </>
       ) : (
-        <Lottieanimation
-          animacion={animacionvacio}
-          alto="200"
-          ancho="200"
-        ></Lottieanimation>
+        <Lottieanimation animacion={animacionvacio} alto="200" ancho="200" />
       )}
     </Container>
   );
@@ -96,21 +94,26 @@ const CustomTooltip = ({ active, payload, label }) => {
     );
   }
 };
+
 const Stats = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.text};
 `;
+
 const Value = styled.span`
   font-size: 14px;
   font-weight: bold;
-  color: ${({ theme }) => theme.colortitlecard};
+  color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
 `;
+
 const Percentage = styled.span`
   font-size: 12px;
   font-weight: bold;
-  color: #828282;
+  color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
 `;
 
 const Row = styled.div`
@@ -118,46 +121,58 @@ const Row = styled.div`
   align-items: center;
   gap: 15px;
   margin-bottom: 8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.bgAlpha || "rgba(255, 122, 24, 0.05)"};
 `;
+
 const NameContent = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 2;
 `;
+
 const Name = styled.span`
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: ${({ theme }) => theme.text};
 `;
 
 const Subtitle = styled.p`
-  font-size: 18px;
-  color: #6b7280;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colorSubtitle || "#6b7280"};
   margin: 5px 0 0;
 `;
+
 const Container = styled.div`
   padding: 20px;
 `;
+
 const TooltipContainer = styled.div`
-  background: ${({ theme }) => theme.bg};
-  padding: 10px;
-  border-radius: 8px;
+  background: ${({ theme }) => theme.body || theme.bg};
+  padding: 10px 14px;
+  border-radius: 10px;
   font-size: 12px;
-  box-shadow: ${({ theme }) => theme.boxshadow};
+  border: 1px solid
+    ${({ theme }) => theme.halloweenBorder || "rgba(255, 122, 24, 0.3)"};
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
 `;
+
 const Date = styled.div`
-  font-size: 14px;
+  font-size: 13px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Header = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   text-align: center;
 `;
 
 const Title = styled.h3`
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 800;
   color: ${({ theme }) => theme.text};
   margin: 0;
 `;

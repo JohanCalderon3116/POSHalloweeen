@@ -1,250 +1,407 @@
-import styled, { useTheme } from "styled-components";
+import styled, { keyframes, useTheme } from "styled-components";
 import {
   LinksArray,
   SecondarylinksArray,
   ToggleTema,
   useAuthStore,
+  v,
 } from "../../../../index";
-import { v } from "../../../../styles/variables";
+
 import { NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
+
 import Swal from "sweetalert2";
 
 export function Sidebar({ state, setState }) {
   const { cerrarSesion } = useAuthStore();
   const theme = useTheme();
-  function cerrarseion() {
+
+  function cerrarSesionConfirmacion() {
     Swal.fire({
       title: "¿Estás seguro(a)?",
-      text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión",
+      text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, cerrar sesión",
+      confirmButtonColor: theme.halloweenPrimary,
+      cancelButtonColor: theme.halloweenDanger,
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
       background: theme.bg2,
       color: theme.text,
+      customClass: {
+        popup: "softcreate-swal-popup",
+        confirmButton: "softcreate-swal-confirm",
+        cancelButton: "softcreate-swal-cancel",
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         cerrarSesion();
       }
     });
   }
+
   return (
     <Main $isopen={state.toString()}>
-      <span className="Sidebarbutton" onClick={() => setState(!state)}>
-        {<v.iconoflechaderecha />}
-      </span>
-      <Container $isopen={state.toString()} className={state ? "active" : ""}>
-        <div className="Logocontent">
-          <div className="imgcontent">
-            <img src={v.logo} />
-          </div>
-          <h2>SoftCreate POS</h2>
-        </div>
-        {LinksArray.map(({ icon, label, to }) => (
-          <div
-            className={state ? "LinkContainer active" : "LinkContainer"}
-            key={label}
-          >
-            <NavLink
-              to={to}
-              className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
-            >
-              <section className={state ? "content open" : "content"}>
-                <Icon className="Linkicon" icon={icon} />
-                <span className={state ? "label_ver" : "label_oculto"}>
-                  {label}
-                </span>
-              </section>
-            </NavLink>
-          </div>
-        ))}
-        <Divider />
-        {SecondarylinksArray.map(({ icon, label, to, color }) => (
-          <div
-            className={state ? "LinkContainer active" : "LinkContainer"}
-            key={label}
-          >
-            <NavLink
-              to={to}
-              className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
-            >
-              <section className={state ? "content open" : "content"}>
-                <Icon color={color} className="Linkicon" icon={icon} />
-                <span className={state ? "label_ver" : "label_oculto"}>
-                  {label}
-                </span>
-              </section>
-            </NavLink>
-          </div>
-        ))}
-        <div className={state ? "LinkContainer active" : "LinkContainer"}>
-          <div className="Links">
-            <section
-              onClick={cerrarseion}
-              className={state ? "content open" : "content"}
-            >
-              <Icon
-                color="#CE82FF"
-                className="Linkicon"
-                icon="streamline-pixel:interface-essential-signout-logout"
-              />
-              <span className={state ? "label_ver" : "label_oculto"}>
-                Cerrar sesión
-              </span>
-            </section>
-          </div>
-        </div>
+      <SidebarButton
+        $isopen={state.toString()}
+        onClick={() => setState(!state)}
+      >
+        <Icon icon="solar:alt-arrow-right-bold" />
+      </SidebarButton>
 
-        <ToggleTema />
-      </Container>
+      <SidebarContainer
+        $isopen={state.toString()}
+        className={state ? "active" : ""}
+      >
+        {/* =====================================================
+            LOGO
+        ===================================================== */}
+        <LogoContent $isopen={state.toString()}>
+          <LogoWrapper $isopen={state.toString()}>
+            <img src={v.logo} alt="SoftCreate POS" />
+          </LogoWrapper>
+
+          <LogoTitle $isopen={state.toString()}>SoftCreate POS</LogoTitle>
+        </LogoContent>
+
+        {/* =====================================================
+            LINKS PRINCIPALES
+        ===================================================== */}
+        {LinksArray.map(({ icon, label, to }) => (
+          <LinkContainer key={label}>
+            <StyledNavLink
+              to={to}
+              className={({ isActive }) => `Links ${isActive ? "active" : ""}`}             >               <LinkContent $isopen={state.toString()}>                 <StyledIcon className="Linkicon" icon={icon} />                 <Label $isopen={state.toString()}>{label}</Label>               </LinkContent>             </StyledNavLink>           </LinkContainer>         ))}          <Divider />          {/* =====================================================             LINKS SECUNDARIOS         ===================================================== */}         {SecondarylinksArray.map(({ icon, label, to, color }) => (           <LinkContainer key={label}>             <StyledNavLink               to={to}               className={({ isActive }) => `Links ${isActive ? "active" : ""}`}
+            >
+              <LinkContent $isopen={state.toString()}>
+                <StyledIcon
+                  className="Linkicon"
+                  icon={icon}
+                  $customcolor={color}
+                />
+                <Label $isopen={state.toString()}>{label}</Label>
+              </LinkContent>
+            </StyledNavLink>
+          </LinkContainer>
+        ))}
+
+        {/* =====================================================
+            CERRAR SESIÓN
+        ===================================================== */}
+        <LinkContainer>
+          <LogoutButton className="Links" onClick={cerrarSesionConfirmacion}>
+            <LinkContent $isopen={state.toString()}>
+              <StyledIcon
+                className="Linkicon"
+                icon="solar:logout-2-bold"
+                $customcolor="#CE82FF"
+              />
+              <Label $isopen={state.toString()}>Cerrar sesión</Label>
+            </LinkContent>
+          </LogoutButton>
+        </LinkContainer>
+
+        {/* =====================================================
+            TOGGLE
+        ===================================================== */}
+        <ThemeContainer $isopen={state.toString()}>
+          <ToggleTema />
+        </ThemeContainer>
+      </SidebarContainer>
     </Main>
   );
 }
-const Container = styled.div`
-  background: ${({ theme }) => theme.bgtotal};
-  color: ${(props) => props.theme.text};
-  position: fixed;
-  padding-top: 20px;
-  z-index: 2;
-  height: 100%;
-  width: 88px;
-  transition: 0.1s ease-in-out;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-right: 2px solid ${({ theme }) => theme.color2};
 
-  &::-webkit-scrollbar {
-    width: 2px;
-    border-radius: 10px;
+/* =========================================================
+   ANIMACIÓN LOGO
+========================================================= */
+const logoFloat = keyframes`
+  0%, 100% {
+    transform: translateY(0);
   }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${(props) => props.theme.colorScroll};
-    border-radius: 10px;
+  50% {
+    transform: translateY(-5px);
   }
+`;
+
+/* =========================================================
+   LOGO
+========================================================= */
+const LogoContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: ${({ $isopen }) =>$isopen === "true" ? "flex-start" : "center"};
+  width: 100%;
+  min-height: 72px;
+  padding: ${({ $isopen }) =>$isopen === "true" ? "0 16px 25px" : "0 0 25px"};
+  overflow: hidden;
+  transition: justify-content 0.3s ease, padding 0.3s ease;
+`;
+
+const LogoWrapper = styled.div`
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: ${({ $isopen }) =>$isopen === "true" ? "scale(0.9)" : "scale(1.1)"};
+
+  img {
+    display: block;
+    width: 100%;
+    animation: ${logoFloat} 2.4s ease-in-out infinite;
+  }
+`;
+
+const LogoTitle = styled.h2`
+  margin: 0 0 0 12px;
+  white-space: nowrap;
+  color: ${({ theme }) => theme.halloweenPrimary};
+  font-size: 18px;
+  font-weight: 800;
+  display: ${({ $isopen }) => ($isopen === "true" ? "block" : "none")};
+  opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
+  transform: ${({ $isopen }) =>$isopen === "true" ? "translateX(0)" : "translateX(-10px)"};
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+`;
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+const SidebarContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 88px;
+  height: 100%;
+  padding-top: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: ${({ theme }) => theme.text};
+  background: ${({ theme }) => theme.bgtotal};
+  border-right: 1px solid ${({ theme }) => theme.color2};
+  transition:
+    width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
 
   &.active {
     width: 260px;
   }
-  .Logocontent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 60px;
-    .imgcontent {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50px;
-      cursor: pointer;
-      transition: 0.3s ease;
-      transform: ${({ $isopen }) =>
-          $isopen === "true" ? `scale(0.7)` : `scale(1.5)`}
-        rotate(${({ theme }) => theme.logorotate});
-      img {
-        width: 100%;
-        animation: flotar 1.7s ease-in-out infinite alternate;
-      }
-    }
-    h2 {
-      color: #6d05e5;
-      display: ${({ $isopen }) => ($isopen === "true" ? `block` : `none`)};
-    }
-  }
-  .LinkContainer {
-    margin: 9px 0;
-    margin-right: 10px;
-    margin-left: 8px;
-    transition: all 0.3s ease-in-out;
-    position: relative;
-    font-weight: 700;
+
+  &::-webkit-scrollbar {
+    width: 4px;
   }
 
-  .Links {
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    width: 100%;
-    color: ${(props) => props.theme.text};
-    height: 60px;
-    position: relative;
-    .content {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      align-items: center;
-      cursor: pointer;
-      .Linkicon {
-        display: flex;
-        font-size: 33px;
-        filter: grayscale(100%);
-        svg {
-          font-size: 25px;
-        }
-      }
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colorScroll};
+    border-radius: 10px;
+  }
 
-      .label_ver {
-        transition: 0.3s ease-in-out;
-        opacity: 1;
-        display: initial;
-        cursor: pointer;
-      }
-      .label_oculto {
-        opacity: 0;
-        display: none;
-        cursor: pointer;
-      }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-      &.open {
-        justify-content: start;
-        gap: 20px;
-        padding: 20px;
-      }
-    }
-
-    &:hover {
-      background: ${(props) => props.theme.bgAlpha};
-    }
-
-    &.active {
-      background: ${(props) => props.theme.bg6};
-      border: 2px solid ${(props) => props.theme.bg5};
-      color: ${(props) => props.theme.color1};
-      font-weight: 600;
-      .Linkicon {
-        filter: grayscale(0%);
-      }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    * {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
     }
   }
 `;
-const Main = styled.div`
-  .Sidebarbutton {
-    position: fixed;
-    top: 70px;
-    left: 68px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: ${(props) => props.theme.bgtgderecha};
-    box-shadow:
-      0 0 4px ${(props) => props.theme.bg3},
-      0 0 7px ${(props) => props.theme.bg};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    z-index: 3;
-    transform: ${({ $isopen }) =>
-      $isopen === "true" ? `translateX(173px) rotate(3.142rad)` : `initial`};
-    color: ${(props) => props.theme.text};
-  }
+
+/* =========================================================
+   LINK CONTAINER
+========================================================= */
+const LinkContainer = styled.div`
+  margin: 7px 8px;
+  position: relative;
 `;
-const Divider = styled.div`
-  height: 1px;
+
+const StyledNavLink = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  background: ${(props) => props.theme.bg4};
-  margin: ${() => v.lgSpacing} 0;
+  height: 52px;
+  text-decoration: none;
+  color: ${({ theme }) => theme.text};
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.bgAlpha};
+    transform: translateX(2px);
+  }
+
+  &.active {
+    background: ${({ theme }) => theme.halloweenSoft};
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    color: ${({ theme }) => theme.halloweenPrimary};
+    box-shadow: inset 3px 0 0 ${({ theme }) => theme.halloweenPrimary};
+  }
+`;
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 52px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease,
+    border-color 0.25s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.bgAlpha};
+    transform: translateX(2px);
+  }
+`;
+
+/* =========================================================
+   CONTENT
+========================================================= */
+const LinkContent = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: ${({ $isopen }) =>$isopen === "true" ? "flex-start" : "center"};
+  width: 100%;
+  height: 100%;
+  gap: ${({ $isopen }) => ($isopen === "true" ? "16px" : "0")};
+  padding: ${({ $isopen }) => ($isopen === "true" ? "0 16px" : "0")};
+  overflow: hidden;
+  transition:
+    justify-content 0.3s ease,
+    gap 0.3s ease,
+    padding 0.3s ease;
+`;
+
+/* =========================================================
+   ICON
+========================================================= */
+const StyledIcon = styled(Icon)`
+  flex-shrink: 0;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: ${({ $customcolor, theme }) =>$customcolor || theme.text};
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease,
+    filter 0.25s ease;
+
+  .Links:hover &,
+  button:hover & {
+    transform: scale(1.08);
+  }
+`;
+
+/* =========================================================
+   LABEL
+========================================================= */
+const Label = styled.span`
+  white-space: nowrap;
+  overflow: hidden;
+  display: ${({ $isopen }) => ($isopen === "true" ? "inline-block" : "none")};
+  opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
+  transform: ${({ $isopen }) =>$isopen === "true" ? "translateX(0)" : "translateX(-8px)"};
+  transition:
+    opacity 0.2s ease 0.08s,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+`;
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+const Divider = styled.div`
+  width: calc(100% - 24px);
+  height: 1px;
+  margin: 18px auto;
+  background: ${({ theme }) => theme.color2};
+  opacity: 0.8;
+`;
+
+/* =========================================================
+   THEME
+========================================================= */
+const ThemeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px 8px 30px;
+`;
+
+/* =========================================================
+   MAIN
+========================================================= */
+const Main = styled.div``;
+
+/* =========================================================
+   BOTÓN SIDEBAR
+========================================================= */
+const SidebarButton = styled.button`
+  position: fixed;
+  top: 67px;
+  left: 71px;
+  z-index: 30;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid ${({ theme }) => theme.color2};
+  background: ${({ theme }) => theme.bgtgderecha};
+  color: ${({ theme }) => theme.text};
+  box-shadow: 0 5px 18px ${({ theme }) => theme.bgAlpha};
+  cursor: pointer;
+  transform: ${({ $isopen }) =>
+    $isopen === "true" ? "translateX(172px) rotate(180deg)" : "translateX(0)"};
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    box-shadow: 0 8px 25px ${({ theme }) => theme.halloweenGlow};
+    color: ${({ theme }) => theme.halloweenPrimary};
+  }
+
+  &:active {
+    transform: ${({ $isopen }) =>
+      $isopen === "true"
+        ? "translateX(172px) rotate(180deg) scale(.92)"
+        : "scale(.92)"};
+  }
 `;

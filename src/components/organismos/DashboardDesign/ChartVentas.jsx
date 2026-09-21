@@ -13,26 +13,24 @@ import {
   FormatearNumeroDinero,
   FormatearNumeroDineroSinIsoYCurrency,
 } from "../../../utils/Conversiones";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useThemeStore } from "../../../store/ThemeStore";
+import { Icon } from "@iconify/react";
 import {
   useDetalleVentasStore,
   useMostrarVentasAgrupadasXFechaQueryStack,
 } from "../../..";
 import { BarLoader } from "react-spinners";
+
 export const ChartVentas = () => {
-  const {
-    ventasAgrupadasFecha,
-    totalVentas,
-    porcentajeCambioTotal,
-  } = useDetalleVentasStore();
-  const { themeStyle } = useThemeStore();
+  const { ventasAgrupadasFecha, totalVentas, porcentajeCambioTotal } =
+    useDetalleVentasStore();
   const isPositive = porcentajeCambioTotal > 0;
   const isNeutral = porcentajeCambioTotal === 0;
   const { isLoading } = useMostrarVentasAgrupadasXFechaQueryStack();
+
   if (isLoading) {
-    return <BarLoader></BarLoader>;
+    return <BarLoader color="#ff7a18" />;
   }
+
   return (
     <Container>
       <Header>
@@ -52,7 +50,7 @@ export const ChartVentas = () => {
                     ? "iconamoon:arrow-up-2-fill"
                     : "iconamoon:arrow-down-2-fill"
               }
-            ></Icon>
+            />
             {Math.abs(porcentajeCambioTotal).toFixed(1)}% al periodo anterior
           </Percentage>
         </Change>
@@ -71,11 +69,15 @@ export const ChartVentas = () => {
         >
           <defs>
             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={themeStyle.text} stopOpacity={0.2} />
-              <stop offset="95%" stopColor={themeStyle.text} stopOpacity={0} />
+              <stop offset="5%" stopColor="#ff7a18" stopOpacity={0.4} />
+              <stop offset="95%" stopColor="#ff7a18" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeOpacity={0.2} vertical={false} />
+          <CartesianGrid
+            strokeOpacity={0.15}
+            stroke="#ff7a18"
+            vertical={false}
+          />
           <XAxis
             dataKey="fecha"
             axisLine={false}
@@ -85,12 +87,17 @@ export const ChartVentas = () => {
           <YAxis hide />
           <Tooltip content={<CustomTooltip />} />
           <Area
-            strokeWidth={1.5}
+            strokeWidth={2}
             type="monotone"
             dataKey="total_dia"
-            stroke={themeStyle.text}
+            stroke="#ff7a18"
             fill="url(#colorValue)"
-            activeDot={{ r: 6 }}
+            activeDot={{
+              r: 6,
+              fill: "#ff7a18",
+              stroke: "#ffffff",
+              strokeWidth: 2,
+            }}
             fillOpacity={1}
           />
         </AreaChart>
@@ -104,7 +111,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <TooltipContainer>
-        <Date>{label} </Date>
+        <Date>{label}</Date>
         <Value>
           {FormatearNumeroDinero(
             payload[0].value,
@@ -116,23 +123,29 @@ const CustomTooltip = ({ active, payload, label }) => {
     );
   }
 };
+
 const Container = styled.div``;
 
 const TooltipContainer = styled.div`
-  background: ${({ theme }) => theme.bg};
-  padding: 10px;
-  border-radius: 8px;
+  background: ${({ theme }) => theme.body || theme.bg};
+  padding: 10px 14px;
+  border-radius: 10px;
   font-size: 12px;
-  box-shadow: ${({ theme }) => theme.boxshadow};
+  border: 1px solid
+    ${({ theme }) => theme.halloweenBorder || "rgba(255, 122, 24, 0.3)"};
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
 `;
 
 const Date = styled.div`
-  font-size: 14px;
+  font-size: 13px;
+  color: ${({ theme }) => theme.colorSubtitle || "#9CA3AF"};
 `;
 
 const Value = styled.div`
   font-size: 16px;
   font-weight: bold;
+  color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
 `;
 
 const Header = styled.div`
@@ -140,6 +153,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-left: 20px;
+  padding-top: 15px;
 `;
 
 const Title = styled.h3`
@@ -149,13 +163,13 @@ const Title = styled.h3`
 `;
 
 const MainInfo = styled.div`
-  margin: 20px 0;
+  margin: 15px 0 20px;
   padding-left: 20px;
 `;
 
 const Revenue = styled.div`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 28px;
+  font-weight: 900;
   color: ${({ theme }) => theme.text};
 `;
 
@@ -171,6 +185,7 @@ const Percentage = styled.span`
   text-align: center;
   align-items: center;
   font-size: 14px;
+  font-weight: 600;
   color: ${(props) =>
-    props.isNeutral ? "#6b7280" : props.isPositive ? "#12ca3a" : "#d32f5b"};
+    props.isNeutral ? "#6b7280" : props.isPositive ? "#10b981" : "#ef4444"};
 `;

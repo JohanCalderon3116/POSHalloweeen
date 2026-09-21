@@ -9,20 +9,23 @@ import {
 } from "../../../index";
 import { FormatearNumeroDinero } from "../../../utils/Conversiones";
 import { useValidarPermisosOpertivos } from "../../../hooks/UseValidarPermisosOpertivos";
+
 export const TotalPos = () => {
   const { setStateMetodosPago } = useVentasStore();
   const { total } = useDetalleVentasStore();
   const { dataempresa } = useEmpresaStore();
   const { validarPermiso } = useValidarPermisosOpertivos();
+
   const validarPermisosCobrar = () => {
     const hasPermission = validarPermiso("Cobrar venta");
     if (!hasPermission) return;
     setStateMetodosPago();
   };
+
   return (
     <Container>
       <section className="imagen">
-        <img src="https://i.ibb.co/tw1xqhHx/Cobrar-Roshi.png" alt="" />
+        <img src="https://i.ibb.co/pvpwN1jf/dulce-de-halloween.png" alt="" />
       </section>
       <section className="contentTotal">
         <section className="contentTituloTotal">
@@ -33,15 +36,14 @@ export const TotalPos = () => {
             color="#3300E3"
             icono={<Icon icon="emojione:money-bag" width="20" height="20" />}
             titulo="Cobrar"
-          ></Btn1>
+          />
         </section>
         <span>
-          {" "}
           {FormatearNumeroDinero(
             total,
             dataempresa?.currency,
             dataempresa?.iso,
-          )}{" "}
+          )}
         </span>
       </section>
     </Container>
@@ -55,22 +57,25 @@ const Container = styled.div`
   border-radius: 15px;
   font-weight: 700;
   font-size: 38px;
-  background-color: #3300E3;
+  background-color: ${({ theme }) => theme.bg2 || theme.bgtotal};
   padding: 10px;
-  color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
   position: relative;
   overflow: hidden;
+
   &::after {
     content: "";
     display: block;
     width: 100px;
     height: 100px;
-    background-color: #2f09b9;
+    background-color: ${({ theme }) =>
+      theme.halloweenSoft2 || theme.color2 || theme.bgtotal};
     position: absolute;
     border-radius: 50%;
     top: -20px;
     left: -15px;
   }
+
   &::before {
     content: "";
     display: block;
@@ -82,30 +87,35 @@ const Container = styled.div`
     top: 5px;
     right: 5px;
   }
+
   .imagen {
     z-index: 1;
     width: 55px;
-   
     position: relative;
+
     @media ${Device.desktop} {
       bottom: initial;
     }
+
     img {
       width: 100%;
     }
   }
+
   .contentTotal {
-    z-index:10;
+    z-index: 10;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
+
     .contentTituloTotal {
       display: flex;
       align-items: center;
       position: relative;
       margin-top: 30px;
-      justify-content:end;
-      align-content:end;
+      justify-content: end;
+      align-content: end;
+
       @media ${Device.desktop} {
         display: none;
       }

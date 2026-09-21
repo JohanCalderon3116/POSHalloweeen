@@ -1,29 +1,48 @@
-import styled, { useTheme } from "styled-components";
-import { useState } from "react";
+import styled, { keyframes, useTheme } from "styled-components";
+
 import {
   LinksArray,
   SecondarylinksArray,
   ToggleTema,
   useAuthStore,
 } from "../../../../index";
+
 import { v } from "../../../../styles/variables";
+
 import { NavLink } from "react-router-dom";
+
 import { Icon } from "@iconify/react";
+
 import Swal from "sweetalert2";
+import React from "react";
+
 export const MenuMovil = ({ setState }) => {
-  const [state, setstate] = useState(true);
+  const [state, setstate] = React.useState(true);
+
   const { cerrarSesion } = useAuthStore();
+
   const theme = useTheme();
-  function cerrarseion() {
+
+  function cerrarSesionConfirmacion() {
     Swal.fire({
       title: "¿Estás seguro(a)?",
-      text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión",
+
+      text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión.",
+
       icon: "warning",
+
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, cerrar sesión",
+
+      confirmButtonColor: theme.halloweenPrimary,
+
+      cancelButtonColor: theme.halloweenDanger,
+
+      confirmButtonText: "Sí, cerrar sesión",
+
+      cancelButtonText: "Cancelar",
+
       background: theme.bg2,
+
       color: theme.text,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -31,222 +50,560 @@ export const MenuMovil = ({ setState }) => {
       }
     });
   }
-  return (
-    <Container>
-      <Main $isopen={state.toString()}>
-        <Container $isopen={state.toString()} className={state ? "active" : ""}>
-          <div className="Logocontent">
-            <div className="imgcontent">
-              <img src={v.logo} />
-            </div>
-            <h2>SoftCreate POS</h2>
-          </div>
-          {LinksArray.map(({ icon, label, to }) => (
-            <div
-              onClick={setState}
-              className={state ? "LinkContainer active" : "LinkContainer"}
-              key={label}
-            >
-              <NavLink
-                to={to}
-                className={({ isActive }) =>
-                  `Links${isActive ? ` active` : ``}`
-                }
-              >
-                <section className={state ? "content open" : "content"}>
-                  <Icon className="Linkicon" icon={icon} />
-                  <span className={state ? "label_ver" : "label_oculto"}>
-                    {label}
-                  </span>
-                </section>
-              </NavLink>
-            </div>
-          ))}
-          <Divider />
-          {SecondarylinksArray.map(({ icon, label, to, color }) => (
-            <div
-              className={state ? "LinkContainer active" : "LinkContainer"}
-              key={label}
-              onClick={setState}
-            >
-              <NavLink
-                to={to}
-                className={({ isActive }) =>
-                  `Links${isActive ? ` active` : ``}`
-                }
-              >
-                <section className={state ? "content open" : "content"}>
-                  <Icon color={color} className="Linkicon" icon={icon} />
-                  <span className={state ? "label_ver" : "label_oculto"}>
-                    {label}
-                  </span>
-                </section>
-              </NavLink>
-            </div>
-          ))}
-          <div className={state ? "LinkContainer active" : "LinkContainer"}>
-            <div
-              className="Links"
-              onClick={() => SetstateDesplegableLinks(!stateDesplegableLinks)}
-            >
-              <section className={state ? "content open" : "content"}>
-                <Icon
-                  color="#CE82FF"
-                  className="Linkicon"
-                  icon="heroicons:ellipsis-horizontal-circle-solid"
-                />
-                <span
-                  onClick={cerrarseion}
-                  className={state ? "label_ver" : "label_oculto"}
-                >
-                  Salir
-                </span>
-              </section>
-            </div>
-          </div>
 
+  function cerrarMenu() {
+    setstate(false);
+
+    if (typeof setState === "function") {
+      setState();
+    }
+  }
+
+  return (
+    <Overlay $isopen={state.toString()}>
+      {/* =====================================================
+          FONDO
+      ===================================================== */}
+
+      <Backdrop $isopen={state.toString()} onClick={cerrarMenu} />
+
+      {/* =====================================================
+          MENU
+      ===================================================== */}
+
+      <Drawer $isopen={state.toString()}>
+        {/* =====================================================
+            HEADER
+        ===================================================== */}
+
+        <DrawerHeader>
+          <LogoContent>
+            <LogoWrapper>
+              <img src={v.logo} alt="SoftCreate POS" />
+            </LogoWrapper>
+
+            <LogoTitle>SoftCreate POS</LogoTitle>
+          </LogoContent>
+
+          <CloseButton onClick={cerrarMenu} aria-label="Cerrar menú">
+            <Icon icon="solar:close-circle-bold" />
+          </CloseButton>
+        </DrawerHeader>
+
+        {/* =====================================================
+            LINKS
+        ===================================================== */}
+
+        <LinksWrapper>
+          {LinksArray.map(({ icon, label, to }) => (
+            <MobileLinkContainer key={label}>
+              <StyledNavLink
+                to={to}
+                onClick={cerrarMenu}
+                className={({ isActive }) =>
+                  `Links ${isActive ? "active" : ""}`
+                }
+              >
+                <MobileLinkContent>
+                  <MobileIcon className="Linkicon" icon={icon} />
+
+                  <span>{label}</span>
+                </MobileLinkContent>
+              </StyledNavLink>
+            </MobileLinkContainer>
+          ))}
+
+          <Divider />
+
+          {/* =====================================================
+              SECUNDARIOS
+          ===================================================== */}
+
+          {SecondarylinksArray.map(({ icon, label, to, color }) => (
+            <MobileLinkContainer key={label}>
+              <StyledNavLink
+                to={to}
+                onClick={cerrarMenu}
+                className={({ isActive }) =>
+                  `Links ${isActive ? "active" : ""}`
+                }
+              >
+                <MobileLinkContent>
+                  <MobileIcon
+                    className="Linkicon"
+                    icon={icon}
+                    $customcolor={color}
+                  />
+
+                  <span>{label}</span>
+                </MobileLinkContent>
+              </StyledNavLink>
+            </MobileLinkContainer>
+          ))}
+
+          {/* =====================================================
+              CERRAR SESIÓN
+          ===================================================== */}
+
+          <MobileLinkContainer>
+            <LogoutButton onClick={cerrarSesionConfirmacion}>
+              <MobileLinkContent>
+                <MobileIcon icon="solar:logout-2-bold" $customcolor="#CE82FF" />
+
+                <span>Cerrar sesión</span>
+              </MobileLinkContent>
+            </LogoutButton>
+          </MobileLinkContainer>
+        </LinksWrapper>
+
+        {/* =====================================================
+            TEMA
+        ===================================================== */}
+
+        <ThemeContainer>
           <ToggleTema />
-        </Container>
-      </Main>
-    </Container>
+        </ThemeContainer>
+      </Drawer>
+    </Overlay>
   );
 };
-const Container = styled.div`
-  background: ${({ theme }) => theme.bgtotal};
-  color: ${(props) => props.theme.text};
+
+/* =========================================================
+   ANIMACIÓN ITEMS
+========================================================= */
+
+const itemIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+const Overlay = styled.div`
   position: fixed;
 
+  inset: 0;
+
   z-index: 100;
+
+  pointer-events: ${({ $isopen }) => ($isopen === "true" ? "auto" : "none")};
+
+  visibility: ${({ $isopen }) => ($isopen === "true" ? "visible" : "hidden")};
+
+  transition: visibility 0s linear
+    ${({ $isopen }) => ($isopen === "true" ? "0s" : ".4s")};
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    & * {
+      animation-duration: 0.01ms !important;
+
+      transition-duration: 0.01ms !important;
+    }
+  }
+`;
+
+/* =========================================================
+   BACKDROP
+========================================================= */
+
+const Backdrop = styled.div`
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.38);
+
+  backdrop-filter: blur(2px);
+
+  opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
+
+  transition: opacity 0.3s ease;
+`;
+
+/* =========================================================
+   DRAWER
+========================================================= */
+
+const Drawer = styled.aside`
+  position: relative;
+
+  z-index: 2;
+
+  width: min(88%, 360px);
+
   height: 100%;
-  width: 100%;
-  transition: 0.1s ease-in-out;
+
   overflow-y: auto;
-  overflow-x: hidden;
-  border-right: 2px solid ${({ theme }) => theme.color2};
+
+  padding: 20px 16px 30px;
+
+  background: ${({ theme }) => theme.bgtotal};
+
+  color: ${({ theme }) => theme.text};
+
+  border-right: 1px solid ${({ theme }) => theme.color2};
+
+  box-shadow: 20px 0 60px rgba(0, 0, 0, 0.15);
+
+  transform: ${({ $isopen }) =>
+    $isopen === "true" ? "translateX(0)" : "translateX(-105%)"};
+
+  transition:
+    transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
 
   &::-webkit-scrollbar {
-    width: 6px;
-    border-radius: 10px;
+    width: 4px;
   }
+
   &::-webkit-scrollbar-thumb {
-    background-color: ${(props) => props.theme.colorScroll};
+    background: ${({ theme }) => theme.colorScroll};
+
     border-radius: 10px;
   }
 
-  .Logocontent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .imgcontent {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 30px;
-      cursor: pointer;
-      transition: 0.3s ease;
-      transform: ${({ $isopen }) =>
-          $isopen === "true" ? `scale(0.7)` : `scale(1.5)`}
-        rotate(${({ theme }) => theme.logorotate});
-      img {
-        width: 100%;
-        animation: flotar 1.7s ease-in-out infinite alternate;
-      }
-    }
-    h2 {
-      color: #f88533;
-      display: ${({ $isopen }) => ($isopen === "true" ? `block` : `none`)};
-    }
+  &::-webkit-scrollbar-track {
+    background: transparent;
   }
-  .LinkContainer {
-    margin: 9px 0;
-    margin-right: 10px;
-    margin-left: 8px;
-    transition: all 0.3s ease-in-out;
-    position: relative;
-    font-weight: 700;
-  }
+`;
 
-  .Links {
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+/* =========================================================
+   HEADER
+========================================================= */
+
+const DrawerHeader = styled.div`
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 30px;
+`;
+
+const LogoContent = styled.div`
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 0;
+`;
+
+const LogoWrapper = styled.div`
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  img {
     width: 100%;
-    color: ${(props) => props.theme.text};
-    height: 60px;
-    position: relative;
-    .content {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      align-items: center;
-      .Linkicon {
-        display: flex;
-        font-size: 33px;
 
-        svg {
-          font-size: 25px;
-        }
-      }
-
-      .label_ver {
-        transition: 0.3s ease-in-out;
-        opacity: 1;
-        display: initial;
-        cursor: pointer;
-      }
-      .label_oculto {
-        opacity: 0;
-        display: none;
-        cursor: pointer;
-      }
-
-      &.open {
-        justify-content: start;
-        gap: 20px;
-        padding: 20px;
-      }
-    }
-
-    &:hover {
-      background: ${(props) => props.theme.bgAlpha};
-    }
-
-    &.active {
-      background: ${(props) => props.theme.bg6};
-      border: 2px solid ${(props) => props.theme.bg5};
-      color: ${(props) => props.theme.color1};
-      font-weight: 600;
-    }
+    animation: mobileLogoFloat 2.5s ease-in-out infinite;
   }
 `;
-const Main = styled.div`
-  .Sidebarbutton {
-    position: fixed;
-    top: 70px;
-    left: 68px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: ${(props) => props.theme.bgtgderecha};
-    box-shadow:
-      0 0 4px ${(props) => props.theme.bg3},
-      0 0 7px ${(props) => props.theme.bg};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    z-index: 3;
-    transform: ${({ $isopen }) =>
-      $isopen === "true" ? `translateX(173px) rotate(3.142rad)` : `initial`};
-    color: ${(props) => props.theme.text};
+
+const LogoTitle = styled.h2`
+  margin: 0;
+
+  white-space: nowrap;
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  color: ${({ theme }) => theme.halloweenPrimary};
+`;
+
+const CloseButton = styled.button`
+  width: 38px;
+
+  height: 38px;
+
+  padding: 0;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  border: 1px solid ${({ theme }) => theme.color2};
+
+  background: ${({ theme }) => theme.bgAlpha};
+
+  color: ${({ theme }) => theme.text};
+
+  font-size: 24px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.halloweenPrimary};
+
+    border-color: ${({ theme }) => theme.halloweenBorder};
+
+    transform: rotate(90deg);
+  }
+
+  &:active {
+    transform: scale(0.92);
   }
 `;
-const Divider = styled.div`
-  height: 1px;
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+const LinksWrapper = styled.div`
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+`;
+
+const MobileLinkContainer = styled.div`
+  animation: ${itemIn} 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  /*
+    Cada elemento entra ligeramente
+    después del anterior.
+  */
+
+  &:nth-child(1) {
+    animation-delay: 0.04s;
+  }
+
+  &:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.12s;
+  }
+
+  &:nth-child(4) {
+    animation-delay: 0.16s;
+  }
+
+  &:nth-child(5) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(6) {
+    animation-delay: 0.24s;
+  }
+
+  &:nth-child(7) {
+    animation-delay: 0.28s;
+  }
+`;
+
+/* =========================================================
+   NAV LINK
+========================================================= */
+
+const StyledNavLink = styled(NavLink)`
+  display: block;
+
   width: 100%;
-  background: ${(props) => props.theme.bg4};
-  margin: ${() => v.lgSpacing} 0;
+
+  min-height: 56px;
+
+  border-radius: 14px;
+
+  text-decoration: none;
+
+  color: ${({ theme }) => theme.text};
+
+  border: 1px solid transparent;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.bgAlpha};
+
+    transform: translateX(3px);
+  }
+
+  &.active {
+    background: ${({ theme }) => theme.halloweenSoft};
+
+    color: ${({ theme }) => theme.halloweenPrimary};
+
+    border-color: ${({ theme }) => theme.halloweenBorder};
+
+    box-shadow: inset 3px 0 0 ${({ theme }) => theme.halloweenPrimary};
+  }
+`;
+
+/* =========================================================
+   CONTENT LINK
+========================================================= */
+
+const MobileLinkContent = styled.section`
+  display: flex;
+
+  align-items: center;
+
+  gap: 17px;
+
+  width: 100%;
+
+  min-height: 56px;
+
+  padding: 0 16px;
+
+  font-weight: 600;
+
+  .Linkicon {
+    font-size: 28px;
+  }
+
+  span {
+    white-space: nowrap;
+  }
+`;
+
+/* =========================================================
+   ICON
+========================================================= */
+
+const MobileIcon = styled(Icon)`
+  flex-shrink: 0;
+
+  width: 28px;
+
+  min-width: 28px;
+
+  height: 28px;
+
+  color: ${({ $customcolor, theme }) => $customcolor || "currentColor"};
+
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+
+  .Links:hover & {
+    transform: scale(1.08);
+  }
+`;
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+const LogoutButton = styled.button`
+  display: block;
+
+  width: 100%;
+
+  min-height: 56px;
+
+  padding: 0;
+
+  border: 1px solid transparent;
+
+  border-radius: 14px;
+
+  background: transparent;
+
+  color: ${({ theme }) => theme.text};
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease,
+    border-color 0.25s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.bgAlpha};
+
+    transform: translateX(3px);
+
+    border-color: ${({ theme }) => theme.color2};
+  }
+`;
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+const Divider = styled.div`
+  width: 100%;
+
+  height: 1px;
+
+  margin: 18px 0;
+
+  background: ${({ theme }) => theme.color2};
+`;
+
+/* =========================================================
+   TEMA
+========================================================= */
+
+const ThemeContainer = styled.div`
+  display: flex;
+
+  justify-content: center;
+
+  padding: 28px 0 10px;
+`;
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+const mobileLogoFloat = keyframes`
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      translateY(-5px);
+  }
 `;

@@ -65,14 +65,14 @@ export const Sombrero = (props) => (
       cy="33"
       rx="18"
       ry="5"
-      fill="#1a0b2e"
-      stroke="#8b5cf6"
+      fill="#120a05"
+      stroke="#c2570f"
       strokeWidth="1"
     />
     <path
       d="M11 31 Q18 22 21 7 Q23 3 26 9 Q27 21 29 31 Z"
-      fill="#2a1247"
-      stroke="#8b5cf6"
+      fill="#1c0f07"
+      stroke="#c2570f"
       strokeWidth="1"
       strokeLinejoin="round"
     />
@@ -92,9 +92,9 @@ export const Sombrero = (props) => (
 
 export const AranaSvg = () => (
   <svg viewBox="0 0 60 60" width="100%" aria-hidden="true">
-    <line x1="30" y1="0" x2="30" y2="17" stroke="#cfc3e8" strokeWidth="0.8" />
+    <line x1="30" y1="0" x2="30" y2="17" stroke="#8a7f70" strokeWidth="0.8" />
     <g
-      stroke="#8b5cf6"
+      stroke="#c2570f"
       strokeWidth="1.6"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -114,16 +114,16 @@ export const AranaSvg = () => (
       cy="38"
       rx="10"
       ry="12"
-      fill="#1a0b2e"
-      stroke="#8b5cf6"
+      fill="#120a05"
+      stroke="#c2570f"
       strokeWidth="1.2"
     />
     <circle
       cx="30"
       cy="24"
       r="6.5"
-      fill="#1a0b2e"
-      stroke="#8b5cf6"
+      fill="#120a05"
+      stroke="#c2570f"
       strokeWidth="1.2"
     />
     <path d="M30 32 L34 38 L30 44 L26 38 Z" fill="#ff7a18" />
@@ -136,8 +136,8 @@ export const MurcielagoSvg = (props) => (
   <svg viewBox="0 0 64 32" width="100%" aria-hidden="true" {...props}>
     <path
       d="M32 10 C30 6 28 4 26 3 C26 7 25 9 23 10 C18 6 10 5 2 8 C6 10 7 13 6 17 C10 14 14 14 17 17 C19 14 22 14 24 16 C26 18 29 19 32 24 C35 19 38 18 40 16 C42 14 45 14 47 17 C50 14 54 14 58 17 C57 13 58 10 62 8 C54 5 46 6 41 10 C39 9 38 7 38 3 C36 4 34 6 32 10 Z"
-      fill="#12081f"
-      stroke="#8b5cf6"
+      fill="#0c0604"
+      stroke="#c2570f"
       strokeWidth="0.8"
       strokeLinejoin="round"
     />
@@ -175,9 +175,9 @@ export const FantasmaSvg = () => (
       d="M8 62 V28 C8 12 18 4 30 4 C42 4 52 12 52 28 V62 L45 55 L38 62 L30 55 L22 62 L15 55 Z"
       fill="rgba(255,255,255,0.88)"
     />
-    <ellipse cx="23" cy="28" rx="3" ry="5" fill="#1a0b2e" />
-    <ellipse cx="37" cy="28" rx="3" ry="5" fill="#1a0b2e" />
-    <ellipse cx="30" cy="42" rx="4" ry="5" fill="#1a0b2e" />
+    <ellipse cx="23" cy="28" rx="3" ry="5" fill="#120a05" />
+    <ellipse cx="37" cy="28" rx="3" ry="5" fill="#120a05" />
+    <ellipse cx="30" cy="42" rx="4" ry="5" fill="#120a05" />
   </svg>
 );
 
@@ -262,8 +262,8 @@ const llama = keyframes`
   75% { opacity: 0.68; }
 `;
 const brillo = keyframes`
-  0%, 100% { filter: drop-shadow(0 0 14px rgba(255, 150, 30, 0.6)); }
-  50% { filter: drop-shadow(0 0 28px rgba(255, 170, 40, 0.95)); }
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(255, 150, 30, 0.25)) brightness(0.6); }
+  50% { filter: drop-shadow(0 0 12px rgba(255, 170, 40, 0.4)) brightness(0.7); }
 `;
 
 /* ---------- estilos ---------- */
@@ -289,6 +289,16 @@ const capa = css`
 const Fondo = styled.div`
   ${capa}
   z-index: 0;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(0, 0, 0, 0.75) 100%
+    );
+  }
 `;
 
 const Frente = styled.div`
@@ -303,6 +313,7 @@ const Estrellas = styled.i`
   width: 2px;
   height: 2px;
   border-radius: 50%;
+  opacity: 0.6;
   box-shadow: ${({ $sombras }) => $sombras};
   animation: ${parpadeo} 3.4s ease-in-out infinite
     ${({ $retraso }) => $retraso || "0s"};
@@ -315,26 +326,27 @@ const Luna = styled.div`
   width: clamp(90px, 11vw, 170px);
   aspect-ratio: 1;
   border-radius: 50%;
+  opacity: 0.55;
   background:
     radial-gradient(
       circle at 62% 28%,
-      rgba(120, 60, 0, 0.18) 0 9%,
+      rgba(60, 30, 0, 0.3) 0 9%,
       transparent 10%
     ),
     radial-gradient(
       circle at 34% 58%,
-      rgba(120, 60, 0, 0.16) 0 12%,
+      rgba(60, 30, 0, 0.28) 0 12%,
       transparent 13%
     ),
     radial-gradient(
       circle at 70% 70%,
-      rgba(120, 60, 0, 0.14) 0 7%,
+      rgba(60, 30, 0, 0.25) 0 7%,
       transparent 8%
     ),
-    radial-gradient(circle at 35% 30%, #fff1c9, #ffc866 55%, #ff9a2e);
+    radial-gradient(circle at 35% 30%, #c9b27a, #a06a20 55%, #6b3a0a);
   box-shadow:
-    0 0 50px 12px rgba(255, 170, 60, 0.35),
-    0 0 160px 60px rgba(255, 120, 30, 0.16);
+    0 0 20px 4px rgba(255, 150, 50, 0.12),
+    0 0 60px 20px rgba(255, 110, 30, 0.05);
   animation: ${flotar} 9s ease-in-out infinite;
 `;
 
@@ -342,7 +354,7 @@ const Rincon = styled.div`
   position: absolute;
   top: 0;
   width: clamp(140px, 22vw, 300px);
-  color: rgba(230, 220, 255, 0.32);
+  color: rgba(255, 190, 130, 0.12);
   svg {
     display: block;
     width: 100%;
@@ -361,20 +373,21 @@ const Niebla = styled.div`
   left: 0;
   bottom: 0;
   width: 200%;
+  opacity: 0.4;
   background:
     radial-gradient(
       ellipse at 20% 100%,
-      rgba(170, 140, 255, 0.28),
+      rgba(255, 110, 30, 0.1),
       transparent 60%
     ),
     radial-gradient(
       ellipse at 70% 100%,
-      rgba(255, 140, 60, 0.16),
+      rgba(255, 140, 60, 0.05),
       transparent 55%
     ),
     radial-gradient(
       ellipse at 45% 100%,
-      rgba(255, 255, 255, 0.12),
+      rgba(200, 200, 200, 0.04),
       transparent 60%
     );
   filter: blur(14px);
@@ -389,7 +402,7 @@ const Cementerio = styled(CementerioSvg)`
   width: 100%;
   height: 24vh;
   display: block;
-  filter: drop-shadow(0 -2px 12px rgba(139, 92, 246, 0.35));
+  filter: drop-shadow(0 -2px 8px rgba(255, 110, 30, 0.08));
 `;
 
 const Farol = styled.div`
@@ -417,12 +430,12 @@ const Farol = styled.div`
 const Fantasma = styled.div`
   position: absolute;
   width: clamp(46px, 5vw, 76px);
-  opacity: 0.35;
+  opacity: 0.12;
   animation: ${flotar} 7s ease-in-out infinite;
   svg {
     display: block;
     width: 100%;
-    filter: drop-shadow(0 0 12px rgba(190, 170, 255, 0.7));
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
   }
   @media (max-width: 640px) {
     display: none;
@@ -439,7 +452,7 @@ const Murcielago = styled.div`
 
 const Aleteo = styled.div`
   animation: ${aletear} 0.32s ease-in-out infinite;
-  filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.7));
+  filter: drop-shadow(0 0 2px rgba(255, 122, 24, 0.25));
 `;
 
 const Colgante = styled.div`
@@ -464,11 +477,11 @@ const Pendulo = styled.div`
 const Hilo = styled.div`
   width: 1px;
   margin: 0 auto;
-  background: linear-gradient(#cfc3e8, rgba(207, 195, 232, 0.55));
+  background: linear-gradient(#8a7f70, rgba(138, 127, 112, 0.55));
 `;
 
 const Cuerpo = styled.div`
-  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+  filter: drop-shadow(0 0 3px rgba(255, 122, 24, 0.2));
 `;
 
 /* ---------- escena ---------- */

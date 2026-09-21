@@ -23,7 +23,7 @@ export const Ganacias = () => {
   };
 
   if (isLoading) {
-    return <BarLoader></BarLoader>;
+    return <BarLoader color="#ff7a18" />;
   }
 
   return (
@@ -31,15 +31,19 @@ export const Ganacias = () => {
       <Tarjeta $oculta={!visible}>
         <CardTotales
           title="Ganancias"
-          icon="mdi:dollar"
+          icon="solar:wallet-money-bold"
           value={FormatearNumeroDineroSinIsoYCurrency(totalGanancias)}
           porcentage={porcentajeCambioGanancias}
-        ></CardTotales>
+        />
       </Tarjeta>
 
       {!visible && (
         <Candado type="button" onClick={desbloquear}>
-          <Icon icon="mdi:lock-outline" width="28" height="28" />
+          <Icon
+            icon="solar:lock-keyhole-minimalistic-unlocked-bold"
+            width="28"
+            height="28"
+          />
           <span>Ver ganancias</span>
         </Candado>
       )}
@@ -68,7 +72,19 @@ const Candado = styled.button`
   gap: 6px;
   border: none;
   background: transparent;
-  color: ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.halloweenPrimary || theme.text};
   font-weight: 700;
   cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+
+  svg {
+    filter: drop-shadow(0 0 6px rgba(255, 122, 24, 0.4));
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    color: ${({ theme }) => theme.text};
+  }
 `;
