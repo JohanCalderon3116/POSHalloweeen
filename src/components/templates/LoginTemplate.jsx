@@ -12,7 +12,6 @@ import {
 } from "../../index";
 import { v } from "../../styles/variables";
 import { Device } from "../../styles/breakpoints";
-import cart from "../../assets/add to cart.json";
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "sonner";
 import { useState } from "react";
@@ -27,12 +26,11 @@ import {
   useIniciarSesionConEmailMutationStack,
   useMostrarContraseñaQueryStack,
 } from "../../tanstack/LoginStack";
-
 const PALETA = {
   dark: {
-    superadmin: "#9a3412", // naranja quemado
-    empleado: "#7f1d1d", // rojo sangre
-    invitado: "#14532d", // verde oscuro
+    superadmin: "#9a3412", 
+    empleado: "#7f1d1d", 
+    invitado: "#14532d", 
   },
 };
 
@@ -218,7 +216,6 @@ export const LoginTemplate = () => {
   );
 };
 
-/* ---------- animaciones ---------- */
 const Globales = createGlobalStyle`
   @property --ang {
     syntax: "<angle>";
@@ -262,7 +259,6 @@ const respirar = keyframes`
   50% { transform: scale(1.07); }
 `;
 
-/* ---------- estilos ---------- */
 const Container = styled.div`
   position: relative;
   z-index: 1;
@@ -281,7 +277,6 @@ const Container = styled.div`
     #060302 45%,
     #000000 100%
   );
-
   .card {
     position: relative;
     z-index: 2;
@@ -305,8 +300,6 @@ const Container = styled.div`
       0 0 30px rgba(255, 122, 24, 0.04),
       inset 0 1px 0 rgba(255, 255, 255, 0.03);
     animation: ${surgir} 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-
-    /* borde de luz giratorio */
     &::before {
       content: "";
       position: absolute;
@@ -329,7 +322,6 @@ const Container = styled.div`
       mask-composite: exclude;
       animation: ${girar} 6s linear infinite;
     }
-
     @media ${Device.tablet} {
       width: 400px;
     }
@@ -339,7 +331,6 @@ const Container = styled.div`
       gap: 10px;
     }
   }
-
   @media (prefers-reduced-motion: reduce) {
     &,
     & *,
@@ -376,7 +367,6 @@ const ContentLogo = styled.section`
   justify-content: center;
   gap: 12px;
   margin: 10px 0 14px;
-
   .marca {
     position: relative;
     display: inline-flex;
@@ -439,7 +429,6 @@ const LottieHalo = styled.div`
   }
   > * {
     position: relative;
-    /* el saco morado del Lottie vive dentro del JSON: se corrige con filtro */
     filter: saturate(0.8) hue-rotate(-40deg) brightness(0.85);
   }
 `;
@@ -448,7 +437,6 @@ const ContentModos = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-
   > * {
     animation: ${entrar} 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
     transition:
@@ -475,7 +463,6 @@ const PanelModo = styled.div`
   flex-direction: column;
   gap: 12px;
   animation: ${entrar} 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-
   > span {
     font-family: "Creepster", cursive;
     font-size: 28px;
@@ -483,7 +470,6 @@ const PanelModo = styled.div`
     color: #e07a26;
     text-shadow: 0 0 6px rgba(255, 122, 24, 0.2);
   }
-
   .form__field {
     color: #d8d0bc !important;
     background: rgba(255, 255, 255, 0.03) !important;
@@ -492,7 +478,6 @@ const PanelModo = styled.div`
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease;
-
     &::placeholder {
       color: rgba(244, 236, 216, 0.5);
     }
@@ -502,7 +487,6 @@ const PanelModo = styled.div`
       box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.12);
     }
   }
-
   button {
     transition:
       transform 0.15s ease,

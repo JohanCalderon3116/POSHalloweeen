@@ -10,6 +10,11 @@ import { ImageSelector } from "../../../hooks/useImageSelector";
 import { useGlobalStore } from "../../../store/GlobalStore";
 import { BeatLoader } from "react-spinners";
 export const BasicosConfig = () => {
+  const HALLOWEEN = {
+    primary: "#b86627",
+    border: "rgba(184,102,39,0.11)",
+    divider: "rgba(184,102,39,0.08)",
+  };
   const { dataempresa } = useEmpresaStore();
   const { fileurl } = useGlobalStore();
   const theme = useTheme();
@@ -110,7 +115,7 @@ export const BasicosConfig = () => {
             <Btn1
               color="#FFFFFF"
               border="2px"
-              bgcolor="#3300E3"
+              bgcolor={HALLOWEEN.primary}
               titulo="Guardar cambios"
             />
           </form>
@@ -186,12 +191,12 @@ const Avatar = styled.div`
     bottom: 0;
     right: 10px;
     font-size: 25px;
-    overflow: hidden; 
-    white-space: normal; 
-    word-wrap: break-word; 
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
     color: #fff !important;
   }
-  background-color: #6d05e5;
+  background-color: #b85c18;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23000' fill-opacity='0.19' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
   animation: ${slideBackground} 10s linear infinite;
   background-size: 60px 60px;

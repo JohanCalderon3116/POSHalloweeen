@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import {
   MenuMovil,
   Sidebar,
@@ -18,13 +20,12 @@ export const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stateMenu, setStateMenu] = useState(false);
   const { dataCierreCaja } = useCierreCajaStore();
-
+  const location = useLocation();
   const {
     refetch: refetchUsuarios,
     data: datausuarios,
     isLoading: isLoadingUsuarios,
   } = useMostrarUsuariosQueryStack();
-
   const { mutate } = useEliminarVentasIncompletasMutateStack();
   const { isLoading: isLoadingSucursales } =
     useMostrarSucursalesAsignadsQueryStack();
@@ -58,7 +59,17 @@ export const Layout = ({ children }) => {
         <Toogle state={stateMenu} setstate={() => setStateMenu(!stateMenu)} />
         {stateMenu && <MenuMovil setState={() => setStateMenu(!stateMenu)} />}
       </section>
-      <Containerbody>{children}</Containerbody>
+      <Containerbody>
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+        >
+          {children}
+        </motion.div>
+      </Containerbody>
     </Container>
   );
 };

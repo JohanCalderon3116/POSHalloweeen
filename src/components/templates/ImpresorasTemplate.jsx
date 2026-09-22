@@ -38,8 +38,6 @@ export const ImpresorasTemplate = () => {
 
   const {
     data: dataImpresorasXCaja,
-    isLoading: isLoadingImpresoraXCaja,
-    error: errorImpresoraXCaja,
   } = useQuery({
     queryKey: [
       "mostrar impresora por caja",
@@ -55,8 +53,6 @@ export const ImpresorasTemplate = () => {
 
   const {
     data: dataImpresorasLocales,
-    isLoading: isLoadingImpresorasLocales,
-    error: errorImpresorasLocales,
   } = useQuery({
     queryKey: ["mostrar impresoras locales"],
     queryFn: mostrarListaImpresoras,

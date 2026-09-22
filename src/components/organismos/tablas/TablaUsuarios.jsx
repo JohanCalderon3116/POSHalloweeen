@@ -233,14 +233,12 @@ export function TablaUsuarios({
 }
 const Container = styled.div`
   position: relative;
-
   margin: 5% 3%;
   @media (min-width: ${v.bpbart}) {
     margin: 2%;
   }
   @media (min-width: ${v.bphomer}) {
     margin: 2em auto;
-    /* max-width: ${v.bphomer}; */
   }
   .responsive-table {
     width: 100%;
@@ -254,13 +252,11 @@ const Container = styled.div`
     }
     thead {
       position: absolute;
-
       padding: 0;
       border: 0;
       height: 1px;
       width: 1px;
       overflow: hidden;
-
       @media (min-width: ${v.bpbart}) {
         position: relative;
         height: auto;
@@ -291,7 +287,6 @@ const Container = styled.div`
         display: table-row;
       }
     }
-
     th,
     td {
       padding: 0.5em;
@@ -344,7 +339,6 @@ const Container = styled.div`
         justify-content: space-between;
         align-items: center;
         height: 50px;
-
         border-bottom: 1px solid rgba(161, 161, 161, 0.32);
         @media (min-width: ${v.bpbart}) {
           justify-content: center;
@@ -354,7 +348,6 @@ const Container = styled.div`
       td {
         text-align: right;
         @media (min-width: ${v.bpbart}) {
-          /* border-bottom: 1px solid rgba(161, 161, 161, 0.32); */
           text-align: center;
         }
       }
@@ -371,13 +364,4 @@ const Container = styled.div`
       }
     }
   }
-`;
-const Colorcontent = styled.div`
-  justify-content: center;
-  min-height: ${(props) => props.$alto};
-  width: ${(props) => props.$ancho};
-  display: flex;
-  background-color: ${(props) => props.color};
-  border-radius: 50%;
-  text-align: center;
 `;

@@ -19,6 +19,7 @@ import {
 } from "@tanstack/react-table";
 import { FaArrowsAltV } from "react-icons/fa";
 import { toast } from "sonner";
+
 export function TablaClientesProveedores({
   data,
   SetopenRegistro,
@@ -266,10 +267,10 @@ const Container = styled.div`
         overflow: auto;
       }
       th {
-        border-bottom: 2px solid ${({ theme }) => theme.color2};
+        border-bottom: 2px solid ${({ theme }) => theme.halloweenBorder};
         font-weight: 700;
         text-align: center;
-        color: ${({ theme }) => theme.text};
+        color: ${({ theme }) => theme.halloweenPrimary};
         &:first-of-type {
           text-align: center;
         }
@@ -317,6 +318,10 @@ const Container = styled.div`
         @media (min-width: ${v.bpbart}) {
           display: table-row;
           border-width: 1px;
+          transition: background-color 0.2s ease;
+          &:hover {
+            background: ${({ theme }) => theme.bgAlpha};
+          }
         }
         &:last-of-type {
           margin-bottom: 0;

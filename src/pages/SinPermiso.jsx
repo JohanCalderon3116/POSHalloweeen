@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 export const SinPermiso = () => {
   return (
     <Container>
-      <Icon icon="fluent-emoji:locked" width="80" height="80" />
-      <Title>No tienes permiso para acceder aquí</Title>
+      <Icon icon="fluent-emoji:jack-o-lantern" width="90" height="90" />
+      <Title>¡Acceso Denegado por los Espíritus!</Title>
       <Subtitle>
-        Si crees que esto es un error, contacta a un administrador.
+        Esta zona está maldita o no tienes el nivel de magia suficiente.
+        Contacta a un administrador.
       </Subtitle>
-      <StyledLink to="/">Volver al inicio</StyledLink>
+      <StyledLink to="/">Huir al inicio</StyledLink>
     </Container>
   );
 };
@@ -24,21 +25,39 @@ const Container = styled.div`
   gap: 15px;
   text-align: center;
   padding: 20px;
+  background-color: ${({ theme }) => theme.body2};
+  color: ${({ theme }) => theme.text};
 `;
+
 const Title = styled.h2`
-  font-size: 28px;
+  font-size: ${({ theme }) => theme.fontxxl};
   margin: 0;
+  color: ${({ theme }) => theme.halloweenPrimary};
+  text-shadow: 0 0 12px ${({ theme }) => theme.halloweenGlow};
 `;
+
 const Subtitle = styled.p`
-  color: #6b7280;
+  color: ${({ theme }) => theme.colorsubtitlecard};
   margin: 0;
+  max-width: 400px;
+  font-size: ${({ theme }) => theme.fontmd};
 `;
+
 const StyledLink = styled(Link)`
-  margin-top: 10px;
-  padding: 10px 20px;
+  margin-top: 15px;
+  padding: 12px 24px;
   border-radius: 8px;
-  background-color: #3300e3;
-  color: #fff;
+  background-color: ${({ theme }) => theme.halloweenSecondary};
+  color: ${({ theme }) => theme.color3};
   text-decoration: none;
   font-weight: 600;
+  font-size: ${({ theme }) => theme.fontButton};
+  box-shadow: 0 0 15px ${({ theme }) => theme.halloweenSoft2};
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.halloweenPrimary};
+    box-shadow: 0 0 20px ${({ theme }) => theme.halloweenGlow};
+    transform: scale(1.05);
+  }
 `;

@@ -4,6 +4,20 @@ import { Btn1 } from "../moleculas/Btn1";
 import { Toaster } from "sonner";
 import { useAuthStore } from "../../store/AuthStore";
 import Swal from "sweetalert2";
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../organismos/LoginDesing/EscenaHalloween";
 
 export const EmpresaTemplate = () => {
   const { cerrarSesion } = useAuthStore();
@@ -27,6 +41,52 @@ export const EmpresaTemplate = () => {
   }
   return (
     <Main>
+      <div className="decorations" aria-hidden="true">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
       <Toaster richColors />
       <PageContainer>
         <Content>
@@ -54,6 +114,13 @@ const Main = styled.div`
   justify-content: center;
   width: 100%;
   display: flex;
+  .decorations {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
 `;
 const PageContainer = styled.div`
   display: flex;
@@ -96,8 +163,8 @@ const SidebarItem = styled(NavLink)`
   }
   &.active {
     background: ${(props) => props.theme.bg6};
-    border: 2px solid ${(props) => props.theme.bg5};
-    color: ${(props) => props.theme.color1};
+    border: 2px solid ${(props) => props.theme.halloweenAccent};
+    color: ${(props) => props.theme.halloweenAccent};
     font-weight: 600;
   }
 `;

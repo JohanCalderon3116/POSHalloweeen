@@ -90,7 +90,7 @@ export const Perfil = () => {
               />
             </InputText2>
             <br></br>
-            <Btn1 bgcolor="#4f12b1" color="#fff" titulo="GUARDAR CAMBIOS" />
+            <Btn1 bgcolor="#b85c18" color="#fff" titulo="GUARDAR CAMBIOS" />
           </form>
         </>
       )}
@@ -98,7 +98,7 @@ export const Perfil = () => {
   );
 };
 const ContentRol = styled.div`
-  background-color: #391ebb;
+  background-color: #b85c18;
   border: 2px solid #fff;
   border-radius: 8px;
   position: absolute;
@@ -165,7 +165,7 @@ const Avatar = styled.div`
     word-wrap: break-word; 
     color: #fff !important;
   }
-  background-color: #6d05e5;
+  background-color: #e8590c;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23000' fill-opacity='0.19' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
   background-size: 60px 60px;
   animation: ${slideBackground} 10s linear infinite;

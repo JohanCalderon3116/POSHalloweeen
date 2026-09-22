@@ -16,7 +16,23 @@ import { Toaster } from "sonner";
 import { TablaCreditos } from "../organismos/tablas/TablaCreditos";
 import { useCreditosStore } from "../../store/CreditosStore";
 import { useMostrarContraseñaQueryStack } from "../../tanstack/LoginStack";
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../organismos/LoginDesing/EscenaHalloween";
 import { BeatLoader } from "react-spinners";
+import { Icon } from "@iconify/react";
+
 export const CreditosTemplate = () => {
   const { setBuscador } = useCreditosStore();
   const theme = useTheme();
@@ -46,6 +62,52 @@ export const CreditosTemplate = () => {
   }
   return (
     <Container>
+      <div className="decorations" aria-hidden="true">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
       <Toaster richColors></Toaster>
       {openRegistro && (
         <RegistrarCreditos
@@ -57,15 +119,16 @@ export const CreditosTemplate = () => {
       )}
       <HistorialCreditoModal></HistorialCreditoModal>
       <TicketModalCredito></TicketModalCredito>
-
       <section className="area1">
         <Title>Créditos</Title>
         <Btn1
           funcion={nuevoRegistro}
-          bgcolor="#6d05e5"
+          bgcolor="#171719"
+          color="#f5f5f5"
           titulo="Nuevo"
-          icono={<v.iconoagregar />}
-        ></Btn1>
+          border="1px"
+          icono={<Icon icon="solar:add-circle-bold" />}
+        />
       </section>
       <section className="area2">
         <Buscador setBuscador={setBuscador}></Buscador>
@@ -87,6 +150,13 @@ const Container = styled.div`
   height: calc(100vh - 30px);
   padding: 15px;
   display: grid;
+  .decorations {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
   grid-template:
     "area1" 60px
     "area2" 60px
@@ -106,31 +176,6 @@ const Container = styled.div`
   }
   .main {
     grid-area: main;
-  }
-`;
-const ModalContraseña = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  .card {
-    background: ${({ theme }) => theme.body2};
-    padding: 30px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 300px;
-    border: 1px solid #7c7c7c;
-    span {
-      font-weight: 700;
-      font-size: 1.1rem;
-      text-align: center;
-    }
   }
 `;
 const ConteinerLoader = styled.div`

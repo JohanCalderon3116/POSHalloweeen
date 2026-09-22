@@ -6,16 +6,13 @@ import {
   useAuthStore,
   v,
 } from "../../../../index";
-
 import { NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
-
 import Swal from "sweetalert2";
 
 export function Sidebar({ state, setState }) {
   const { cerrarSesion } = useAuthStore();
   const theme = useTheme();
-
   function cerrarSesionConfirmacion() {
     Swal.fire({
       title: "¿Estás seguro(a)?",
@@ -39,7 +36,6 @@ export function Sidebar({ state, setState }) {
       }
     });
   }
-
   return (
     <Main $isopen={state.toString()}>
       <SidebarButton
@@ -48,30 +44,35 @@ export function Sidebar({ state, setState }) {
       >
         <Icon icon="solar:alt-arrow-right-bold" />
       </SidebarButton>
-
       <SidebarContainer
         $isopen={state.toString()}
         className={state ? "active" : ""}
       >
-        {/* =====================================================
-            LOGO
-        ===================================================== */}
         <LogoContent $isopen={state.toString()}>
           <LogoWrapper $isopen={state.toString()}>
             <img src={v.logo} alt="SoftCreate POS" />
           </LogoWrapper>
-
           <LogoTitle $isopen={state.toString()}>SoftCreate POS</LogoTitle>
         </LogoContent>
-
-        {/* =====================================================
-            LINKS PRINCIPALES
-        ===================================================== */}
         {LinksArray.map(({ icon, label, to }) => (
           <LinkContainer key={label}>
             <StyledNavLink
               to={to}
-              className={({ isActive }) => `Links ${isActive ? "active" : ""}`}             >               <LinkContent $isopen={state.toString()}>                 <StyledIcon className="Linkicon" icon={icon} />                 <Label $isopen={state.toString()}>{label}</Label>               </LinkContent>             </StyledNavLink>           </LinkContainer>         ))}          <Divider />          {/* =====================================================             LINKS SECUNDARIOS         ===================================================== */}         {SecondarylinksArray.map(({ icon, label, to, color }) => (           <LinkContainer key={label}>             <StyledNavLink               to={to}               className={({ isActive }) => `Links ${isActive ? "active" : ""}`}
+              className={({ isActive }) => `Links ${isActive ? "active" : ""}`}
+            >
+              <LinkContent $isopen={state.toString()}>
+                <StyledIcon className="Linkicon" icon={icon} />{" "}
+                <Label $isopen={state.toString()}>{label}</Label>{" "}
+              </LinkContent>{" "}
+            </StyledNavLink>{" "}
+          </LinkContainer>
+        ))}{" "}
+        <Divider />
+        {SecondarylinksArray.map(({ icon, label, to, color }) => (
+          <LinkContainer key={label}>
+            <StyledNavLink
+              to={to}
+              className={({ isActive }) => `Links ${isActive ? "active" : ""}`}
             >
               <LinkContent $isopen={state.toString()}>
                 <StyledIcon
@@ -84,10 +85,6 @@ export function Sidebar({ state, setState }) {
             </StyledNavLink>
           </LinkContainer>
         ))}
-
-        {/* =====================================================
-            CERRAR SESIÓN
-        ===================================================== */}
         <LinkContainer>
           <LogoutButton className="Links" onClick={cerrarSesionConfirmacion}>
             <LinkContent $isopen={state.toString()}>
@@ -100,10 +97,6 @@ export function Sidebar({ state, setState }) {
             </LinkContent>
           </LogoutButton>
         </LinkContainer>
-
-        {/* =====================================================
-            TOGGLE
-        ===================================================== */}
         <ThemeContainer $isopen={state.toString()}>
           <ToggleTema />
         </ThemeContainer>
@@ -112,9 +105,6 @@ export function Sidebar({ state, setState }) {
   );
 }
 
-/* =========================================================
-   ANIMACIÓN LOGO
-========================================================= */
 const logoFloat = keyframes`
   0%, 100% {
     transform: translateY(0);
@@ -124,18 +114,19 @@ const logoFloat = keyframes`
   }
 `;
 
-/* =========================================================
-   LOGO
-========================================================= */
 const LogoContent = styled.div`
   display: flex;
   align-items: center;
-  justify-content: ${({ $isopen }) =>$isopen === "true" ? "flex-start" : "center"};
+  justify-content: ${({ $isopen }) =>
+    $isopen === "true" ? "flex-start" : "center"};
   width: 100%;
   min-height: 72px;
-  padding: ${({ $isopen }) =>$isopen === "true" ? "0 16px 25px" : "0 0 25px"};
+  padding: ${({ $isopen }) =>
+    $isopen === "true" ? "0 16px 25px" : "0 0 25px"};
   overflow: hidden;
-  transition: justify-content 0.3s ease, padding 0.3s ease;
+  transition:
+    justify-content 0.3s ease,
+    padding 0.3s ease;
 `;
 
 const LogoWrapper = styled.div`
@@ -147,8 +138,8 @@ const LogoWrapper = styled.div`
   align-items: center;
   cursor: pointer;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: ${({ $isopen }) =>$isopen === "true" ? "scale(0.9)" : "scale(1.1)"};
-
+  transform: ${({ $isopen }) =>
+    $isopen === "true" ? "scale(0.9)" : "scale(1.1)"};
   img {
     display: block;
     width: 100%;
@@ -164,15 +155,13 @@ const LogoTitle = styled.h2`
   font-weight: 800;
   display: ${({ $isopen }) => ($isopen === "true" ? "block" : "none")};
   opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
-  transform: ${({ $isopen }) =>$isopen === "true" ? "translateX(0)" : "translateX(-10px)"};
+  transform: ${({ $isopen }) =>
+    $isopen === "true" ? "translateX(0)" : "translateX(-10px)"};
   transition:
     opacity 0.25s ease,
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
 const SidebarContainer = styled.div`
   position: fixed;
   top: 0;
@@ -190,24 +179,19 @@ const SidebarContainer = styled.div`
     width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     background 0.3s ease,
     border-color 0.3s ease;
-
   &.active {
     width: 260px;
   }
-
   &::-webkit-scrollbar {
     width: 4px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.colorScroll};
     border-radius: 10px;
   }
-
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-
   @media (prefers-reduced-motion: reduce) {
     transition: none;
     * {
@@ -217,9 +201,6 @@ const SidebarContainer = styled.div`
   }
 `;
 
-/* =========================================================
-   LINK CONTAINER
-========================================================= */
 const LinkContainer = styled.div`
   margin: 7px 8px;
   position: relative;
@@ -241,12 +222,10 @@ const StyledNavLink = styled(NavLink)`
     color 0.25s ease,
     transform 0.2s ease,
     box-shadow 0.25s ease;
-
   &:hover {
     background: ${({ theme }) => theme.bgAlpha};
     transform: translateX(2px);
   }
-
   &.active {
     background: ${({ theme }) => theme.halloweenSoft};
     border-color: ${({ theme }) => theme.halloweenBorder};
@@ -255,9 +234,6 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-/* =========================================================
-   LOGOUT
-========================================================= */
 const LogoutButton = styled.button`
   display: flex;
   align-items: center;
@@ -274,20 +250,17 @@ const LogoutButton = styled.button`
     background 0.25s ease,
     transform 0.2s ease,
     border-color 0.25s ease;
-
   &:hover {
     background: ${({ theme }) => theme.bgAlpha};
     transform: translateX(2px);
   }
 `;
 
-/* =========================================================
-   CONTENT
-========================================================= */
 const LinkContent = styled.section`
   display: flex;
   align-items: center;
-  justify-content: ${({ $isopen }) =>$isopen === "true" ? "flex-start" : "center"};
+  justify-content: ${({ $isopen }) =>
+    $isopen === "true" ? "flex-start" : "center"};
   width: 100%;
   height: 100%;
   gap: ${({ $isopen }) => ($isopen === "true" ? "16px" : "0")};
@@ -299,9 +272,6 @@ const LinkContent = styled.section`
     padding 0.3s ease;
 `;
 
-/* =========================================================
-   ICON
-========================================================= */
 const StyledIcon = styled(Icon)`
   flex-shrink: 0;
   width: 26px;
@@ -311,35 +281,30 @@ const StyledIcon = styled(Icon)`
   align-items: center;
   justify-content: center;
   font-size: 26px;
-  color: ${({ $customcolor, theme }) =>$customcolor || theme.text};
+  color: ${({ $customcolor, theme }) => $customcolor || theme.text};
   transition:
     transform 0.25s ease,
     color 0.25s ease,
     filter 0.25s ease;
-
   .Links:hover &,
   button:hover & {
     transform: scale(1.08);
   }
 `;
 
-/* =========================================================
-   LABEL
-========================================================= */
 const Label = styled.span`
   white-space: nowrap;
   overflow: hidden;
+  font-size: 16px;
   display: ${({ $isopen }) => ($isopen === "true" ? "inline-block" : "none")};
   opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
-  transform: ${({ $isopen }) =>$isopen === "true" ? "translateX(0)" : "translateX(-8px)"};
+  transform: ${({ $isopen }) =>
+    $isopen === "true" ? "translateX(0)" : "translateX(-8px)"};
   transition:
     opacity 0.2s ease 0.08s,
     transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
-/* =========================================================
-   DIVIDER
-========================================================= */
 const Divider = styled.div`
   width: calc(100% - 24px);
   height: 1px;
@@ -348,9 +313,6 @@ const Divider = styled.div`
   opacity: 0.8;
 `;
 
-/* =========================================================
-   THEME
-========================================================= */
 const ThemeContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -359,14 +321,8 @@ const ThemeContainer = styled.div`
   padding: 15px 8px 30px;
 `;
 
-/* =========================================================
-   MAIN
-========================================================= */
 const Main = styled.div``;
 
-/* =========================================================
-   BOTÓN SIDEBAR
-========================================================= */
 const SidebarButton = styled.button`
   position: fixed;
   top: 67px;
@@ -391,13 +347,11 @@ const SidebarButton = styled.button`
     background 0.25s ease,
     box-shadow 0.25s ease,
     border-color 0.25s ease;
-
   &:hover {
     border-color: ${({ theme }) => theme.halloweenBorder};
     box-shadow: 0 8px 25px ${({ theme }) => theme.halloweenGlow};
     color: ${({ theme }) => theme.halloweenPrimary};
   }
-
   &:active {
     transform: ${({ $isopen }) =>
       $isopen === "true"

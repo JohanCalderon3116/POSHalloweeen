@@ -28,13 +28,13 @@ const ANILLOS = [38, 76, 114, 152, 190]
   )
   .join(" ");
 
-const MURCIELAGOS = [
+export const MURCIELAGOS = [
   { y: "16vh", t: "28s", d: "2s", w: 54, rev: false },
   { y: "34vh", t: "36s", d: "11s", w: 40, rev: true },
   { y: "8vh", t: "44s", d: "20s", w: 34, rev: false },
 ];
 
-const ARANAS = [
+export const ARANAS = [
   { x: "8%", largo: "17vh", ancho: 52, t: "4.6s", d: "0.3s" },
   { x: "91%", largo: "27vh", ancho: 66, t: "5.4s", d: "0.7s" },
   { x: "23%", largo: "8vh", ancho: 34, t: "3.8s", d: "1.1s", extra: true },
@@ -236,22 +236,22 @@ const deriva = keyframes`
   from { transform: translateX(0); }
   to { transform: translateX(-25%); }
 `;
-const columpio = keyframes`
+export const columpio = keyframes`
   from { transform: rotate(-7deg); }
   to { transform: rotate(7deg); }
 `;
-const caer = keyframes`
+export const caer = keyframes`
   from { transform: translateY(-70vh); }
   to { transform: translateY(0); }
 `;
-const volar = keyframes`
+export const volar = keyframes`
   0% { transform: translate(-15vw, var(--y)) rotate(-4deg); }
   10% { transform: translate(20vw, calc(var(--y) - 6vh)) rotate(4deg); }
   20% { transform: translate(50vw, calc(var(--y) + 4vh)) rotate(-3deg); }
   30% { transform: translate(80vw, calc(var(--y) - 5vh)) rotate(3deg); }
   40%, 100% { transform: translate(118vw, var(--y)) rotate(-2deg); }
 `;
-const aletear = keyframes`
+export const aletear = keyframes`
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(0.5); }
 `;
@@ -350,7 +350,7 @@ const Luna = styled.div`
   animation: ${flotar} 9s ease-in-out infinite;
 `;
 
-const Rincon = styled.div`
+export const Rincon = styled.div`
   position: absolute;
   top: 0;
   width: clamp(140px, 22vw, 300px);
@@ -442,7 +442,7 @@ const Fantasma = styled.div`
   }
 `;
 
-const Murcielago = styled.div`
+export const Murcielago = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -450,12 +450,12 @@ const Murcielago = styled.div`
   animation: ${volar} 30s linear infinite;
 `;
 
-const Aleteo = styled.div`
+export const Aleteo = styled.div`
   animation: ${aletear} 0.32s ease-in-out infinite;
   filter: drop-shadow(0 0 2px rgba(255, 122, 24, 0.25));
 `;
 
-const Colgante = styled.div`
+export const Colgante = styled.div`
   position: absolute;
   top: 0;
   width: 0;
@@ -469,18 +469,18 @@ const Colgante = styled.div`
   }
 `;
 
-const Pendulo = styled.div`
+export const Pendulo = styled.div`
   transform-origin: top center;
   animation: ${columpio} 4s ease-in-out infinite alternate;
 `;
 
-const Hilo = styled.div`
+export const Hilo = styled.div`
   width: 1px;
   margin: 0 auto;
   background: linear-gradient(#8a7f70, rgba(138, 127, 112, 0.55));
 `;
 
-const Cuerpo = styled.div`
+export const Cuerpo = styled.div`
   filter: drop-shadow(0 0 3px rgba(255, 122, 24, 0.2));
 `;
 

@@ -42,7 +42,7 @@ export const CrudTemplate = ({
         {stateBtnAdd && (
           <Btn1
             funcion={nuevoRegistro}
-            bgcolor="#3300E3"
+            bgcolor="#9a5425"
             titulo="Nuevo"
             icono={<v.iconoagregar />}
           ></Btn1>
@@ -61,7 +61,6 @@ export const CrudTemplate = ({
           )}
         </section>
       )}
-
       <section className="main">
         {isExploding && <Confetti></Confetti>}
         {Table && (
@@ -87,7 +86,6 @@ const Container = styled.div`
     "main" auto;
   .area1 {
     grid-area: area1;
-
     display: flex;
     justify-content: end;
     align-items: center;
@@ -95,7 +93,6 @@ const Container = styled.div`
   }
   .area2 {
     grid-area: area2;
-
     display: flex;
     justify-content: end;
     align-items: center;

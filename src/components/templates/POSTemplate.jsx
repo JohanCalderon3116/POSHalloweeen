@@ -23,14 +23,10 @@ import { useMostrarStockAlmacenesyProductoQueryStack } from "../../tanstack/Stoc
 import { useMostrarImpresorasXCajaQueryStack } from "../../tanstack/ImpresorasStack";
 import { PantallaAbonoCredito } from "../organismos/POSDesing/CajaDesing/PantallaAbonoCredito";
 import { PantallaMuestraValoresVenta } from "../organismos/POSDesing/PantallaMuestraValoresVenta";
-
 const ANG = [0, 18, 36, 54, 72, 90].map((a) => (a * Math.PI) / 180);
-
 const pt = (r, a) =>
   `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
-
 const RAYOS = ANG.map((a) => `M0 0 L${pt(200, a)}`).join(" ");
-
 const ANILLOS = [38, 76, 114, 152, 190]
   .flatMap((r) =>
     ANG.slice(0, -1).map(
@@ -39,20 +35,17 @@ const ANILLOS = [38, 76, 114, 152, 190]
     ),
   )
   .join(" ");
-
 const MURCIELAGOS = [
   { y: "12vh", t: "28s", d: "0s", w: 52, rev: false },
   { y: "32vh", t: "36s", d: "8s", w: 42, rev: true },
   { y: "8vh", t: "44s", d: "18s", w: 34, rev: false },
 ];
-
 const ARANAS = [
   { x: "5%", largo: "18vh", ancho: 48, t: "4.6s", d: "0.3s" },
   { x: "94%", largo: "26vh", ancho: 58, t: "5.4s", d: "0.7s" },
   { x: "18%", largo: "10vh", ancho: 34, t: "3.8s", d: "1.1s" },
   { x: "82%", largo: "14vh", ancho: 40, t: "4.2s", d: "0.9s" },
 ];
-
 const Telarana = (props) => (
   <svg
     viewBox="0 0 200 200"
@@ -67,7 +60,6 @@ const Telarana = (props) => (
     <path d={ANILLOS} strokeWidth="0.8" />
   </svg>
 );
-
 const AranaSvg = () => (
   <svg viewBox="0 0 60 60" width="100%" aria-hidden="true">
     <line
@@ -116,7 +108,6 @@ const AranaSvg = () => (
     <circle cx="32.5" cy="22.5" r="1.5" fill="#ff3b3b" />
   </svg>
 );
-
 const MurcielagoSvg = (props) => (
   <svg
     viewBox="0 0 64 32"
@@ -148,13 +139,11 @@ export const POSTemplate = () => {
   useMostrarStockAlmacenesyProductoQueryStack();
   useMostrarSerealizacionesVentasQueryStack();
   useMostrarImpresorasXCajaQueryStack();
-
   return (
     <>
       <FondoHalloweenPOS>
         <Telarana className="web izquierda" />
         <Telarana className="web derecha" />
-
         {MURCIELAGOS.map((b, i) => (
           <Murcielago
             key={i}
@@ -176,7 +165,6 @@ export const POSTemplate = () => {
             </Aleteo>
           </Murcielago>
         ))}
-
         <AranasContenedor>
           {ARANAS.map((a, i) => (
             <AranaHilo
@@ -192,7 +180,6 @@ export const POSTemplate = () => {
           ))}
         </AranasContenedor>
       </FondoHalloweenPOS>
-
       <Container>
         {statePantallaCobro && <PantallaCobro />}
         <PantallaMuestraValoresVenta />
@@ -305,13 +292,11 @@ const FondoHalloweenPOS = styled.div`
     transform-origin: center;
     z-index: 1;
   }
-
   .izquierda {
     top: 0;
     left: 0;
     transform: scaleX(-1);
   }
-
   .derecha {
     top: 0;
     right: 0;
@@ -328,7 +313,6 @@ const Murcielago = styled.div`
   z-index: 1;
   transform-origin: center;
   will-change: transform;
-
   .bat & {
     pointer-events: none;
   }
@@ -363,11 +347,9 @@ const AranaHilo = styled.div`
     ${caer} 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${({ $d }) => $d} both,
     ${columpio} ${({ $t }) => $t} ease-in-out infinite alternate;
   will-change: transform;
-
   svg {
     display: block;
   }
-
   @media (max-width: 768px) {
     &:nth-child(n + 3) {
       display: none;
@@ -386,7 +368,6 @@ const Container = styled.div`
     "main" auto;
   position: relative;
   z-index: 1;
-
   @media ${Device.desktop} {
     grid-template:
       "header header" 140px
@@ -403,7 +384,6 @@ const Main = styled.div`
   position: relative;
   overflow: hidden;
   gap: 10px;
-
   @media ${Device.desktop} {
     flex-direction: row;
   }

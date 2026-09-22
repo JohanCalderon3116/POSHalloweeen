@@ -2,6 +2,22 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { usePermisosStore } from "../../index";
+import { fadeUp, reducedMotion } from "../../utils/animations";
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../organismos/LoginDesing/EscenaHalloween";
+
 export function ConfiguracionesTemplate() {
   const { dataPermisosConfiguraciones } = usePermisosStore();
   useEffect(() => {
@@ -10,23 +26,67 @@ export function ConfiguracionesTemplate() {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-
         card.style.setProperty("--mouse-x", `${x}px`);
         card.style.setProperty("--mouse-y", `${y}px`);
       });
     };
-
     const cardsContainer = document.getElementById("cards");
     if (cardsContainer) {
       cardsContainer.addEventListener("mousemove", handleMouseMove);
-
       return () => {
         cardsContainer.removeEventListener("mousemove", handleMouseMove);
       };
     }
   }, []);
+
   return (
     <Container>
+      <div className="decorations">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
       <div id="cards">
         {dataPermisosConfiguraciones?.map((item, index) => {
           return (
@@ -34,12 +94,12 @@ export function ConfiguracionesTemplate() {
               to={item.modulos.link}
               className={item.modulos.state ? "card" : "card false"}
               key={index}
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <div className="card-content">
                 <div className="card-image">
                   <img src={item.modulos.icono} />
                 </div>
-
                 <div className="card-info-wrapper">
                   <div className="card-info">
                     <i className="fa-duotone fa-unicorn"></i>
@@ -57,10 +117,11 @@ export function ConfiguracionesTemplate() {
     </Container>
   );
 }
+
 const Container = styled.div`
   --bg-color: rgb(20, 20, 20);
   --card-color: rgb(23, 23, 23);
-
+  position: relative;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat, repeat;
@@ -71,21 +132,32 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   align-items: flex-start;
+  overflow-y: auto;
+  ${reducedMotion}
+  .decorations {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
   #cards {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    max-width: 916px;
-    width: calc(100% - 20px);
-    padding: 10px;
+    gap: 16px;
+    max-width: 980px;
+    width: 100%;
+    padding: 20px;
+    justify-content: center;
   }
-
   #cards:hover > .card::after {
     opacity: 1;
   }
-
   .card {
     background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(90, 90, 90, 0.22);
     border-radius: 10px;
     cursor: pointer;
     display: flex;
@@ -93,6 +165,7 @@ const Container = styled.div`
     flex-direction: column;
     position: relative;
     width: 300px;
+    animation: ${fadeUp} 0.4s ease-out both;
     &:hover {
       .card-image {
         img {
@@ -101,24 +174,21 @@ const Container = styled.div`
       }
     }
   }
-
   .card:hover::before {
     opacity: 1;
   }
-
   .card::before,
   .card::after {
     border-radius: inherit;
     content: "";
     height: 100%;
-    left: 0px;
+    left: 0;
     opacity: 0;
     position: absolute;
-    top: 0px;
+    top: 0;
     transition: opacity 500ms;
     width: 100%;
   }
-
   .card::before {
     background: radial-gradient(
       800px circle at var(--mouse-x) var(--mouse-y),
@@ -127,7 +197,6 @@ const Container = styled.div`
     );
     z-index: 3;
   }
-
   .card::after {
     background: radial-gradient(
       600px circle at var(--mouse-x) var(--mouse-y),
@@ -136,7 +205,6 @@ const Container = styled.div`
     );
     z-index: 1;
   }
-
   .card > .card-content {
     background-color: ${({ theme }) => theme.bgcards};
     border-radius: inherit;
@@ -148,7 +216,6 @@ const Container = styled.div`
     position: absolute;
     z-index: 2;
   }
-
   h1,
   h2,
   h3,
@@ -157,117 +224,82 @@ const Container = styled.div`
     color: ${({ theme }) => theme.colorsubtitlecard};
     font-family: "Rubik", sans-serif;
     font-weight: 600;
-    margin: 0px;
+    margin: 0;
   }
-
   i {
     color: ${({ theme }) => theme.colorsubtitlecard};
   }
-
   .card-image {
     align-items: center;
     display: flex;
     height: 140px;
     justify-content: center;
-
     img {
       transition: 0.3s;
       height: 70%;
       filter: grayscale(100%);
     }
   }
-
   .card-info-wrapper {
     align-items: center;
     display: flex;
     flex-grow: 1;
     justify-content: flex-start;
-    padding: 0px 20px;
+    padding: 0 20px;
   }
-
   .card-info {
     align-items: flex-start;
     display: flex;
     gap: 10px;
   }
-
   .card-info > i {
     font-size: 1em;
     height: 20px;
     line-height: 20px;
   }
-
   .card-info-title > h3 {
     font-size: 1.1em;
     line-height: 20px;
   }
-
   .card-info-title > h4 {
     color: ${({ theme }) => theme.colortitlecard};
     font-size: 0.85em;
     margin-top: 8px;
     font-weight: 500;
   }
-  #cards:hover > .card::after {
-    opacity: 1;
-  }
-  &::before {
-    background: radial-gradient(
-      800px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.06),
-      transparent 40%
-    );
-    z-index: 3;
-  }
-
-  &::after {
-    background: radial-gradient(
-      600px circle at var(--mouse-x) var(--mouse-y),
-      ${(props) => props.$color0},
-      transparent 40%
-    );
-    z-index: 1;
-  }
-
   @media (max-width: 1000px) {
+    #cards {
+      max-width: 650px;
+    }
+  }
+  @media (max-width: 700px) {
     align-items: flex-start;
     overflow: auto;
-
     #cards {
-      max-width: 1000px;
+      max-width: 400px;
     }
-
     .card {
       flex-shrink: 1;
-      width: calc(50% - 4px);
+      width: calc(50% - 8px);
     }
   }
-
   @media (max-width: 500px) {
     .card {
       height: 180px;
+      width: 100%;
     }
-
     .card-image {
       height: 80px;
     }
-
-    .card-image > i {
-      font-size: 3em;
-    }
-
     .card-info-wrapper {
-      padding: 0px 10px;
+      padding: 0 10px;
     }
-
     .card-info > i {
       font-size: 0.8em;
     }
-
     .card-info-title > h3 {
       font-size: 0.9em;
     }
-
     .card-info-title > h4 {
       font-size: 0.8em;
       margin-top: 4px;

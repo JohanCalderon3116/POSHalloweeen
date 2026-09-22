@@ -220,14 +220,17 @@ const parpadeo = keyframes`
   0%, 100% { opacity: 0.35; }
   50% { opacity: 1; }
 `;
+
 const columpio = keyframes`
   from { transform: rotate(-7deg); }
   to { transform: rotate(7deg); }
 `;
+
 const caer = keyframes`
   from { transform: translateY(-70vh); }
   to { transform: translateY(0); }
 `;
+
 const volar = keyframes`
   0% { transform: translate(-15vw, var(--y)) rotate(-4deg); }
   10% { transform: translate(20vw, calc(var(--y) - 6vh)) rotate(4deg); }
@@ -235,10 +238,12 @@ const volar = keyframes`
   30% { transform: translate(80vw, calc(var(--y) - 5vh)) rotate(3deg); }
   40%, 100% { transform: translate(118vw, var(--y)) rotate(-2deg); }
 `;
+
 const aletear = keyframes`
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(0.5); }
 `;
+
 const capa = css`
   position: fixed;
   inset: 0;
@@ -257,6 +262,7 @@ const capa = css`
     }
   }
 `;
+
 const FondoHalloween = styled.div`
   ${capa}
   z-index: 0;
@@ -311,6 +317,7 @@ const FondoHalloween = styled.div`
     right: -10px;
   }
 `;
+
 const MurcielagoWrapper = styled.div`
   position: absolute;
   top: 0;
@@ -331,11 +338,13 @@ const MurcielagoWrapper = styled.div`
     animation: ${aletear} 0.28s ease-in-out infinite alternate;
   }
 `;
+
 const AranasContenedor = styled.div`
   position: absolute;
   inset: 0;
   z-index: 2;
 `;
+
 const AranaHilo = styled.div`
   position: absolute;
   top: 0;
@@ -350,6 +359,7 @@ const AranaHilo = styled.div`
     display: block;
   }
 `;
+
 const CementerioHalloween = styled(CementerioSvg)`
   position: absolute;
   bottom: 0;
@@ -361,6 +371,7 @@ const CementerioHalloween = styled(CementerioSvg)`
   opacity: 0.65;
   z-index: 1;
 `;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -392,6 +403,7 @@ const Container = styled.div`
     z-index: 1;
   }
 `;
+
 const MainContent = styled.div`
   display: grid;
   grid-template-areas:
@@ -410,6 +422,7 @@ const MainContent = styled.div`
     gap: 22px;
   }
 `;
+
 const Area1 = styled.section`
   grid-area: area1;
   display: grid;
@@ -419,6 +432,7 @@ const Area1 = styled.section`
     grid-template-columns: repeat(3, 1fr);
   }
 `;
+
 const Area2 = styled.section`
   grid-area: area2;
   border: 1px solid
@@ -439,6 +453,7 @@ const Area2 = styled.section`
     background: linear-gradient(90deg, #ff7a18, #c2570f, #ff3b3b);
   }
 `;
+
 const Area3 = styled.section`
   grid-area: area3;
   background-color: ${({ theme }) => theme.body};
@@ -459,6 +474,7 @@ const Area3 = styled.section`
     background: linear-gradient(90deg, #ff3b3b, #c2570f, #ff7a18);
   }
 `;
+
 const Area4 = styled.section`
   grid-area: area4;
   display: flex;
@@ -468,6 +484,7 @@ const Area4 = styled.section`
     flex-wrap: nowrap;
   }
 `;
+
 const ContentTotales = styled.div`
   background-color: ${({ theme }) => theme.body};
   padding: 16px;

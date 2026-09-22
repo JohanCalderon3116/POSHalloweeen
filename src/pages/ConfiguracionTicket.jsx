@@ -7,6 +7,20 @@ import { useUpdatEmpresaTicketMutateStack } from "../tanstack/EmpresaStack";
 import { ImageSelector } from "../hooks/useImageSelector";
 import { useGlobalStore } from "../store/GlobalStore";
 import { BeatLoader } from "react-spinners";
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../components/organismos/LoginDesing/EscenaHalloween";
 
 export const ConfiguracionTicket = () => {
   const theme = useTheme();
@@ -29,6 +43,54 @@ export const ConfiguracionTicket = () => {
 
   return (
     <Container>
+      <div className="decorations" aria-hidden="true">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
       <Toaster richColors />
       {isPending ? (
         <ConteinerLoader>
@@ -318,6 +380,13 @@ const Container = styled.div`
   position: relative;
   color: ${({ theme }) => theme.text};
   padding: 40px 20px;
+  .decorations {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
 
   input {
     width: 90%;
@@ -330,11 +399,9 @@ const Container = styled.div`
     color: #000;
     font-weight: 500;
     transition: all 0.25s ease;
-
     &::placeholder {
       color: #a89b3d;
     }
-
     &:hover,
     &:focus {
       border-color: #ffc107;
@@ -342,12 +409,10 @@ const Container = styled.div`
       box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.15);
       transform: translateY(-1px);
     }
-
     &:focus {
       outline: none;
     }
   }
-
   .left-section {
     width: 400px;
     margin: 10px;
@@ -365,7 +430,6 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     position: relative;
-
     &::before,
     &::after {
       content: "";
@@ -418,16 +482,13 @@ const Container = styled.div`
       );
       filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
     }
-
     &::before {
       top: -10px;
     }
-
     &::after {
       bottom: -10px;
     }
   }
-
   .back-button {
     position: absolute;
     top: 20px;
@@ -441,23 +502,19 @@ const Container = styled.div`
     font-weight: 600;
     color: ${({ theme }) => theme.colortitlecard};
   }
-
   .camera-icon {
     margin: 30px 0;
     position: relative;
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .company-info {
     width: 100%;
     max-width: 600px;
@@ -467,57 +524,47 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 14px;
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .company-name {
     font-weight: bold;
     position: relative;
-
     input {
       font-size: 15px;
       font-weight: 700;
       letter-spacing: 0.3px;
     }
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .company-details {
     font-size: 12px;
     position: relative;
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .ticket-number {
     font-weight: bold;
     font-size: 15px;
@@ -528,50 +575,42 @@ const Container = styled.div`
     border-radius: 8px;
     position: relative;
     color: ${({ theme }) => theme.colortitlecard};
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .barcode {
     width: 100%;
     max-width: 600px;
     height: 50px;
     margin: 10px 0;
     position: relative;
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
-
     img {
       max-width: 100%;
       height: auto;
     }
   }
-
   .divider {
     width: 100%;
     max-width: 600px;
     border-top: 1.5px dashed ${({ theme }) => theme.color2};
     margin: 14px 0;
   }
-
   .details-section {
     width: 100%;
     max-width: 600px;
@@ -581,7 +620,6 @@ const Container = styled.div`
     border-radius: 10px;
     padding: 4px 12px;
   }
-
   .details-row {
     display: grid;
     grid-template-columns: 120px 20px 1fr;
@@ -589,40 +627,32 @@ const Container = styled.div`
     border-bottom: 1px dotted ${({ theme }) => theme.color2};
     align-items: center;
     position: relative;
-
     &:last-child {
       border-bottom: none;
     }
-
     &:hover {
       background-color: rgba(74, 108, 247, 0.08);
-
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .details-label {
     font-weight: 500;
     font-size: 12.5px;
     color: ${({ theme }) => theme.colorSubtitle};
   }
-
   .details-colon {
     text-align: center;
   }
-
   .details-value {
     font-weight: 600;
     color: ${({ theme }) => theme.colorsubtitlecard};
   }
-
   .products-table {
     width: 100%;
     max-width: 600px;
@@ -631,27 +661,22 @@ const Container = styled.div`
     border-spacing: 0;
     border-radius: 10px;
     overflow: hidden;
-
     th,
     td {
       padding: 12px 10px;
       text-align: left;
       position: relative;
-
       &:hover {
         background-color: rgba(74, 108, 247, 0.08);
-
         .tech-label {
           opacity: 1;
         }
-
         .connector-line {
           opacity: 1;
           width: 50px;
         }
       }
     }
-
     th {
       font-weight: 600;
       font-size: 11.5px;
@@ -661,14 +686,12 @@ const Container = styled.div`
       background: ${({ theme }) => theme.color2}33;
       border-bottom: 1px solid ${({ theme }) => theme.color2};
     }
-
     td {
       font-size: 13px;
       color: ${({ theme }) => theme.colorsubtitlecard};
       border-bottom: 1px dotted ${({ theme }) => theme.color2};
     }
   }
-
   .summary-section {
     width: 100%;
     max-width: 600px;
@@ -677,7 +700,6 @@ const Container = styled.div`
     border-radius: 10px;
     padding: 10px 14px;
   }
-
   .summary-row {
     display: flex;
     justify-content: space-between;
@@ -686,21 +708,17 @@ const Container = styled.div`
     padding: 6px 0;
     position: relative;
     color: ${({ theme }) => theme.colorsubtitlecard};
-
     &:hover {
       background-color: rgba(74, 108, 247, 0.08);
-
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .summary-row.total {
     font-weight: bold;
     font-size: 15px;
@@ -709,7 +727,6 @@ const Container = styled.div`
     margin-top: 8px;
     padding-top: 10px;
   }
-
   .payment-info {
     width: 100%;
     max-width: 600px;
@@ -717,7 +734,6 @@ const Container = styled.div`
     margin: 16px auto;
     color: ${({ theme }) => theme.colorsubtitlecard};
   }
-
   .son-text {
     display: flex;
     align-items: center;
@@ -725,14 +741,11 @@ const Container = styled.div`
     padding: 8px 0;
     font-style: italic;
     position: relative;
-
     &:hover {
       background-color: rgba(74, 108, 247, 0.08);
-
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
@@ -746,27 +759,22 @@ const Container = styled.div`
     margin: 6px 0;
     padding: 6px 0;
     position: relative;
-
     &:hover {
       background-color: rgba(74, 108, 247, 0.08);
-
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
   }
-
   .footer-info {
     width: 100%;
     max-width: 600px;
     margin: 24px auto 0;
   }
-
   .footer-row {
     width: 100%;
     text-align: center;
@@ -774,18 +782,15 @@ const Container = styled.div`
     margin: 2px 0;
     font-size: 12px;
     position: relative;
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
         width: 50px;
       }
     }
-
     input {
       width: 90%;
       padding: 8px 12px;
@@ -797,20 +802,17 @@ const Container = styled.div`
       background-color: #fffde7;
       color: #000;
       transition: all 0.25s ease;
-
       &:hover,
       &:focus {
         border-color: #ffc107;
         background-color: #fff9c4;
         box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.15);
       }
-
       &:focus {
         outline: none;
       }
     }
   }
-
   .footer-stars {
     width: 100%;
     max-width: 600px;
@@ -819,7 +821,6 @@ const Container = styled.div`
     letter-spacing: 2px;
     margin: 16px auto;
   }
-
   .qr-code {
     width: 130px;
     height: 130px;
@@ -829,23 +830,19 @@ const Container = styled.div`
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-
     &:hover {
       .tech-label {
         opacity: 1;
       }
-
       .connector-line {
         opacity: 1;
       }
     }
-
     img {
       max-width: 100%;
       height: auto;
     }
   }
-
   .receipt-content {
     width: 100%;
     display: flex;
@@ -853,8 +850,6 @@ const Container = styled.div`
     align-items: center;
     gap: 4px;
   }
-
-  /* Desktop tooltips */
   .tech-label {
     position: absolute;
     top: 50%;
@@ -876,12 +871,10 @@ const Container = styled.div`
     white-space: nowrap;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   }
-
   .tech-type {
     color: #ff7e33;
     font-size: 11px;
   }
-
   .connector-line {
     position: absolute;
     left: -70px;
@@ -893,7 +886,6 @@ const Container = styled.div`
     transition: all 0.3s ease;
     z-index: 19;
   }
-
   .help-button {
     position: fixed;
     bottom: 20px;
@@ -912,13 +904,10 @@ const Container = styled.div`
     z-index: 1001;
     transition: all 0.3s ease;
   }
-
   .help-button:hover {
     background-color: #333;
     transform: scale(1.1);
   }
-
-  /* Mobile tooltips */
   @media (max-width: 768px) {
     .company-name,
     .company-details,
@@ -935,7 +924,6 @@ const Container = styled.div`
     td {
       margin-bottom: 30px;
     }
-
     .tech-label {
       top: 100%;
       left: 0;
@@ -946,7 +934,6 @@ const Container = styled.div`
       text-align: center;
       justify-content: center;
     }
-
     .connector-line {
       top: 100%;
       left: 50%;
@@ -954,11 +941,9 @@ const Container = styled.div`
       height: 5px;
       margin-top: 0;
     }
-
     .receipt-content {
       padding-bottom: 40px;
     }
-
     input {
       padding: 10px !important;
       font-size: 16px !important;
@@ -977,7 +962,6 @@ const Contentguia = styled.div`
   padding-bottom: 20px;
   border-bottom: 2px dashed ${({ theme }) => theme.color2};
   color: ${({ theme }) => theme.colortitlecard};
-
   .title {
     font-size: 36px;
     font-weight: 800;

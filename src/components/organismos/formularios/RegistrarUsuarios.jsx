@@ -188,7 +188,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
                   data={dataCaja}
                 ></SelectList>
               </article>
-              <Btn1 titulo="Guardar" color="#fff" bgcolor="#2c2ca8"></Btn1>
+              <Btn1 titulo="Guardar" color="#fff" bgcolor="#b85c18"></Btn1>
             </section>
             <section className="area2">
               <PermisosUser></PermisosUser>

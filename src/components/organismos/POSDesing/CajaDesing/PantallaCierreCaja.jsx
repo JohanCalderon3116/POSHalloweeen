@@ -14,6 +14,13 @@ import {
   useMostrarEfectivoSinVentasMovCajasQueryStack,
   useMostrarVentasMetodoPagoMovCajaQueryStack,
 } from "../../../../tanstack/MovimientosCajaStack";
+
+const HALLOWEEN = {
+  primary: "#b86627",
+  border: "rgba(184,102,39,0.11)",
+  divider: "rgba(184,102,39,0.08)",
+};
+
 export const PantallaCierreCaja = () => {
   const {
     setStateCierreCaja,
@@ -21,8 +28,10 @@ export const PantallaCierreCaja = () => {
     stateConteoCaja,
     setStateConteoCaja,
   } = useCierreCajaStore();
+
   const fechaActual = useFormattedDate();
   const theme = useTheme();
+
   const {
     totalVentasMetodoPago,
     totalVentasEfectivo,
@@ -31,16 +40,22 @@ export const PantallaCierreCaja = () => {
     totalIngresosVariosCaja,
     totalEfectivoTotalCaja,
   } = useMovCajaStore();
+
   const { dataempresa } = useEmpresaStore();
+
   const fechaInicioFormateada = format(
     new Date(dataCierreCaja?.fechainicio),
     "dd/MM/yyyy:HH:mm:ss",
   );
+
   const { isLoading: isLoading1 } =
     useMostrarEfectivoSinVentasMovCajasQueryStack();
+
   const { isLoading: isLoading2, data: dataventasmetodospago } =
     useMostrarVentasMetodoPagoMovCajaQueryStack();
+
   const isLoading = isLoading1 || isLoading2;
+
   if (isLoading) {
     return (
       <ConteinerLoader>
@@ -51,44 +66,48 @@ export const PantallaCierreCaja = () => {
       </ConteinerLoader>
     );
   }
+
   return (
     <Container>
       <VolverBtn funcion={() => setStateCierreCaja(false)} />
+
       <Fechas>
         Corte de caja desde: {fechaInicioFormateada} Hasta: {fechaActual}
       </Fechas>
+
       <Datos>
         <section>
-          Ventas Totales:{" "}
+          Ventas Totales:
           <span>
-            {" "}
             {FormatearNumeroDinero(
               totalVentasMetodoPago,
               dataempresa?.currency,
               dataempresa?.iso,
-            )}{" "}
+            )}
           </span>
         </section>
+
         <section>
-          Efectivo en caja:{" "}
+          Efectivo en caja:
           <span>
-            {" "}
             {FormatearNumeroDinero(
               totalEfectivoTotalCaja,
               dataempresa?.currency,
               dataempresa?.iso,
-            )}{" "}
+            )}
           </span>
         </section>
       </Datos>
-      <Division></Division>
+
+      <Division />
+
       <Resumen>
         <Tablas>
           <Tabla>
             <h4>Dinero en caja</h4>
             <ul>
               <li>
-                Base de caja:{" "}
+                Base de caja:
                 <span>
                   {FormatearNumeroDinero(
                     totalAperturaCaja,
@@ -97,19 +116,20 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
+
               <li>
-                Ventas (Efectivo):{" "}
+                Ventas (Efectivo):
                 <span>
-                  {" "}
                   {FormatearNumeroDinero(
                     totalVentasEfectivo,
                     dataempresa?.currency,
                     dataempresa?.iso,
-                  )}{" "}
+                  )}
                 </span>
               </li>
+
               <li>
-                Entradas:{" "}
+                Entradas:
                 <span>
                   {FormatearNumeroDinero(
                     totalIngresosVariosCaja,
@@ -118,10 +138,10 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
+
               <li>
-                Salidas / Gastos:{" "}
-                <span style={{ color: "#f15050", fontWeight: "bold" }}>
-                  {" "}
+                Salidas / Gastos:
+                <span className="gasto">
                   -
                   {FormatearNumeroDinero(
                     totalGastosVariosCaja,
@@ -130,6 +150,7 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
+
               <li className="total">
                 <Divider />
                 {FormatearNumeroDinero(
@@ -140,24 +161,25 @@ export const PantallaCierreCaja = () => {
               </li>
             </ul>
           </Tabla>
+
           <DivisionY />
+
           <Tabla>
             <h4>Ventas Totales</h4>
             <ul>
-              {dataventasmetodospago?.map((item, index) => {
-                return (
-                  <li key={index}>
-                    En {item?.metodo_pago}:{" "}
-                    <span>
-                      {FormatearNumeroDinero(
-                        item.monto,
-                        dataempresa?.currency,
-                        dataempresa?.iso,
-                      )}
-                    </span>{" "}
-                  </li>
-                );
-              })}
+              {dataventasmetodospago?.map((item, index) => (
+                <li key={index}>
+                  En {item?.metodo_pago}:
+                  <span>
+                    {FormatearNumeroDinero(
+                      item.monto,
+                      dataempresa?.currency,
+                      dataempresa?.iso,
+                    )}
+                  </span>
+                </li>
+              ))}
+
               <li className="total">
                 <Divider />
                 {FormatearNumeroDinero(
@@ -168,18 +190,20 @@ export const PantallaCierreCaja = () => {
               </li>
             </ul>
           </Tabla>
+
           <DivisionY />
         </Tablas>
       </Resumen>
+
       <Btn1
         funcion={() => setStateConteoCaja(true)}
-        
-        titulo={"Cerrar caja"}
+        titulo="Cerrar caja"
         color="#ffffff"
         border="2px"
-        bgcolor="#e88018"
+        bgcolor={HALLOWEEN.primary}
       />
-      {stateConteoCaja && <PantallaConteoCaja></PantallaConteoCaja>}
+
+      {stateConteoCaja && <PantallaConteoCaja />}
     </Container>
   );
 };
@@ -187,55 +211,136 @@ export const PantallaCierreCaja = () => {
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.color2};
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"};
   margin-right: 10px;
 `;
+
 const DivisionY = styled.span`
   width: 1px;
-  border-radius: 15px;
+  height: 95%;
   margin: 20px 0;
   position: relative;
-  text-align: center;
   display: none;
-  border-left: 1px dashed ${({ theme }) => theme.color2};
-  height: 95%;
+  border-left: 1px dashed
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.09)" : "rgba(255,255,255,0.07)"};
+
   @media ${Device.tablet} {
     display: block;
   }
 `;
+
 const Division = styled.span`
-  background-color: ${({ theme }) => theme.color2};
-  height: 1px;
-  border-radius: 15px;
-  margin: 20px 0;
-  position: relative;
-  text-align: center;
-  display: block;
   width: 95%;
+  height: 1px;
+  margin: 20px 0;
+  border-radius: 15px;
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"};
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 35%;
+    right: 35%;
+    top: 0;
+    height: 1px;
+    background: ${HALLOWEEN.divider};
+  }
 `;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.bgtotal || "#fff"};
+  justify-content: center;
   gap: 20px;
   position: absolute;
   width: 100%;
-  justify-content: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: ${({ theme }) => theme.bgtotal || "#fff"};
+  color: ${({ theme }) => theme.text};
   z-index: 10;
-`;
-const Fechas = styled.p`
-  font-size: 14px;
+
+  & > button {
+    transition:
+      transform 0.18s ease,
+      filter 0.18s ease,
+      box-shadow 0.18s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+      box-shadow: 0 6px 16px rgba(184, 102, 39, 0.07);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 
   @media (max-width: 768px) {
-    text-align: center;
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding-top: 30px;
+    padding-bottom: 30px;
   }
 `;
+
+const Fechas = styled.p`
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0.7;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
+`;
+
+const Datos = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 12px;
+  width: min(900px, 92%);
+
+  section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    background: ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.018)" : "rgba(255,255,255,0.015)"};
+    border: 1px solid
+      ${({ theme }) =>
+        theme.body === "#fff" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.05)"};
+
+    span {
+      font-weight: 700;
+      white-space: nowrap;
+      color: ${HALLOWEEN.primary};
+      opacity: 0.9;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 92%;
+  }
+`;
+
 const Resumen = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
   gap: 20px;
 
@@ -244,53 +349,95 @@ const Resumen = styled.div`
     align-items: center;
   }
 `;
-const Datos = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: space-around;
-  width: 100%;
-`;
+
 const Tablas = styled.div`
   display: flex;
-  gap: 20px;
+  align-items: stretch;
+  justify-content: center;
+  gap: 30px;
+  width: min(900px, 92%);
+
   @media (max-width: 768px) {
     flex-direction: column;
+    width: 92%;
+    gap: 12px;
   }
 `;
+
 const Tabla = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 120%;
+  width: 100%;
+  max-width: 410px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(0,0,0,0.012)" : "rgba(255,255,255,0.01)"};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.055)" : "rgba(255,255,255,0.045)"};
+
   h4 {
+    margin: 0 0 12px;
     font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 8px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.text};
   }
+
   ul {
-    list-style: none;
+    width: 100%;
     padding: 0;
     margin: 0;
-    width: 100%;
+    list-style: none;
   }
+
   li {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 6px;
     font-size: 14px;
-    margin-bottom: 4px;
+    color: ${({ theme }) => theme.text};
+    opacity: 0.8;
+
+    span {
+      white-space: nowrap;
+      font-weight: 600;
+    }
   }
+
+  li .gasto {
+    color: #c95858;
+    font-weight: 700;
+  }
+
   .total {
-    font-weight: bold;
-    margin-top: 8px;
-    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     justify-content: flex-end;
+    width: 100%;
+    margin-top: 9px;
+    font-weight: 700;
+    color: ${HALLOWEEN.primary};
+    opacity: 1;
   }
 `;
+
 const ConteinerLoader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
   height: 100vh;
+  color: ${({ theme }) => theme.text};
+
+  strong {
+    font-size: 14px;
+    opacity: 0.7;
+  }
 `;
