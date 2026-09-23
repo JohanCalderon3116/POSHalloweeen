@@ -80,6 +80,22 @@ export const useMostrarEfectivoSinVentasMovCajasQueryStack = () => {
     retry: 1,
   });
 };
+export const useMostrarDetalleEfectivoSinVentasMovCajasQueryStack = () => {
+  const { dataCierreCaja } = useCierreCajaStore();
+  const { mostrarDetalleEfectivoSinVentasMovCierreCaja } = useMovCajaStore();
+  return useQuery({
+    queryKey: [
+      "mostrar detalle efectivo sin ventas movCaja",
+      dataCierreCaja?.id,
+    ],
+    queryFn: () =>
+      mostrarDetalleEfectivoSinVentasMovCierreCaja({
+        _id_cierre_caja: dataCierreCaja?.id,
+      }),
+    enabled: !!dataCierreCaja?.id,
+    retry: 1,
+  });
+};
 export const useMostrarVentasMetodoPagoMovCajaQueryStack = () => {
   const { mostrarVentasMetodoPagoMovCaja } = useMovCajaStore();
   const { dataCierreCaja } = useCierreCajaStore();

@@ -11,75 +11,37 @@ import { useForm } from "react-hook-form";
 import { BeatLoader } from "react-spinners";
 
 const telaranaAnim = keyframes`
-  0%, 100% {
-    opacity: 0.025;
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    opacity: 0.055;
-    transform: rotate(1.5deg) scale(1.015);
-  }
+  0%, 100% { opacity: 0.025; transform: rotate(0deg) scale(1); }
+  50% { opacity: 0.055; transform: rotate(1.5deg) scale(1.015); }
 `;
 
 const murcielagoVolar = keyframes`
-  0% {
-    transform: translateX(-120px) translateY(0) rotate(-3deg);
-  }
-  20% {
-    transform: translateX(20vw) translateY(-8px) rotate(3deg);
-  }
-  40% {
-    transform: translateX(45vw) translateY(6px) rotate(-2deg);
-  }
-  60% {
-    transform: translateX(70vw) translateY(-6px) rotate(2deg);
-  }
-  80% {
-    transform: translateX(90vw) translateY(4px) rotate(-2deg);
-  }
-  100% {
-    transform: translateX(calc(100vw + 120px)) translateY(0) rotate(2deg);
-  }
+  0% { transform: translateX(-120px) translateY(0) rotate(-3deg); }
+  20% { transform: translateX(20vw) translateY(-8px) rotate(3deg); }
+  40% { transform: translateX(45vw) translateY(6px) rotate(-2deg); }
+  60% { transform: translateX(70vw) translateY(-6px) rotate(2deg); }
+  80% { transform: translateX(90vw) translateY(4px) rotate(-2deg); }
+  100% { transform: translateX(calc(100vw + 120px)) translateY(0) rotate(2deg); }
 `;
 
 const aletear = keyframes`
-  0%, 100% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(0.55);
-  }
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.55); }
 `;
 
 const arañaCaer = keyframes`
-  from {
-    transform: translateY(-45px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(-45px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 `;
 
 const arañaBalancear = keyframes`
-  0%, 100% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
 `;
 
 const aparecer = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; margin-top: 10px; }
+  to { opacity: 1; margin-top: 0; }
 `;
 
 const telaranaPaths = `
@@ -181,76 +143,51 @@ export function RegistrarClientesProveedores({
 }) {
   const { tipo } = useClientesProveedoresStore();
   const theme = useTheme();
-
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-
   const { isPending, mutate: doInsertar } =
     useInsertarClientesProveedoresMutationStack({
       accion,
       dataSelect,
       cerrarFormulario,
     });
-
   const handlesub = (data) => {
     doInsertar(data);
   };
-
   function cerrarFormulario() {
     onClose();
     setIsExploding(true);
   }
-
   return (
     <Container>
       <Decoracion>
         <WebCorner className="web-left">
           <WebSvg />
         </WebCorner>
-
         <WebCorner className="web-right">
           <WebSvg flip />
         </WebCorner>
-
-        <Bat
-          style={{
-            animationDuration: "34s",
-            animationDelay: "-8s",
-          }}
-        >
+        <Bat style={{ animationDuration: "34s", animationDelay: "-8s" }}>
           <BatInner>
             <MurcielagoSvg />
           </BatInner>
         </Bat>
-
-        <Spider
-          style={{
-            left: "4%",
-            height: "115px",
-            animationDelay: "0.2s",
-          }}
-        >
+        <Spider style={{ left: "4%", height: "115px", animationDelay: "0.2s" }}>
           <SpiderInner>
             <AranaSvg />
           </SpiderInner>
         </Spider>
-
         <Spider
-          style={{
-            right: "4%",
-            height: "145px",
-            animationDelay: "0.5s",
-          }}
+          style={{ right: "4%", height: "145px", animationDelay: "0.5s" }}
         >
           <SpiderInner>
             <AranaSvg />
           </SpiderInner>
         </Spider>
       </Decoracion>
-
       {isPending ? (
         <ConteinerLoader>
           <span>
@@ -268,12 +205,10 @@ export function RegistrarClientesProveedores({
                   : "Registrar nuevo " + tipo}
               </h1>
             </section>
-
             <section>
               <BtnClose funcion={onClose} />
             </section>
           </div>
-
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
               <article>
@@ -283,9 +218,7 @@ export function RegistrarClientesProveedores({
                     defaultValue={dataSelect.nombres}
                     type="text"
                     placeholder="Nombre"
-                    {...register("nombres", {
-                      required: true,
-                    })}
+                    {...register("nombres", { required: true })}
                   />
                   <label className="form__label">Nombre</label>
                   {errors.nombres?.type === "required" && (
@@ -293,7 +226,6 @@ export function RegistrarClientesProveedores({
                   )}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -301,9 +233,7 @@ export function RegistrarClientesProveedores({
                     defaultValue={dataSelect.direccion}
                     type="text"
                     placeholder="Dirección"
-                    {...register("direccion", {
-                      required: true,
-                    })}
+                    {...register("direccion", { required: true })}
                   />
                   <label className="form__label">Dirección</label>
                   {errors.direccion?.type === "required" && (
@@ -311,7 +241,6 @@ export function RegistrarClientesProveedores({
                   )}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -319,9 +248,7 @@ export function RegistrarClientesProveedores({
                     defaultValue={dataSelect.telefono}
                     type="number"
                     placeholder="Telefono"
-                    {...register("telefono", {
-                      required: true,
-                    })}
+                    {...register("telefono", { required: true })}
                   />
                   <label className="form__label">Telefono</label>
                   {errors.telefono?.type === "required" && (
@@ -329,7 +256,6 @@ export function RegistrarClientesProveedores({
                   )}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -337,15 +263,12 @@ export function RegistrarClientesProveedores({
                     defaultValue={dataSelect.email}
                     type="email"
                     placeholder="Email"
-                    {...register("email", {
-                      required: true,
-                    })}
+                    {...register("email", { required: true })}
                   />
                   <label className="form__label">Email</label>
                   {errors.email?.type === "required" && <p>Campo requerido</p>}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -353,9 +276,7 @@ export function RegistrarClientesProveedores({
                     defaultValue={dataSelect.identificador_nacional}
                     type="number"
                     placeholder="Identificador_nacional"
-                    {...register("identificador_nacional", {
-                      required: true,
-                    })}
+                    {...register("identificador_nacional", { required: true })}
                   />
                   <label className="form__label">C.C</label>
                   {errors.identificador_nacional?.type === "required" && (
@@ -363,7 +284,6 @@ export function RegistrarClientesProveedores({
                   )}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -378,7 +298,6 @@ export function RegistrarClientesProveedores({
                   </label>
                 </InputText>
               </article>
-
               <Btn1
                 icono={<v.iconoguardar />}
                 titulo="Guardar"
@@ -396,9 +315,6 @@ export function RegistrarClientesProveedores({
 const Container = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(4, 4, 4, 0.65);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   display: flex;
   width: 100%;
   min-height: 100vh;
@@ -409,8 +325,7 @@ const Container = styled.div`
   overflow-x: hidden;
   padding: 20px;
   box-sizing: border-box;
-  animation: ${aparecer} 0.22s ease both;
-
+  backdrop-filter: blur(5px);
   .sub-contenedor {
     position: relative;
     width: 500px;
@@ -419,45 +334,25 @@ const Container = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 18px;
-    background: ${({ theme }) => theme.bgtotal};
+    background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    border: 1px solid
-      ${({ theme }) => theme.halloweenBorder || "rgba(255, 255, 255, 0.12)"};
-    box-shadow:
-      0 22px 60px rgba(0, 0, 0, 0.45),
-      0 0 35px rgba(255, 122, 24, 0.04);
+    box-shadow: -10px 15px 30px rgba(10, 9, 9, 0.4);
     padding: 18px 36px 24px;
     z-index: 5;
+    animation: ${aparecer} 0.4s ease forwards;
     scrollbar-width: thin;
     scrollbar-color: ${({ theme }) => theme.halloweenPrimary || "#a8a8a8"}
       transparent;
-
     &::-webkit-scrollbar {
       width: 6px;
     }
-
     &::-webkit-scrollbar-track {
       background: transparent;
     }
-
     &::-webkit-scrollbar-thumb {
       background: ${({ theme }) => theme.halloweenPrimary || "#777777"};
       border-radius: 10px;
     }
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      border-radius: 18px 18px 0 0;
-      background: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
     .headers {
       display: flex;
       justify-content: space-between;
@@ -465,84 +360,62 @@ const Container = styled.div`
       margin-bottom: 20px;
       position: relative;
       z-index: 2;
-
       h1 {
         font-size: 20px;
         font-weight: 700;
         margin: 0;
         color: ${({ theme }) => theme.text};
       }
-
       span {
         font-size: 20px;
         cursor: pointer;
       }
     }
-
     .formulario {
       position: relative;
       z-index: 2;
-
       .form-subcontainer {
         gap: 20px;
         display: flex;
         flex-direction: column;
-
-        .colorContainer {
-          .colorPickerContent {
-            padding-top: 15px;
-            min-height: 50px;
-          }
-        }
-
         article {
           animation: ${aparecer} 0.25s ease both;
         }
-
         article:nth-child(1) {
           animation-delay: 0.03s;
         }
-
         article:nth-child(2) {
           animation-delay: 0.06s;
         }
-
         article:nth-child(3) {
           animation-delay: 0.09s;
         }
-
         article:nth-child(4) {
           animation-delay: 0.12s;
         }
-
         article:nth-child(5) {
           animation-delay: 0.15s;
         }
-
         article:nth-child(6) {
           animation-delay: 0.18s;
         }
-
         p {
           color: #eb5360;
           font-size: 12px;
           font-weight: 700;
           margin: 5px 0 0;
         }
-
         > button {
           margin-top: 3px;
           transition:
             transform 0.18s ease,
             filter 0.18s ease,
             box-shadow 0.18s ease;
-
           &:hover {
             transform: translateY(-2px);
             filter: brightness(1.04);
             box-shadow: 0 7px 18px rgba(255, 122, 24, 0.1);
           }
-
           &:active {
             transform: scale(0.98);
           }
@@ -550,10 +423,8 @@ const Container = styled.div`
       }
     }
   }
-
   @media (max-width: 700px) {
     padding: 12px;
-
     .sub-contenedor {
       width: 100%;
       max-width: 96vw;
@@ -561,10 +432,7 @@ const Container = styled.div`
       padding: 16px 20px 22px;
     }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    animation: none;
-
     .sub-contenedor,
     .sub-contenedor .form-subcontainer article,
     .sub-contenedor .form-subcontainer > button {
@@ -579,7 +447,6 @@ const Decoracion = styled.div`
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
-
   &::after {
     content: "";
     position: absolute;
@@ -596,7 +463,6 @@ const Decoracion = styled.div`
         transparent 28%
       );
   }
-
   @media (prefers-reduced-motion: reduce) {
     & * {
       animation: none !important;
@@ -613,11 +479,9 @@ const WebCorner = styled.div`
   opacity: 0.05;
   animation: ${telaranaAnim} 8s ease-in-out infinite;
   transform-origin: top center;
-
   &.web-left {
     left: -12px;
   }
-
   &.web-right {
     right: -12px;
     animation-delay: -3s;
@@ -659,7 +523,6 @@ const SpiderInner = styled.div`
   height: 100%;
   transform-origin: top center;
   animation: ${arañaBalancear} 5s ease-in-out infinite alternate;
-
   svg {
     display: block;
   }
@@ -672,7 +535,6 @@ const ConteinerLoader = styled.div`
   flex-direction: column;
   gap: 8px;
   min-height: 320px;
-
   strong {
     color: ${({ theme }) => theme.text};
   }

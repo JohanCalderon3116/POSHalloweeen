@@ -1,17 +1,25 @@
-import styled, { keyframes, useTheme } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useResumenVentaStore } from "../../../store/ResumenVentaStore";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { FormatearNumeroDinero } from "../../../utils/Conversiones";
 
+/* =========================================================
+   PALETA — mismo verde registro del componente de cobro,
+   para que ambas pantallas se sientan del mismo producto.
+   ========================================================= */
+
+const ACCENT = {
+  primary: "#1f7a5c",
+  primaryDark: "#155a44",
+  primarySoft: "rgba(31, 122, 92, 0.10)",
+  borderSoft: "rgba(31, 122, 92, 0.13)",
+};
+
 const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
 
 const subir = keyframes`
@@ -25,58 +33,9 @@ const subir = keyframes`
   }
 `;
 
-const flotar = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-`;
-
-const pulsar = keyframes`
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.025);
-  }
-`;
-
-const aparecerFila = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const Telarana = ({ className }) => (
-  <svg
-    className={className}
-    viewBox="0 0 200 200"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1"
-    strokeLinecap="round"
-    aria-hidden="true"
-  >
-    <path d="M0 0 L200 0 M0 0 L190 38 M0 0 L152 76 M0 0 L114 114 M0 0 L76 152 M0 0 L38 190" />
-    <path d="M32 0 Q28 15 32 32" />
-    <path d="M64 0 Q52 28 64 64" />
-    <path d="M96 0 Q78 42 96 96" />
-    <path d="M128 0 Q104 55 128 128" />
-    <path d="M160 0 Q130 70 160 160" />
-  </svg>
-);
-
 export const PantallaMuestraValoresVenta = () => {
   const { open, datos, cerrarResumenVenta } = useResumenVentaStore();
   const { dataempresa } = useEmpresaStore();
-  const theme = useTheme();
 
   useEffect(() => {
     if (!open) return;
@@ -102,14 +61,11 @@ export const PantallaMuestraValoresVenta = () => {
   return (
     <Overlay onClick={cerrarResumenVenta}>
       <Container onClick={(e) => e.stopPropagation()}>
-        <Decoracion>
-          <Telarana className="web-left" />
-          <Telarana className="web-right" />
-        </Decoracion>
-
         <Contenido>
           <Cabecera>
-            <Icon icon="noto:money-bag" className="money-icon" />
+            <IconoExito>
+              <Icon icon="solar:check-circle-bold" />
+            </IconoExito>
             <span>Venta registrada</span>
             <small>La operación se completó correctamente</small>
           </Cabecera>
@@ -131,7 +87,7 @@ export const PantallaMuestraValoresVenta = () => {
             <strong>{fmt(datos?.restante)}</strong>
           </Fila>
 
-          <Boton onClick={cerrarResumenVenta} $primary={theme.halloweenPrimary}>
+          <Boton onClick={cerrarResumenVenta}>
             <Icon icon="solar:check-circle-bold" />
             Cerrar
             <span>(Esc)</span>
@@ -142,17 +98,25 @@ export const PantallaMuestraValoresVenta = () => {
   );
 };
 
+/* =========================================================
+   ESTILOS
+   ========================================================= */
+
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
   z-index: 9999;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 20px;
-  background: rgba(0, 0, 0, 0.68);
+
+  background: rgba(15, 23, 42, 0.55);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+
   animation: ${fadeIn} 0.18s ease both;
 
   @media (prefers-reduced-motion: reduce) {
@@ -166,21 +130,25 @@ const Overlay = styled.div`
 const Container = styled.div`
   position: relative;
   box-sizing: border-box;
+
   width: 400px;
   max-width: 94vw;
+
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 18px;
+
   color: ${({ theme }) => theme.text};
   background-color: ${({ theme }) => theme.bgtotal || theme.bg2};
+
   border: 1px solid
     ${({ theme }) =>
-      theme.body === "#fff"
-        ? "rgba(255, 122, 24, 0.1)"
-        : "rgba(255, 255, 255, 0.08)"};
+      theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
+
   box-shadow: ${({ theme }) =>
     theme.body === "#fff"
-      ? "0 20px 45px rgba(0, 0, 0, 0.14)"
-      : "0 20px 45px rgba(0, 0, 0, 0.7)"};
+      ? "0 24px 55px rgba(15,23,42,0.16)"
+      : "0 24px 55px rgba(0,0,0,0.65)"};
+
   animation: ${subir} 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   &::before {
@@ -190,67 +158,16 @@ const Container = styled.div`
     left: 0;
     right: 0;
     height: 3px;
-    background: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
-    z-index: 4;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(
-        circle at 12% 8%,
-        rgba(255, 122, 24, 0.02),
-        transparent 28%
-      ),
-      radial-gradient(
-        circle at 90% 90%,
-        rgba(70, 60, 80, 0.025),
-        transparent 35%
-      );
-  }
-`;
-
-const Decoracion = styled.div`
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-
-  .web-left,
-  .web-right {
-    position: absolute;
-    width: 145px;
-    height: 145px;
-    color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
-    opacity: 0.1;
-    filter: drop-shadow(0 0 5px rgba(255, 122, 24, 0.05));
-    animation: ${flotar} 7s ease-in-out infinite;
-  }
-
-  .web-left {
-    top: -8px;
-    left: -8px;
-    transform: scaleX(-1);
-  }
-
-  .web-right {
-    top: -8px;
-    right: -8px;
-    animation-delay: -3s;
+    background: ${ACCENT.primary};
   }
 `;
 
 const Contenido = styled.div`
   position: relative;
-  z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  padding: 26px;
+  gap: 14px;
+  padding: 28px 26px 26px;
 `;
 
 const Cabecera = styled.div`
@@ -258,16 +175,9 @@ const Cabecera = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding-top: 4px;
-  text-align: center;
+  gap: 8px;
 
-  .money-icon {
-    font-size: 42px;
-    color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
-    filter: drop-shadow(0 0 6px rgba(255, 122, 24, 0.1));
-    animation: ${flotar} 3s ease-in-out infinite;
-  }
+  text-align: center;
 
   span {
     font-size: 19px;
@@ -277,17 +187,33 @@ const Cabecera = styled.div`
 
   small {
     font-size: 12px;
-    opacity: 0.42;
+    opacity: 0.5;
   }
+`;
+
+const IconoExito = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 54px;
+  height: 54px;
+
+  border-radius: 50%;
+
+  background: ${ACCENT.primarySoft};
+  color: ${ACCENT.primary};
+
+  font-size: 28px;
+
+  margin-bottom: 2px;
 `;
 
 const Separador = styled.div`
   width: 100%;
   height: 1px;
   background: ${({ theme }) =>
-    theme.body === "#fff"
-      ? "rgba(0, 0, 0, 0.08)"
-      : "rgba(255, 255, 255, 0.08)"};
+    theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
 `;
 
 const Fila = styled.div`
@@ -295,16 +221,20 @@ const Fila = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  font-size: 20px;
-  animation: ${aparecerFila} 0.25s ease both;
+
+  span {
+    font-size: 14px;
+    opacity: 0.6;
+  }
 
   strong {
+    font-size: 18px;
     font-variant-numeric: tabular-nums;
     font-weight: 800;
   }
 
   &.suave {
-    opacity: 0.5;
+    opacity: 0.55;
   }
 `;
 
@@ -314,36 +244,29 @@ const Vuelto = styled.div`
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-height: 105px;
+
+  min-height: 104px;
   padding: 14px;
   box-sizing: border-box;
-  border-radius: 13px;
-  background-color: ${({ theme }) =>
-    theme.body === "#fff"
-      ? "rgba(0, 0, 0, 0.025)"
-      : "rgba(255, 255, 255, 0.025)"};
-  border: 1px solid
-    ${({ theme }) =>
-      theme.body === "#fff"
-        ? "rgba(0, 0, 0, 0.07)"
-        : "rgba(255, 255, 255, 0.07)"};
-  animation: ${aparecerFila} 0.3s ease both;
+
+  border-radius: 14px;
+
+  background: ${ACCENT.primarySoft};
+  border: 1px solid ${ACCENT.borderSoft};
 
   span {
     font-size: 12px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    opacity: 0.52;
+    opacity: 0.65;
+    color: ${ACCENT.primary};
   }
 
   strong {
-    font-size: 39px;
+    font-size: 38px;
     line-height: 1;
     font-weight: 850;
     font-variant-numeric: tabular-nums;
-    color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
-    animation: ${pulsar} 2.5s ease-in-out infinite;
+    color: ${ACCENT.primary};
   }
 `;
 
@@ -352,34 +275,42 @@ const Boton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 7px;
+
   width: 100%;
   padding: 13px 14px;
-  margin-top: 2px;
+  margin-top: 4px;
+
   border: none;
   border-radius: 10px;
+
   font-size: 15px;
   font-weight: 800;
-  color: ${({ theme }) => (theme.body === "#fff" ? "#fff" : "#080808")};
-  background-color: ${({ $primary, theme }) => $primary || "#ff7a18"};
+
+  color: #ffffff;
+  background-color: ${ACCENT.primary};
+
   cursor: pointer;
-  box-shadow: 0 7px 16px rgba(0, 0, 0, 0.18);
+
   transition:
-    transform 0.16s ease,
-    filter 0.16s ease,
-    box-shadow 0.16s ease;
+    transform 0.15s ease,
+    filter 0.15s ease;
 
   span {
-    opacity: 0.58;
+    opacity: 0.65;
     font-size: 12px;
+    font-weight: 600;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.05);
-    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.24);
+    filter: brightness(1.06);
   }
 
   &:active {
     transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${ACCENT.primaryDark};
+    outline-offset: 2px;
   }
 `;

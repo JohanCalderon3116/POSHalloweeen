@@ -21,270 +21,40 @@ import { useConfirmarVentasMutationStack } from "../../../tanstack/VentasStack";
 import { BeatLoader } from "react-spinners";
 import { useMostrarMonedaQueryStack } from "../../../tanstack/MonedaStack";
 
-/* =========================================================
-   PALETA HALLOWEEN SUAVE
-   ========================================================= */
-
-const HALLOWEEN = {
-  primary: "#c56a20",
-  primaryDark: "#a85618",
-  primarySoft: "rgba(197, 106, 32, 0.045)",
-  primarySoft2: "rgba(197, 106, 32, 0.025)",
-  border: "rgba(197, 106, 32, 0.14)",
-  borderSoft: "rgba(197, 106, 32, 0.09)",
-  glow: "rgba(197, 106, 32, 0.07)",
-  glowStrong: "rgba(197, 106, 32, 0.11)",
+const ACCENT = {
+  primary: "#1f7a5c",
+  primaryDark: "#155a44",
+  primarySoft: "rgba(31, 122, 92, 0.10)",
+  primarySoft2: "rgba(31, 122, 92, 0.05)",
+  border: "rgba(31, 122, 92, 0.22)",
+  borderSoft: "rgba(31, 122, 92, 0.13)",
+  pending: "#b7791f",
+  pendingSoft: "rgba(183, 121, 31, 0.10)",
+  pendingBorder: "rgba(183, 121, 31, 0.22)",
+  danger: "#b3402f",
+  dangerSoft: "rgba(179, 64, 47, 0.08)",
 };
 
-const ANG = [0, 18, 36, 54, 72, 90].map((a) => (a * Math.PI) / 180);
-
-const pt = (r, a) =>
-  `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
-
-const RAYOS = ANG.map((a) => `M0 0 L${pt(200, a)}`).join(" ");
-
-const ANILLOS = [38, 76, 114, 152, 190]
-  .flatMap((r) =>
-    ANG.slice(0, -1).map(
-      (a, i) =>
-        `M${pt(r, a)} Q${pt(
-          r * 0.9,
-          (a + ANG[i + 1]) / 2,
-        )} ${pt(r, ANG[i + 1])}`,
-    ),
-  )
-  .join(" ");
-
-const MURCIELAGOS = [
-  { y: "10%", t: "28s", d: "0s", w: 48, rev: false },
-  { y: "36%", t: "34s", d: "8s", w: 40, rev: true },
-  { y: "18%", t: "42s", d: "18s", w: 32, rev: false },
-];
-
-const ARANAS = [
-  { x: "2%", largo: "13vh", ancho: 42, t: "4.8s", d: "0.2s" },
-  { x: "96%", largo: "19vh", ancho: 48, t: "5.4s", d: "0.6s" },
-];
-
-/* =========================================================
-   SVG DECORACIONES
-   ========================================================= */
-
-const Telarana = (props) => (
-  <svg
-    viewBox="0 0 200 200"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1"
-    strokeLinecap="round"
-    aria-hidden="true"
-    {...props}
-  >
-    <path d={RAYOS} />
-    <path d={ANILLOS} strokeWidth="0.8" />
-  </svg>
-);
-
-const AranaSvg = () => (
-  <svg viewBox="0 0 60 60" width="100%" aria-hidden="true">
-    <line
-      x1="30"
-      y1="0"
-      x2="30"
-      y2="17"
-      stroke="currentColor"
-      strokeWidth="0.8"
-    />
-
-    <g
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-    >
-      <path d="M36 24 L49 11 L56 19" />
-      <path d="M37 28 L53 21 L58 31" />
-      <path d="M37 32 L53 35 L57 47" />
-      <path d="M35 36 L47 45 L49 55" />
-
-      <path d="M24 24 L11 11 L4 19" />
-      <path d="M23 28 L7 21 L2 31" />
-      <path d="M23 32 L7 35 L3 47" />
-      <path d="M25 36 L13 45 L11 55" />
-    </g>
-
-    <ellipse
-      cx="30"
-      cy="38"
-      rx="10"
-      ry="12"
-      fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="1.2"
-    />
-
-    <circle
-      cx="30"
-      cy="24"
-      r="6.5"
-      fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="1.2"
-    />
-
-    <path d="M30 32 L34 38 L30 44 L26 38 Z" fill="#a85d24" />
-
-    <circle cx="27.5" cy="22.5" r="1.5" fill="#a94a42" />
-    <circle cx="32.5" cy="22.5" r="1.5" fill="#a94a42" />
-  </svg>
-);
-
-const MurcielagoSvg = (props) => (
-  <svg
-    viewBox="0 0 64 32"
-    width="100%"
-    height="100%"
-    aria-hidden="true"
-    {...props}
-  >
-    <path
-      d="M32 10 C30 6 28 4 26 3 C26 7 25 9 23 10 C18 6 10 5 2 8 C6 10 7 13 6 17 C10 14 14 14 17 17 C19 14 22 14 24 16 C26 18 29 19 32 24 C35 19 38 18 40 16 C42 14 45 14 47 17 C50 14 54 14 58 17 C57 13 58 10 62 8 C54 5 46 6 41 10 C39 9 38 7 38 3 C36 4 34 6 32 10 Z"
-      fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="0.8"
-      strokeLinejoin="round"
-    />
-
-    <circle cx="29.5" cy="13" r="0.9" fill="#a94a42" />
-    <circle cx="34.5" cy="13" r="0.9" fill="#a94a42" />
-  </svg>
-);
-
-/* =========================================================
-   ANIMACIONES
-   ========================================================= */
-
 const aparecer = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.985);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 `;
 
 const aparecerFila = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(7px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const caer = keyframes`
-  from {
-    transform: translateY(-70vh);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-`;
-
-const columpio = keyframes`
-  from {
-    transform: rotate(-7deg);
-  }
-
-  to {
-    transform: rotate(7deg);
-  }
-`;
-
-const volar = keyframes`
-  0% {
-    transform: translate(-15vw, var(--y)) rotate(-4deg);
-  }
-
-  10% {
-    transform: translate(20vw, calc(var(--y) - 5vh)) rotate(4deg);
-  }
-
-  20% {
-    transform: translate(50vw, calc(var(--y) + 3vh)) rotate(-3deg);
-  }
-
-  30% {
-    transform: translate(80vw, calc(var(--y) - 4vh)) rotate(3deg);
-  }
-
-  40%,
-  100% {
-    transform: translate(118vw, var(--y)) rotate(-2deg);
-  }
-`;
-
-const aletear = keyframes`
-  0%,
-  100% {
-    transform: scaleY(1);
-  }
-
-  50% {
-    transform: scaleY(0.5);
-  }
-`;
-
-const parpadeo = keyframes`
-  0%,
-  100% {
-    opacity: 0.055;
-  }
-
-  50% {
-    opacity: 0.13;
-  }
-`;
-
-const flotar = keyframes`
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-3px);
-  }
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
 const LoaderAnim = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
-
-/* =========================================================
-   COMPONENTE PRINCIPAL
-   ========================================================= */
 
 export const IngresoCobro = forwardRef((props, ref) => {
   const [openRegistro, setOpenRegistro] = useState(false);
   const [stateBuscadorClientes, setStateBuscadorClientes] = useState(false);
   const [montoManualEfectivo, setMontoManualEfectivo] = useState("");
   const [recibido, setRecibido] = useState(0);
-
   const {
     tipocobro,
     restante,
@@ -295,52 +65,40 @@ export const IngresoCobro = forwardRef((props, ref) => {
     setVuelto,
     vuelto,
   } = useVentasStore();
-
   const { total, mostrardetalleventa } = useDetalleVentasStore();
-
   const [precioVenta] = useState(total);
-
   const { data: dataMonedas } = useMostrarMonedaQueryStack();
-
   const {
     dataComprobantes,
     itemSelectComprobanteSelect,
     setItemSelectComprobanteSelect,
   } = useSerealizacionesStore();
-
   const { ProductosItemSelect } = useProductosStore();
   const { datausuarios } = useUsuariosStore();
   const { dataMetodosPago } = useMetodosPagoStore();
-
   const theme = useTheme();
-
   const { dataempresa } = useEmpresaStore();
-
   const { setBuscador, selectCliPro, cliproItemSelect } =
     useClientesProveedoresStore();
-
   const usaEfectivo = tipocobro === "Efectivo";
-
   const denominacionesOrdenadas = [...(dataMonedas ?? [])].sort(
     (a, b) => a.numero - b.numero,
   );
+  const estadoRecibido =
+    recibido === 0 ? "neutro" : recibido >= total ? "completo" : "pendiente";
 
   const calcularVueltoYRestante = () => {
     const totalPagado = Object.values(valoresPago).reduce(
       (acc, curr) => acc + curr,
       0,
     );
-
     const totalSinEfectivo = totalPagado - (valoresPago["Efectivo"] || 0);
-
     if (totalSinEfectivo > precioVenta) {
       setVuelto(0);
       setRestante(precioVenta - totalSinEfectivo);
     } else if (totalPagado >= precioVenta) {
       const exceso = totalPagado - precioVenta;
-
       setVuelto(valoresPago["Efectivo"] ? exceso : 0);
-
       setRestante(0);
     } else {
       setVuelto(0);
@@ -349,28 +107,22 @@ export const IngresoCobro = forwardRef((props, ref) => {
   };
 
   const { data: databuscadorcliente } = useBuscarClientesQueryStack();
-
   const mutation = useConfirmarVentasMutationStack({
     imprimirDirectoTicket,
     imprimirConVentanaEmergente,
   });
 
   const handleChangePago = (tipo, valor) => {
-    setValoresPago((prev) => ({
-      ...prev,
-      [tipo]: parseFloat(valor) || 0,
-    }));
+    setValoresPago((prev) => ({ ...prev, [tipo]: parseFloat(valor) || 0 }));
   };
 
   const handleAgregarMontoEfectivo = (monto) => {
     if (!monto || monto <= 0) return;
-
     setRecibido((prev) => prev + monto);
   };
 
   const handleAgregarMontoManual = () => {
     const valor = parseFloat(montoManualEfectivo);
-
     if (!isNaN(valor) && valor > 0) {
       handleAgregarMontoEfectivo(valor);
       setMontoManualEfectivo("");
@@ -382,26 +134,18 @@ export const IngresoCobro = forwardRef((props, ref) => {
     setMontoManualEfectivo("");
   };
 
-  useImperativeHandle(ref, () => ({
-    mutateAsync: mutation.mutateAsync,
-  }));
+  useImperativeHandle(ref, () => ({ mutateAsync: mutation.mutateAsync }));
 
   async function imprimirConVentanaEmergente(responseVentaConfirmada) {
-    const items = await mostrardetalleventa({
-      id_venta: idventa,
-    });
-
+    const items = await mostrardetalleventa({ id_venta: idventa });
     const ahora = new Date();
-
     const horaFormateada = ahora.toLocaleTimeString("en-US", {
       hour12: true,
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
     });
-
     const fechaFormateada = ahora.toLocaleDateString();
-
     const dataenv = {
       hora: horaFormateada,
       fecha: fechaFormateada,
@@ -423,7 +167,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
         itemSelectComprobanteSelect?.tipo_comprobantes?.nombre,
       telefono: dataempresa?.telefono_celular,
     };
-
     await ticket("print", dataenv);
   }
 
@@ -434,30 +177,21 @@ export const IngresoCobro = forwardRef((props, ref) => {
       setValoresPago({});
     } else if (tipocobro === "Efectivo") {
       setRecibido(0);
-
-      setValoresPago({
-        Efectivo: total,
-      });
+      setValoresPago({ Efectivo: total });
     } else {
-      setValoresPago({
-        [tipocobro]: total,
-      });
+      setValoresPago({ [tipocobro]: total });
     }
   }, [tipocobro]);
 
   useEffect(() => {
     if (tipocobro !== "Mixto" && tipocobro !== "Efectivo") {
-      setValoresPago({
-        [tipocobro]: total,
-      });
+      setValoresPago({ [tipocobro]: total });
     }
   }, [total]);
 
   useEffect(() => {
     if (tipocobro === "Efectivo") {
-      setValoresPago({
-        Efectivo: recibido > 0 ? recibido : total,
-      });
+      setValoresPago({ Efectivo: recibido > 0 ? recibido : total });
     }
   }, [recibido, total]);
 
@@ -466,62 +200,14 @@ export const IngresoCobro = forwardRef((props, ref) => {
   }, [precioVenta, tipocobro, valoresPago]);
 
   return (
-    <Container $ancho={usaEfectivo ? "1180px" : "700px"}>
-      <HalloweenDecor>
-        <Telarana className="web web-left" />
-        <Telarana className="web web-right" />
-
-        {MURCIELAGOS.map((b, i) => (
-          <Murcielago
-            key={i}
-            style={{
-              "--y": b.y,
-              width: b.w,
-              animationDuration: b.t,
-              animationDelay: b.d,
-              animationDirection: b.rev ? "reverse" : "normal",
-            }}
-          >
-            <Aleteo>
-              <MurcielagoSvg
-                style={{
-                  transform: b.rev ? "scaleX(-1)" : "none",
-                }}
-              />
-            </Aleteo>
-          </Murcielago>
-        ))}
-
-        {ARANAS.map((a, i) => (
-          <AranaHilo
-            key={i}
-            style={{
-              left: a.x,
-              width: a.ancho,
-              height: a.largo,
-              animationDelay: a.d,
-            }}
-          >
-            <AranaBalanceo
-              style={{
-                animationDuration: a.t,
-                animationDelay: `-${i * 0.8}s`,
-              }}
-            >
-              <AranaSvg />
-            </AranaBalanceo>
-          </AranaHilo>
-        ))}
-      </HalloweenDecor>
-
+    <Container $ancho={usaEfectivo ? "1180px" : "480px"}>
       <Contenido>
         {mutation.isPending ? (
           <ConteinerLoader>
             <span>
               <strong>Guardando</strong>
             </span>
-
-            <BeatLoader color={HALLOWEEN.primary} size={8} />
+            <BeatLoader color={ACCENT.primary} size={8} />
           </ConteinerLoader>
         ) : (
           <>
@@ -531,14 +217,12 @@ export const IngresoCobro = forwardRef((props, ref) => {
                 Error: {mutation.error.message}
               </ErrorMessage>
             )}
-
             <TopBar>
               <TipoCobro>
                 <Icon icon="solar:wallet-money-bold" />
                 {tipocobro}
               </TipoCobro>
             </TopBar>
-
             <Libro>
               <PaginaIzquierda>
                 {openRegistro && (
@@ -548,57 +232,62 @@ export const IngresoCobro = forwardRef((props, ref) => {
                     />
                   </ContentReg>
                 )}
-
                 <section className="cabecera">
                   <ComprobanteActual>
-                    {itemSelectComprobanteSelect?.tipo_comprobantes?.nombre}
-
+                    <span className="label">
+                      {itemSelectComprobanteSelect?.tipo_comprobantes?.nombre}
+                    </span>
                     <strong>
                       {itemSelectComprobanteSelect?.serie}-
                       {itemSelectComprobanteSelect?.correlativos}
                     </strong>
                   </ComprobanteActual>
-
                   <section className="areacomprobantes">
-                    {dataComprobantes?.map((item, index) => (
-                      <article className="box" key={index}>
-                        <Btn1
-                          funcion={() => setItemSelectComprobanteSelect(item)}
-                          border="1px"
-                          height="48px"
-                          width="100%"
-                          titulo={item?.tipo_comprobantes?.nombre}
-                          bgcolor={
-                            theme.body === "#fff"
-                              ? "rgba(0,0,0,0.025)"
-                              : "rgba(255,255,255,0.018)"
-                          }
-                          color={theme.text}
-                        />
-                      </article>
-                    ))}
+                    {dataComprobantes?.map((item, index) => {
+                      const seleccionado = item === itemSelectComprobanteSelect;
+                      return (
+                        <article
+                          className={seleccionado ? "box seleccionado" : "box"}
+                          key={index}
+                        >
+                          <Btn1
+                            funcion={() => setItemSelectComprobanteSelect(item)}
+                            border="1px"
+                            height="48px"
+                            width="100%"
+                            titulo={item?.tipo_comprobantes?.nombre}
+                            bgcolor={
+                              seleccionado
+                                ? ACCENT.primarySoft
+                                : theme.body === "#fff"
+                                  ? "rgba(0,0,0,0.025)"
+                                  : "rgba(255,255,255,0.018)"
+                            }
+                            color={seleccionado ? ACCENT.primary : theme.text}
+                          />
+                        </article>
+                      );
+                    })}
                   </section>
-
                   <ClienteBox>
                     <ClienteTitulo>
                       <Icon icon="solar:user-id-bold" />
                       <span>Cliente</span>
                     </ClienteTitulo>
-
-                    <EditButton
-                      onClick={() =>
-                        setStateBuscadorClientes(!stateBuscadorClientes)
-                      }
-                    >
-                      <Icon className="icono" icon="line-md:pencil-twotone" />
-                    </EditButton>
-
                     <span className="cliente">
                       {cliproItemSelect?.nombres || "Consumidor final"}
                     </span>
+                    <EditButton
+                      type="button"
+                      onClick={() =>
+                        setStateBuscadorClientes(!stateBuscadorClientes)
+                      }
+                      aria-label="Cambiar cliente"
+                    >
+                      <Icon icon="line-md:pencil-twotone" />
+                    </EditButton>
                   </ClienteBox>
                 </section>
-
                 <section className="metodos">
                   {dataMetodosPago?.map((item, index) => {
                     const mostrar =
@@ -606,9 +295,7 @@ export const IngresoCobro = forwardRef((props, ref) => {
                         item.nombre !== "Mixto" &&
                         item.nombre !== "Credito") ||
                       (tipocobro === item.nombre && item.nombre !== "Mixto");
-
                     if (!mostrar) return null;
-
                     if (item.nombre === "Efectivo") {
                       if (tipocobro === "Efectivo") {
                         return (
@@ -618,7 +305,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
                                 <label className="form__label">
                                   Total a cobrar
                                 </label>
-
                                 <DisplayEfectivo>
                                   {FormatearNumeroDinero(
                                     total,
@@ -627,27 +313,26 @@ export const IngresoCobro = forwardRef((props, ref) => {
                                   )}
                                 </DisplayEfectivo>
                               </MontoBox>
-
-                              <MontoBox>
+                              <MontoBox $estado={estadoRecibido}>
                                 <label className="form__label">Recibido</label>
-
-                                <DisplayEfectivo $vacio={recibido === 0}>
+                                <DisplayEfectivo $estado={estadoRecibido}>
                                   {FormatearNumeroDinero(
                                     recibido,
                                     dataempresa?.currency,
                                     dataempresa?.iso,
                                   )}
+                                  {estadoRecibido === "completo" && (
+                                    <Icon icon="solar:check-circle-bold" />
+                                  )}
                                 </DisplayEfectivo>
                               </MontoBox>
                             </FilaMontos>
-
                             {recibido === 0 && (
                               <Hint>
                                 <Icon icon="solar:info-circle-bold" />
                                 Pago exacto: presiona Cobrar directamente
                               </Hint>
                             )}
-
                             <ManualRow>
                               <input
                                 type="number"
@@ -664,7 +349,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
                                   }
                                 }}
                               />
-
                               <button
                                 type="button"
                                 onClick={handleAgregarMontoManual}
@@ -672,7 +356,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
                                 <Icon icon="solar:add-circle-bold" />
                                 Agregar
                               </button>
-
                               <button
                                 type="button"
                                 className="limpiar"
@@ -686,7 +369,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
                         );
                       }
                     }
-
                     return (
                       <InputText textaling="center" key={index}>
                         <input
@@ -698,39 +380,45 @@ export const IngresoCobro = forwardRef((props, ref) => {
                           type="number"
                           disabled={tipocobro === "Mixto" ? false : true}
                         />
-
                         <label className="form__label">{item.nombre}</label>
                       </InputText>
                     );
                   })}
                 </section>
-
                 <TotalesBox>
                   <article>
-                    <span className="total">Total</span>
-
-                    <span>Vuelto</span>
-                    <span>Restante</span>
-                  </article>
-
-                  <article>
-                    <span className="total">
+                    <span className="label">Total</span>
+                    <span className="valor total">
                       {FormatearNumeroDinero(
                         total,
                         dataempresa?.currency,
                         dataempresa?.iso,
                       )}
                     </span>
-
-                    <span>
+                  </article>
+                  <article>
+                    <span className="label">Vuelto</span>
+                    <span
+                      className={
+                        vuelto > 0 ? "valor vuelto activo" : "valor vuelto"
+                      }
+                    >
                       {FormatearNumeroDinero(
                         vuelto,
                         dataempresa?.currency,
                         dataempresa?.iso,
                       )}
                     </span>
-
-                    <span>
+                  </article>
+                  <article>
+                    <span className="label">Restante</span>
+                    <span
+                      className={
+                        restante > 0
+                          ? "valor restante activo"
+                          : "valor restante"
+                      }
+                    >
                       {FormatearNumeroDinero(
                         restante,
                         dataempresa?.currency,
@@ -739,26 +427,27 @@ export const IngresoCobro = forwardRef((props, ref) => {
                     </span>
                   </article>
                 </TotalesBox>
-
                 <section className="acciones">
                   {tipocobro === "Credito" ? (
                     <>
                       <Btn1
                         border="2px"
                         titulo="¿Fiado? Presiona"
-                        bgcolor="#8f831c"
+                        bgcolor={ACCENT.pending}
                         color="#ffffff"
                         width="100%"
                         funcion={() => setOpenRegistro(!openRegistro)}
                       />
-
                       <Linea />
-
                       <Btn1
+                        funcion={() => {
+                          if (mutation.isPending) return;
+                          mutation.mutateAsync();
+                        }}
                         border="2px"
                         titulo="Cobrar (Enter)"
-                        bgcolor={HALLOWEEN.primary}
-                        color={theme.body === "#fff" ? "#ffffff" : "#f4ebe4"}
+                        bgcolor={ACCENT.primary}
+                        color="#ffffff"
                         width="100%"
                       />
                     </>
@@ -766,29 +455,25 @@ export const IngresoCobro = forwardRef((props, ref) => {
                     <Btn1
                       funcion={() => {
                         if (mutation.isPending) return;
-
                         mutation.mutateAsync();
                       }}
                       border="2px"
                       titulo="Cobrar (Enter)"
-                      bgcolor={HALLOWEEN.primary}
-                      color={theme.body === "#fff" ? "#ffffff" : "#f4ebe4"}
+                      bgcolor={ACCENT.primary}
+                      color="#ffffff"
                       width="100%"
                     />
                   )}
                 </section>
               </PaginaIzquierda>
-
               {usaEfectivo && (
                 <>
                   <Lomo />
-
                   <PaginaDerecha>
                     <h4>
                       <Icon icon="solar:money-bag-bold" />
                       Denominaciones
                     </h4>
-
                     <DenominacionesGrid>
                       {denominacionesOrdenadas.map((moneda) => (
                         <DenominacionBtn
@@ -807,7 +492,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
                               }}
                             />
                           ) : null}
-
                           <span>
                             {FormatearNumeroDinero(
                               moneda.numero,
@@ -822,7 +506,6 @@ export const IngresoCobro = forwardRef((props, ref) => {
                 </>
               )}
             </Libro>
-
             {stateBuscadorClientes && (
               <PanelBuscador
                 data={databuscadorcliente}
@@ -841,226 +524,69 @@ export const IngresoCobro = forwardRef((props, ref) => {
   );
 });
 
-/* =========================================================
-   DECORACIÓN
-   ========================================================= */
-
-const HalloweenDecor = styled.div`
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background:
-      radial-gradient(
-        circle at 10% 8%,
-        rgba(197, 106, 32, 0.035),
-        transparent 28%
-      ),
-      radial-gradient(
-        circle at 90% 85%,
-        rgba(115, 76, 50, 0.035),
-        transparent 30%
-      );
-  }
-
-  .web {
-    position: absolute;
-    width: min(180px, 20vw);
-
-    color: ${HALLOWEEN.primary};
-
-    opacity: 0.11;
-
-    filter: drop-shadow(0 0 4px rgba(197, 106, 32, 0.05));
-
-    animation: ${parpadeo} 7s ease-in-out infinite;
-
-    transform-origin: center;
-  }
-
-  .web-left {
-    top: -15px;
-    left: -15px;
-    transform: scaleX(-1);
-  }
-
-  .web-right {
-    top: -15px;
-    right: -15px;
-    animation-delay: -3s;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    & * {
-      animation: none !important;
-    }
-  }
-`;
-
-const Murcielago = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  --y: ${({ style }) => style?.["--y"]};
-
-  color: ${HALLOWEEN.primary};
-
-  animation: ${volar} 30s linear infinite;
-
-  opacity: 0.23;
-
-  will-change: transform;
-
-  @media (prefers-reduced-motion: reduce) {
-    display: none;
-  }
-`;
-
-const Aleteo = styled.div`
-  animation: ${aletear} 0.3s ease-in-out infinite alternate;
-
-  filter: drop-shadow(0 0 2px rgba(197, 106, 32, 0.06));
-
-  will-change: transform;
-`;
-
-const AranaHilo = styled.div`
-  position: absolute;
-  top: 0;
-
-  color: ${HALLOWEEN.primaryDark};
-
-  transform-origin: top center;
-
-  animation: ${caer} 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-
-  will-change: transform;
-
-  @media (max-width: 700px) {
-    &:nth-last-child(-n + 1) {
-      display: none;
-    }
-  }
-`;
-
-const AranaBalanceo = styled.div`
-  width: 100%;
-  height: 100%;
-
-  transform-origin: top center;
-
-  animation: ${columpio} 4.8s ease-in-out infinite alternate;
-
-  svg {
-    display: block;
-  }
-`;
-
-/* =========================================================
-   CONTENEDOR PRINCIPAL
-   ========================================================= */
-
 const Container = styled.div`
   position: relative;
   box-sizing: border-box;
-
-  width: ${({ $ancho }) => $ancho || "480px"};
+  width: ${({ $ancho }) => $ancho};
   max-width: 96vw;
-
   margin: 0 auto;
   align-self: center;
-
-  max-height: calc(100vh - 60px);
-
-  padding: 20px 24px;
-
-  border-radius: 16px;
-
+  max-height: 100vh;
+  padding: 24px 28px;
+  border-radius: 20px;
+  background-color: ${({ theme }) => theme.bg2 || theme.bgtotal};
+  color: ${({ theme }) => theme.text};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
   box-shadow: ${({ theme }) =>
     theme.body === "#fff"
-      ? "0 18px 45px rgba(0,0,0,0.10)"
-      : "0 18px 45px rgba(0,0,0,0.42)"};
-
+      ? "0 24px 60px rgba(15,23,42,0.14)"
+      : "0 24px 60px rgba(0,0,0,0.5)"};
   display: flex;
   flex-direction: column;
-
-  background-color: ${({ theme }) => theme.bg2 || theme.bgtotal};
-
-  color: ${({ theme }) => theme.text};
-
   align-items: center;
   justify-content: flex-start;
-
   font-size: 22px;
-
   overflow-y: auto;
   overflow-x: hidden;
-
   scrollbar-width: thin;
-
-  scrollbar-color: ${HALLOWEEN.primary} transparent;
-
-  border: 1px solid ${HALLOWEEN.border};
-
+  scrollbar-color: ${ACCENT.primary} transparent;
   animation: ${aparecer} 0.28s ease both;
-
   &::before {
     content: "";
-
     position: absolute;
-    inset: 0;
-
-    border-radius: inherit;
-
-    pointer-events: none;
-
-    border-top: 2px solid ${HALLOWEEN.primary};
-
-    opacity: 0.9;
-
-    z-index: 1;
+    top: 0;
+    left: 24px;
+    right: 24px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: ${ACCENT.primary};
+    opacity: 0.85;
   }
-
   &::-webkit-scrollbar {
     width: 6px;
   }
-
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-
   &::-webkit-scrollbar-thumb {
-    background: ${HALLOWEEN.primary};
-
+    background: ${ACCENT.primary};
     border-radius: 10px;
   }
-
   @media (max-height: 760px) {
-    padding: 14px 20px;
+    padding: 16px 20px;
   }
-
   @media (max-width: 700px) {
     width: 100%;
     max-width: 95vw;
-
     max-height: calc(100vh - 40px);
-
-    padding: 14px;
+    padding: 16px;
   }
 `;
 
 const Contenido = styled.div`
   position: relative;
-  z-index: 3;
-
   width: 100%;
   min-height: 0;
 `;
@@ -1068,94 +594,81 @@ const Contenido = styled.div`
 const TopBar = styled.div`
   display: flex;
   justify-content: flex-end;
-
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 `;
 
 const TipoCobro = styled.span`
   display: flex;
   align-items: center;
-
-  gap: 5px;
-
-  padding: 5px 9px;
-
-  border-radius: 8px;
-
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
   font-size: 12px;
-  font-weight: 750;
-
-  color: ${HALLOWEEN.primary};
-
-  background: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(0,0,0,0.025)" : "rgba(255,255,255,0.025)"};
-
-  border: 1px solid ${HALLOWEEN.borderSoft};
-
-  animation: ${flotar} 3s ease-in-out infinite;
+  font-weight: 700;
+  color: ${ACCENT.primary};
+  background: ${ACCENT.primarySoft};
+  border: 1px solid ${ACCENT.borderSoft};
 `;
 
 const ErrorMessage = styled.div`
   display: flex;
   align-items: center;
-
   gap: 8px;
-
   width: 100%;
   box-sizing: border-box;
-
-  padding: 8px 10px;
-
-  margin-bottom: 6px;
-
-  border-radius: 8px;
-
-  color: #e04040;
-
-  background: rgba(224, 64, 64, 0.07);
-
-  border: 1px solid rgba(224, 64, 64, 0.15);
-
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border-left: 3px solid ${ACCENT.danger};
+  color: ${ACCENT.danger};
+  background: ${ACCENT.dangerSoft};
   font-size: 12px;
+  svg {
+    flex-shrink: 0;
+    font-size: 16px;
+  }
 `;
 
 const Libro = styled.div`
   width: 100%;
-
   display: flex;
   flex-direction: row;
-
   align-items: stretch;
-
   gap: 0;
-
-  padding: 4px;
-
-  border-radius: 12px;
-
-  background: ${({ theme }) =>
-    theme.body === "#fff"
-      ? "rgba(255,255,255,0.35)"
-      : "rgba(255,255,255,0.012)"};
-
-  animation: ${aparecerFila} 0.35s ease both;
-
   @media (max-width: 700px) {
     flex-direction: column;
   }
 `;
 
 const Lomo = styled.div`
-  width: 2px;
-
+  position: relative;
+  width: 0;
   align-self: stretch;
-
-  background: ${HALLOWEEN.borderSoft};
-
-  box-shadow: 0 0 6px 1px ${HALLOWEEN.glow};
-
-  margin: 0 14px;
-
+  margin: 6px 20px;
+  border-left: 1.5px dashed
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(15,23,42,0.16)" : "rgba(255,255,255,0.16)"};
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: -6px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: ${({ theme }) => theme.bg2 || theme.bgtotal};
+    border: 1.5px solid
+      ${({ theme }) =>
+        theme.body === "#fff"
+          ? "rgba(15,23,42,0.16)"
+          : "rgba(255,255,255,0.16)"};
+  }
+  &::before {
+    top: -6px;
+  }
+  &::after {
+    bottom: -6px;
+  }
   @media (max-width: 700px) {
     display: none;
   }
@@ -1163,123 +676,92 @@ const Lomo = styled.div`
 
 const PaginaIzquierda = styled.div`
   position: relative;
-
   flex: 1 1 0;
-
   min-width: 0;
-
   display: flex;
   flex-direction: column;
-
   align-items: center;
-
-  padding: 6px 8px;
-
+  padding: 4px 6px;
   .cabecera {
     display: flex;
     flex-direction: column;
-
     align-items: center;
-
     width: 100%;
-
-    margin-bottom: 8px;
-
-    .areacomprobantes {
-      display: flex;
-
-      flex-wrap: wrap;
-
-      gap: 9px;
-
-      padding: 9px 0;
-
-      width: 100%;
-
-      .box {
-        flex: 1 1 40%;
-
-        min-width: 150px;
-
-        display: flex;
-      }
-    }
+    margin-bottom: 10px;
   }
-
+  .cabecera .areacomprobantes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 0;
+    width: 100%;
+  }
+  .cabecera .areacomprobantes .box {
+    position: relative;
+    flex: 1 1 40%;
+    min-width: 150px;
+    display: flex;
+  }
+  .cabecera .areacomprobantes .box.seleccionado::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: -2px;
+    height: 2px;
+    background: ${ACCENT.primary};
+    border-radius: 2px;
+  }
   .metodos {
     margin-top: 8px;
-
     width: 100%;
-
     min-height: 70px;
-
     display: flex;
     flex-direction: column;
-
     justify-content: center;
-
     gap: 10px;
-
-    animation: ${aparecerFila} 0.3s ease both;
-
-    input {
-      color: ${({ theme }) => theme.text} !important;
-
-      font-weight: 700;
-
-      font-size: 30px;
-
-      background: transparent;
-
-      border-bottom: 2px solid ${HALLOWEEN.borderSoft};
-
-      transition:
-        border-color 0.2s ease,
-        transform 0.2s ease;
-
-      &:focus {
-        border-color: ${HALLOWEEN.primary};
-
-        transform: translateY(-1px);
-
-        outline: none;
-      }
-    }
-
-    .form__label {
-      color: ${({ theme }) => theme.text} !important;
-
-      opacity: 0.65;
-    }
   }
-
+  .metodos input {
+    color: ${({ theme }) => theme.text} !important;
+    font-weight: 700;
+    font-size: 28px;
+    font-variant-numeric: tabular-nums;
+    background: transparent;
+    border-bottom: 2px solid
+      ${({ theme }) =>
+        theme.body === "#fff"
+          ? "rgba(15,23,42,0.12)"
+          : "rgba(255,255,255,0.12)"};
+    transition: border-color 0.2s ease;
+  }
+  .metodos input:focus {
+    border-color: ${ACCENT.primary};
+    outline: none;
+  }
+  .metodos .form__label {
+    color: ${({ theme }) => theme.text} !important;
+    opacity: 0.6;
+  }
   .acciones {
     width: 100%;
-
-    margin-top: 12px;
-
+    margin-top: 14px;
     flex-shrink: 0;
-
-    button {
-      transition:
-        transform 0.18s ease,
-        filter 0.18s ease,
-        box-shadow 0.18s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-
-        filter: brightness(1.04);
-
-        box-shadow: 0 7px 18px rgba(197, 106, 32, 0.08);
-      }
-
-      &:active {
-        transform: scale(0.985);
-      }
-    }
   }
-
+  .acciones button {
+    transition:
+      transform 0.15s ease,
+      filter 0.15s ease;
+  }
+  .acciones button:hover {
+    filter: brightness(1.05);
+  }
+  .acciones button:active {
+    transform: scale(0.98);
+  }
+  .acciones button:focus-visible {
+    outline: 2px solid ${ACCENT.primary};
+    outline-offset: 2px;
+  }
   @media (max-width: 700px) {
     padding: 4px;
   }
@@ -1287,429 +769,352 @@ const PaginaIzquierda = styled.div`
 
 const ComprobanteActual = styled.div`
   display: flex;
-
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  gap: 7px;
-
-  font-size: 13px;
-
-  opacity: 0.72;
-
-  margin-bottom: 2px;
-
+  gap: 2px;
+  margin-bottom: 4px;
+  .label {
+    font-size: 12px;
+    opacity: 0.6;
+  }
   strong {
-    color: ${HALLOWEEN.primary};
-
+    font-size: 15px;
     font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: ${ACCENT.primary};
   }
 `;
 
 const ClienteBox = styled.section`
   width: 100%;
-
   box-sizing: border-box;
-
   display: flex;
-
   align-items: center;
-
-  gap: 9px;
-
-  padding: 9px 11px;
-
-  margin-top: 2px;
-
-  border-radius: 9px;
-
-  background: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(0,0,0,0.025)" : "rgba(255,255,255,0.018)"};
-
-  border: 1px solid ${HALLOWEEN.borderSoft};
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 4px;
+  border-radius: 10px;
+  background: ${ACCENT.primarySoft2};
+  border: 1px solid ${ACCENT.borderSoft};
+  .cliente {
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const ClienteTitulo = styled.div`
   display: flex;
-
   align-items: center;
-
   gap: 5px;
-
   font-size: 13px;
-
   opacity: 0.6;
-
   white-space: nowrap;
+  svg {
+    color: ${ACCENT.primary};
+  }
 `;
 
 const EditButton = styled.button`
   flex-shrink: 0;
-
-  background-color: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(0,0,0,0.025)" : "rgba(255,255,255,0.025)"};
-
-  color: ${HALLOWEEN.primary};
-
-  border: 1px solid ${HALLOWEEN.borderSoft};
-
+  background: transparent;
+  color: ${ACCENT.primary};
+  border: 1px solid ${ACCENT.borderSoft};
   border-radius: 50%;
-
   cursor: pointer;
-
-  width: 29px;
-  height: 29px;
-
+  width: 28px;
+  height: 28px;
   display: flex;
-
-  justify-content: center;
   align-items: center;
-
-  margin: 0;
-
+  justify-content: center;
   transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-
-  .icono {
-    font-size: 18px;
+    background 0.15s ease,
+    transform 0.15s ease;
+  svg {
+    font-size: 16px;
   }
-
   &:hover {
-    transform: rotate(7deg) scale(1.05);
-
-    box-shadow: 0 4px 12px rgba(197, 106, 32, 0.08);
+    background: ${ACCENT.primarySoft};
   }
-
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
+  }
+  &:focus-visible {
+    outline: 2px solid ${ACCENT.primary};
+    outline-offset: 2px;
   }
 `;
 
 const ContentReg = styled.div`
   position: relative;
-
   z-index: 10;
-
   width: 100%;
-
-  color: ${HALLOWEEN.primary};
-
+  color: ${ACCENT.primary};
   animation: ${aparecer} 0.2s ease both;
 `;
 
 const TotalesBox = styled.section`
   width: 100%;
-
   box-sizing: border-box;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  margin-top: 12px;
-
-  padding: 12px 15px;
-
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 14px;
   border-radius: 10px;
-
-  background: ${({ theme }) =>
-    theme.body === "#fff"
-      ? "rgba(255,255,255,0.55)"
-      : "rgba(255,255,255,0.02)"};
-
-  border: 1px solid ${HALLOWEEN.borderSoft};
-
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
   article {
     display: flex;
-
     flex-direction: column;
-
+    align-items: center;
     gap: 4px;
-
-    line-height: 1.15;
+    padding: 12px 8px;
+    border-right: 1px solid
+      ${({ theme }) =>
+        theme.body === "#fff"
+          ? "rgba(15,23,42,0.08)"
+          : "rgba(255,255,255,0.08)"};
   }
-
   article:last-child {
-    text-align: right;
+    border-right: none;
   }
-
-  .total {
-    color: ${HALLOWEEN.primary};
-
-    font-weight: 800;
+  .label {
+    font-size: 11px;
+    opacity: 0.55;
+  }
+  .valor {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.55;
+  }
+  .valor.total {
+    color: ${ACCENT.primary};
+    opacity: 1;
+    font-size: 18px;
+  }
+  .valor.vuelto.activo {
+    opacity: 1;
+    color: ${ACCENT.primary};
+  }
+  .valor.restante.activo {
+    opacity: 1;
+    color: ${ACCENT.pending};
   }
 `;
 
 const ConteinerLoader = styled.div`
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   flex-direction: column;
-
   gap: 8px;
-
   min-height: 280px;
-
   animation: ${LoaderAnim} 0.25s ease both;
-
   strong {
-    color: ${HALLOWEEN.primary};
+    color: ${ACCENT.primary};
   }
 `;
 
 const EfectivoContainer = styled.div`
   width: 100%;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 10px;
-
   margin-top: 6px;
-
-  padding: 3px 0;
-
-  animation: ${aparecerFila} 0.25s ease both;
+  padding: 2px 0;
+  animation: ${aparecerFila} 0.22s ease both;
 `;
 
 const FilaMontos = styled.div`
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
-  gap: 14px;
+  gap: 12px;
 `;
 
 const MontoBox = styled.div`
   padding: 10px 12px;
-
   min-height: 76px;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   border-radius: 10px;
-
-  background: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(0,0,0,0.018)" : "rgba(255,255,255,0.018)"};
-
-  border: 1px solid ${HALLOWEEN.borderSoft};
-
+  background: ${({ $estado }) =>
+    $estado === "completo"
+      ? ACCENT.primarySoft
+      : $estado === "pendiente"
+        ? ACCENT.pendingSoft
+        : "transparent"};
+  border: 1px solid
+    ${({ $estado, theme }) =>
+      $estado === "completo"
+        ? ACCENT.borderSoft
+        : $estado === "pendiente"
+          ? ACCENT.pendingBorder
+          : theme.body === "#fff"
+            ? "rgba(15,23,42,0.08)"
+            : "rgba(255,255,255,0.08)"};
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
   .form__label {
     display: block;
-
     text-align: center;
-
     color: ${({ theme }) => theme.text};
-
     opacity: 0.55;
-
     font-size: 12px;
-
     margin-bottom: 5px;
   }
 `;
 
 const DisplayEfectivo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-weight: 800;
-
-  font-size: 28px;
-
+  font-size: 26px;
   line-height: 1.1;
-
+  font-variant-numeric: tabular-nums;
   text-align: center;
-
-  color: ${({ theme }) => theme.text};
-
-  padding-bottom: 2px;
-
+  color: ${({ $estado, theme }) =>
+    $estado === "completo"
+      ? ACCENT.primary
+      : $estado === "pendiente"
+        ? ACCENT.pending
+        : theme.text};
+  opacity: ${({ $estado }) => ($estado === "neutro" ? 0.42 : 1)};
   user-select: none;
-
-  opacity: ${({ $vacio }) => ($vacio ? 0.42 : 1)};
-
-  transition: opacity 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
+  svg {
+    font-size: 18px;
+  }
 `;
 
 const Hint = styled.span`
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 5px;
-
   font-size: 12px;
-
   text-align: center;
-
-  color: ${HALLOWEEN.primary};
-
-  opacity: 0.58;
+  color: ${ACCENT.primary};
+  opacity: 0.6;
 `;
 
 const ManualRow = styled.div`
   display: flex;
-
   gap: 7px;
-
   align-items: center;
-
   input {
     flex: 1;
-
     min-width: 0;
-
-    padding: 8px 10px;
-
+    padding: 9px 11px;
     border-radius: 8px;
-
     font-size: 15px !important;
-
     font-weight: 500 !important;
-
-    border: 1px solid ${HALLOWEEN.borderSoft};
-
+    font-variant-numeric: tabular-nums;
+    border: 1px solid
+      ${({ theme }) =>
+        theme.body === "#fff"
+          ? "rgba(15,23,42,0.12)"
+          : "rgba(255,255,255,0.12)"};
     background: transparent;
-
     color: ${({ theme }) => theme.text} !important;
-
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
-
-    &:focus {
-      outline: none;
-
-      border-color: ${HALLOWEEN.primary};
-
-      box-shadow: 0 0 0 3px rgba(197, 106, 32, 0.04);
-    }
+    transition: border-color 0.2s ease;
   }
-
+  input:focus {
+    outline: none;
+    border-color: ${ACCENT.primary};
+  }
+  input:focus-visible {
+    outline: 2px solid ${ACCENT.primary};
+    outline-offset: 1px;
+  }
   button {
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 4px;
-
-    padding: 8px 12px;
-
+    padding: 9px 13px;
     border-radius: 8px;
-
-    border: none;
-
+    border: 1px solid transparent;
     cursor: pointer;
-
     font-weight: 700;
-
-    background-color: ${HALLOWEEN.primary};
-
-    color: ${({ theme }) => (theme.body === "#fff" ? "#fff" : "#f4ebe4")};
-
+    font-size: 13px;
+    background-color: ${ACCENT.primary};
+    color: #ffffff;
     transition:
-      transform 0.18s ease,
-      filter 0.18s ease,
-      box-shadow 0.18s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-
-      filter: brightness(1.04);
-
-      box-shadow: 0 5px 12px rgba(197, 106, 32, 0.08);
-    }
-
-    &:active {
-      transform: scale(0.97);
-    }
-
-    &.limpiar {
-      background-color: #c34a4a;
-
-      color: #fff;
-    }
+      filter 0.15s ease,
+      transform 0.15s ease;
+  }
+  button:hover {
+    filter: brightness(1.06);
+  }
+  button:active {
+    transform: scale(0.97);
+  }
+  button:focus-visible {
+    outline: 2px solid ${ACCENT.primary};
+    outline-offset: 2px;
+  }
+  button.limpiar {
+    background-color: transparent;
+    border-color: ${ACCENT.dangerSoft};
+    color: ${ACCENT.danger};
+  }
+  button.limpiar:hover {
+    background-color: ${ACCENT.dangerSoft};
   }
 `;
 
 const PaginaDerecha = styled.div`
   flex: 1 1 0;
-
   min-width: 0;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
-  padding: 8px 10px;
-
+  padding: 6px 10px;
   h4 {
     display: flex;
-
     align-items: center;
-
     gap: 6px;
-
     margin: 0 0 12px;
-
-    color: ${HALLOWEEN.primary};
-
-    font-size: 16px;
-
+    color: ${ACCENT.primary};
+    font-size: 15px;
+    font-weight: 700;
     align-self: center;
-
-    animation: ${flotar} 3s ease-in-out infinite;
   }
-
   @media (max-width: 700px) {
     margin-top: 16px;
-
     padding: 4px;
-
     width: 100%;
   }
 `;
 
 const DenominacionesGrid = styled.div`
   width: 100%;
-
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
   gap: 10px;
-
   max-height: 330px;
-
   overflow-y: auto;
-
   padding: 2px 4px 2px 2px;
-
   &::-webkit-scrollbar {
     width: 5px;
   }
-
   &::-webkit-scrollbar-thumb {
-    background: ${HALLOWEEN.primary};
-
+    background: ${ACCENT.primary};
     border-radius: 10px;
   }
-
   @media (max-height: 760px) {
     max-height: 270px;
   }
-
   @media (max-width: 700px) {
     max-height: 260px;
   }
@@ -1717,67 +1122,42 @@ const DenominacionesGrid = styled.div`
 
 const DenominacionBtn = styled.button`
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   gap: 5px;
-
   padding: 9px 5px;
-
-  min-height: 78px;
-
-  border-radius: 9px;
-
-  border: 1px solid ${HALLOWEEN.borderSoft};
-
-  background-color: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(0,0,0,0.018)" : "rgba(255,255,255,0.018)"};
-
+  min-height: 76px;
+  border-radius: 10px;
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
+  background-color: transparent;
   color: ${({ theme }) => theme.text};
-
   font-weight: 700;
-
   font-size: 13px;
-
+  font-variant-numeric: tabular-nums;
   cursor: pointer;
-
   transition:
-    transform 0.16s ease,
-    background-color 0.16s ease,
-    border-color 0.16s ease,
-    box-shadow 0.16s ease;
-
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
   img {
-    width: 38px;
-
-    height: 38px;
-
+    width: 34px;
+    height: 34px;
     object-fit: contain;
-
     pointer-events: none;
-
-    transition: transform 0.16s ease;
   }
-
   &:hover {
+    background-color: ${ACCENT.primarySoft2};
+    border-color: ${ACCENT.borderSoft};
     transform: translateY(-2px);
-
-    background-color: ${({ theme }) =>
-      theme.body === "#fff" ? "rgba(0,0,0,0.03)" : "rgba(255,255,255,0.03)"};
-
-    border-color: ${HALLOWEEN.primary};
-
-    box-shadow: 0 5px 12px rgba(197, 106, 32, 0.06);
-
-    img {
-      transform: scale(1.05);
-    }
   }
-
   &:active {
     transform: scale(0.96);
+  }
+  &:focus-visible {
+    outline: 2px solid ${ACCENT.primary};
+    outline-offset: 2px;
   }
 `;

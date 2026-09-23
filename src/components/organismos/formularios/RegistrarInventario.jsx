@@ -22,23 +22,8 @@ import { BeatLoader } from "react-spinners";
 import { RadioChecks } from "../../ui/toogles/RadioChecks";
 
 const aparecer = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-`;
-
-const pulso = keyframes`
-  0%, 100% {
-    box-shadow: 0 0 0 rgba(184,102,39,0);
-  }
-  50% {
-    box-shadow: 0 0 18px rgba(184,102,39,0.08);
-  }
+  from { opacity: 0; margin-top: 14px; }
+  to { opacity: 1; margin-top: 0; }
 `;
 
 export function RegistrarInventario({ onClose }) {
@@ -48,40 +33,30 @@ export function RegistrarInventario({ onClose }) {
     useProductosStore();
   const { selectSucursal, sucursalesItemSelect } = useSucursalesStore();
   const { almacenSelelctItem, setAlmacenSelelctItem } = useAlmacenesStore();
-
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
   } = useForm();
-
   const { data: dataProductos } = useBuscarProductosQueryStack();
-
   const { data: dataSucursales, isLoading: isLoadingSucursales } =
     useMostrarSucursalesXEmpresaStack();
-
   const { data: dataAlmacenes, isLoading: isLoadingAlmacenes } =
     useMostrarAlmacenesXSucursalItemSelectQueryStack();
-
   const { data: dataStock } = useMostrarStockQueryStack();
-
   const { isPending, mutate: doInsertar } = useInsertarMovStcoMutationStack({
     onClose,
     resetFuction,
   });
-
   const handlesub = (data) => {
     doInsertar(data);
   };
-
   function resetFuction() {
     reset();
     setTipo("ingreso");
   }
-
   const isLoading = isLoadingSucursales || isLoadingAlmacenes;
-
   if (isLoading) {
     return (
       <ConteinerLoader>
@@ -92,11 +67,9 @@ export function RegistrarInventario({ onClose }) {
       </ConteinerLoader>
     );
   }
-
   return (
     <Container>
       <Toaster richColors />
-
       {isPending ? (
         <ConteinerLoader>
           <span>
@@ -107,19 +80,16 @@ export function RegistrarInventario({ onClose }) {
       ) : (
         <SubContenedor>
           <RadioChecks />
-
           <div className="headers">
             <section>
               <h1>
                 {tipo === "ingreso" ? "Registrar entrada" : "Registrar salida"}
               </h1>
             </section>
-
             <section>
               <BtnClose funcion={onClose} />
             </section>
           </div>
-
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
               <BuscadorList
@@ -127,19 +97,16 @@ export function RegistrarInventario({ onClose }) {
                 onSelect={selectProductos}
                 setBuscador={setBuscador}
               />
-
               <InfoRow>
                 <span>Producto</span>
                 <strong>{ProductosItemSelect?.nombre || "-"}</strong>
               </InfoRow>
-
               <InfoRow>
                 <span>Stock actual</span>
                 <strong className="stock">
                   {dataStock?.stock ? dataStock.stock : "-"}
                 </strong>
               </InfoRow>
-
               <ContainerSelector>
                 <label>Sucursal</label>
                 <SelectList
@@ -149,7 +116,6 @@ export function RegistrarInventario({ onClose }) {
                   displayField="nombre"
                 />
               </ContainerSelector>
-
               <ContainerSelector>
                 <label>Almacen</label>
                 <SelectList
@@ -159,16 +125,13 @@ export function RegistrarInventario({ onClose }) {
                   displayField="nombre"
                 />
               </ContainerSelector>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
                     type="number"
                     placeholder="cantidad"
-                    {...register("cantidad", {
-                      required: true,
-                    })}
+                    {...register("cantidad", { required: true })}
                   />
                   <label className="form__label">Cantidad...</label>
                   {errors.cantidad?.type === "required" && (
@@ -176,7 +139,6 @@ export function RegistrarInventario({ onClose }) {
                   )}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -190,7 +152,6 @@ export function RegistrarInventario({ onClose }) {
                   </label>
                 </InputText>
               </article>
-
               <div className="button-container">
                 <Btn1
                   disabled={!ProductosItemSelect?.nombre}
@@ -219,11 +180,7 @@ const Container = styled.div`
   z-index: 1000;
   padding: 20px;
   box-sizing: border-box;
-  background: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(255,255,255,0.48)" : "rgba(0,0,0,0.58)"};
   backdrop-filter: blur(6px);
-  animation: ${aparecer} 0.22s ease both;
-
   @media (max-width: 600px) {
     padding: 12px;
   }
@@ -238,49 +195,27 @@ const SubContenedor = styled.div`
   box-sizing: border-box;
   border-radius: 18px;
   padding: 18px 28px 24px;
-  background: ${({ theme }) => theme.bg2 || theme.body};
+  background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
-  border: 1px solid
-    ${({ theme }) =>
-      theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.07)"};
-  box-shadow: ${({ theme }) =>
-    theme.body === "#fff"
-      ? "0 18px 45px rgba(0,0,0,0.12)"
-      : "0 18px 45px rgba(0,0,0,0.5)"};
-  animation: ${pulso} 4s ease-in-out infinite;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 18px;
-    right: 18px;
-    height: 2px;
-    border-radius: 0 0 10px 10px;
-    background: rgba(184, 102, 39, 0.32);
-    pointer-events: none;
-  }
-
+  box-shadow: -10px 15px 30px rgba(10, 9, 9, 0.4);
+  animation: ${aparecer} 0.4s ease forwards;
   &::-webkit-scrollbar {
     width: 5px;
   }
-
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-
   &::-webkit-scrollbar-thumb {
     background: rgba(184, 102, 39, 0.18);
     border-radius: 10px;
   }
-
   .headers {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 15px;
+    padding-top: 20px;
     margin-bottom: 18px;
-
     h1 {
       margin: 0;
       font-size: 28px;
@@ -288,29 +223,24 @@ const SubContenedor = styled.div`
       line-height: 1.15;
     }
   }
-
   .formulario {
     .form-subcontainer {
       display: flex;
       flex-direction: column;
       gap: 16px;
-
       .form__field:focus {
         border-color: rgba(184, 102, 39, 0.35);
       }
     }
   }
-
   .button-container {
     display: flex;
     justify-content: flex-end;
     margin-top: 4px;
   }
-
   @media (max-width: 600px) {
     padding: 16px;
     max-height: 92vh;
-
     .headers {
       h1 {
         font-size: 23px;
@@ -331,18 +261,15 @@ const InfoRow = styled.div`
   border: 1px solid
     ${({ theme }) =>
       theme.body === "#fff" ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.05)"};
-
   span {
     font-size: 13px;
     opacity: 0.58;
   }
-
   strong {
     font-size: 14px;
     font-weight: 700;
     text-align: right;
   }
-
   .stock {
     color: ${({ theme }) => (theme.body === "#fff" ? "#347a42" : "#72bc7d")};
   }
@@ -353,22 +280,18 @@ export const ContainerSelector = styled.div`
   gap: 10px;
   align-items: center;
   position: relative;
-
   label {
     min-width: 70px;
     font-size: 13px;
     font-weight: 600;
     opacity: 0.65;
   }
-
   > *:last-child {
     flex: 1;
   }
-
   @media (max-width: 600px) {
     flex-direction: column;
     align-items: stretch;
-
     label {
       min-width: auto;
     }
@@ -384,7 +307,6 @@ const ConteinerLoader = styled.div`
   min-height: 250px;
   width: 100%;
   color: ${({ theme }) => theme.text};
-
   strong {
     opacity: 0.7;
     font-size: 14px;

@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import {
   Btn1,
-  RegistrarMetodosPago,
   Title,
   useMetodosPagoStore,
 } from "../../index";
@@ -24,9 +23,14 @@ import {
   ARANAS,
   MURCIELAGOS,
 } from "../organismos/LoginDesing/EscenaHalloween";
+import { RegistrarMetodosPago } from "../organismos/formularios/RegistrarmovimientocreditoVenta";
+
+// 👇 transform → margin-top: cualquier transform en un ancestro
+// del modal rompe su position:fixed. margin-top da el mismo
+// efecto visual sin ese problema.
 const aparecer = keyframes`
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; margin-top: 8px; }
+  to { opacity: 1; margin-top: 0; }
 `;
 
 export const MetodosPagoTemplate = () => {

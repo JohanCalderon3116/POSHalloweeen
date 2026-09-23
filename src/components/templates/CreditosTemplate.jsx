@@ -8,7 +8,6 @@ import {
   useBuscarCreditsoQueryStack,
   useMostrarCreditosQueryStack,
 } from "../../index";
-import { v } from "../../styles/variables";
 import { useState } from "react";
 import Confetti from "react-confetti-boom";
 import { RegistrarCreditos } from "../organismos/formularios/RegistrarCreditos";

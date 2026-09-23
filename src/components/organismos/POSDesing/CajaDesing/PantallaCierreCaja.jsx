@@ -13,6 +13,7 @@ import { BeatLoader } from "react-spinners";
 import {
   useMostrarEfectivoSinVentasMovCajasQueryStack,
   useMostrarVentasMetodoPagoMovCajaQueryStack,
+  useMostrarDetalleEfectivoSinVentasMovCajasQueryStack,
 } from "../../../../tanstack/MovimientosCajaStack";
 
 const HALLOWEEN = {
@@ -54,7 +55,18 @@ export const PantallaCierreCaja = () => {
   const { isLoading: isLoading2, data: dataventasmetodospago } =
     useMostrarVentasMetodoPagoMovCajaQueryStack();
 
-  const isLoading = isLoading1 || isLoading2;
+  const { isLoading: isLoading3, data: dataDetalleMovs } =
+    useMostrarDetalleEfectivoSinVentasMovCajasQueryStack();
+
+  const isLoading = isLoading1 || isLoading2 || isLoading3;
+
+  const formatearDescripcion = (descripcion) =>
+    !descripcion || descripcion === "-" ? "Sin detalle" : descripcion;
+
+  const entradasDetalle =
+    dataDetalleMovs?.filter((m) => m.tipo_movimiento === "ingreso") ?? [];
+  const salidasDetalle =
+    dataDetalleMovs?.filter((m) => m.tipo_movimiento === "salida") ?? [];
 
   if (isLoading) {
     return (
@@ -70,11 +82,9 @@ export const PantallaCierreCaja = () => {
   return (
     <Container>
       <VolverBtn funcion={() => setStateCierreCaja(false)} />
-
       <Fechas>
         Corte de caja desde: {fechaInicioFormateada} Hasta: {fechaActual}
       </Fechas>
-
       <Datos>
         <section>
           Ventas Totales:
@@ -86,7 +96,6 @@ export const PantallaCierreCaja = () => {
             )}
           </span>
         </section>
-
         <section>
           Efectivo en caja:
           <span>
@@ -98,9 +107,7 @@ export const PantallaCierreCaja = () => {
           </span>
         </section>
       </Datos>
-
       <Division />
-
       <Resumen>
         <Tablas>
           <Tabla>
@@ -128,7 +135,7 @@ export const PantallaCierreCaja = () => {
                 </span>
               </li>
 
-              <li>
+              <li className="conDetalle">
                 Entradas:
                 <span>
                   {FormatearNumeroDinero(
@@ -138,8 +145,27 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
+              {entradasDetalle.length > 0 && (
+                <DetalleList>
+                  {entradasDetalle.map((mov) => (
+                    <li key={mov.id}>
+                      <span className="concepto">
+                        {formatearDescripcion(mov.descripcion)}
+                      </span>
+                      <span className="monto ingreso">
+                        +
+                        {FormatearNumeroDinero(
+                          mov.monto,
+                          dataempresa?.currency,
+                          dataempresa?.iso,
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </DetalleList>
+              )}
 
-              <li>
+              <li className="conDetalle">
                 Salidas / Gastos:
                 <span className="gasto">
                   -
@@ -150,6 +176,25 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
+              {salidasDetalle.length > 0 && (
+                <DetalleList>
+                  {salidasDetalle.map((mov) => (
+                    <li key={mov.id}>
+                      <span className="concepto">
+                        {formatearDescripcion(mov.descripcion)}
+                      </span>
+                      <span className="monto gasto">
+                        -
+                        {FormatearNumeroDinero(
+                          mov.monto,
+                          dataempresa?.currency,
+                          dataempresa?.iso,
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </DetalleList>
+              )}
 
               <li className="total">
                 <Divider />
@@ -423,6 +468,41 @@ const Tabla = styled.div`
     font-weight: 700;
     color: ${HALLOWEEN.primary};
     opacity: 1;
+  }
+`;
+
+const DetalleList = styled.ul`
+  width: 100%;
+  padding: 0 0 6px 10px !important;
+  margin: -2px 0 6px !important;
+  list-style: none;
+  border-left: 2px solid ${HALLOWEEN.border};
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    opacity: 0.75;
+    margin-bottom: 4px;
+  }
+
+  .concepto {
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  .monto {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .monto.ingreso {
+    color: #4caf83;
+  }
+
+  .monto.gasto {
+    color: #c95858;
   }
 `;
 
