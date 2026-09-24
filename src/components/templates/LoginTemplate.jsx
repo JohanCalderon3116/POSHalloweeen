@@ -61,7 +61,6 @@ export const LoginTemplate = () => {
     mutate({ email: "tester1@gmail.com", password: "123456" });
   };
   const colores = PALETA.dark;
-  
   return (
     <Container>
       <link
@@ -98,7 +97,7 @@ export const LoginTemplate = () => {
         {stateModos && (
           <ContentModos>
             <CardModos
-              title={"Super admin"}
+              title={"Super Administrador"}
               subtitle={"Crea y gestiona tu empresa."}
               bgcolor={colores.superadmin}
               img={"https://i.ibb.co/Wp7FPzZQ/jack-o-linterna.png"}
@@ -119,7 +118,7 @@ export const LoginTemplate = () => {
             ></CardModos>
             <CardModos
               title={"Invitado"}
-              subtitle={"Obten una prueba de 30 días gratis."}
+              subtitle={"Obten acceso a una cuenta comunitaria."}
               bgcolor={colores.invitado}
               img={"https://i.ibb.co/DDqXMfYP/ataud.png"}
               funcion={() => {
