@@ -249,10 +249,6 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
       const result = await insertarVentas(pventas);
       if (result?.id > 0) {
         await insertarDVentas(result?.id);
-        // idventa se actualiza en el store SOLO después de que el
-        // detalle ya quedó insertado, para que la query que pinta
-        // el carrito ("mostrar detalle venta") nunca se dispare
-        // con datos a medias.
         setIdventa(result?.id);
       }
     } else {

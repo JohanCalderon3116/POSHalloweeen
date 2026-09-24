@@ -1,20 +1,24 @@
-import styled from "styled-components";
-import { PuffLoader } from "react-spinners";
-import { theme } from "antd";
+import styled, { useTheme } from "styled-components";
+import { RotateLoader } from "react-spinners";
 
 export const SpinnerSecundario = ({ texto }) => {
+  const theme = useTheme();
   return (
     <Container>
-      <PuffLoader color={theme.halloweenAccent} size={20}></PuffLoader>
-      <span> {texto} </span>
+      <RotateLoader color={theme.halloweenAccent} size={15}></RotateLoader>
+      <span>{texto}</span>
     </Container>
   );
 };
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 16px;
   height: 100vh;
   width: 100%;
   align-items: center;
   justify-content: center;
+  font-size: 18px;
+  color: ${({ theme }) => theme.text};
 `;
