@@ -64,9 +64,13 @@ export const useVentasStore = create((set, get) => ({
   },
   insertarVentas: async (p) => {
     const result = await InsertarVentas(p);
-    set({ idventa: result?.id });
+    // Ya NO se actualiza idventa aquí. Se actualiza manualmente
+    // (con setIdventa) solo cuando el detalle de la venta ya
+    // quedó insertado, para evitar que la query del carrito se
+    // dispare con el id de venta antes de que el producto exista.
     return result;
   },
+  setIdventa: (id) => set({ idventa: id }),
   eliminarventasIncompletas: async (p) => {
     await EliminarVentasIncompletas(p);
   },

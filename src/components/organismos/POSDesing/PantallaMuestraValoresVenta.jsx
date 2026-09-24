@@ -5,10 +5,10 @@ import { useResumenVentaStore } from "../../../store/ResumenVentaStore";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { FormatearNumeroDinero } from "../../../utils/Conversiones";
 const ACCENT = {
-  primary: "#1f7a5c",
-  primaryDark: "#155a44",
-  primarySoft: "rgba(31, 122, 92, 0.10)",
-  borderSoft: "rgba(31, 122, 92, 0.13)",
+  primary: "#0aca21",
+  primaryDark: "#088f17",
+  primarySoft: "rgba(10, 202, 33, 0.12)",
+  borderSoft: "rgba(10, 202, 33, 0.25)",
 };
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -44,7 +44,7 @@ export const PantallaMuestraValoresVenta = () => {
 
   if (!open) return null;
   const fmt = (v) =>
-    FormatearNumeroDinero(v, dataempresa?.currency, dataempresa?.iso);
+    FormatearNumeroDinero(v || 0, dataempresa?.currency, dataempresa?.iso);
 
   return (
     <Overlay onClick={cerrarResumenVenta}>
@@ -54,25 +54,33 @@ export const PantallaMuestraValoresVenta = () => {
             <IconoExito>
               <Icon icon="solar:check-circle-bold" />
             </IconoExito>
-            <span>Venta registrada</span>
+            <span>¡Cobro Exitoso!</span>
             <small>La operación se completó correctamente</small>
           </Cabecera>
-          <Separador />
-          <Fila>
-            <span>Total</span>
-            <strong>{fmt(datos?.total)}</strong>
-          </Fila>
+          <SeccionResumen>
+            <Fila>
+              <span className="label">Total de la venta</span>
+              <span className="valor-total">{fmt(datos?.total)}</span>
+            </Fila>
+            <SeparadorFino />
+            <Fila>
+              <span className="label">Total pagado (Recibido)</span>
+              <span className="valor">{fmt(datos?.totalPagado)}</span>
+            </Fila>
+          </SeccionResumen>
           <Vuelto>
-            <span>Vuelto</span>
+            <span>Vuelto a entregar</span>
             <strong>{fmt(datos?.vuelto)}</strong>
           </Vuelto>
-          <Fila className="suave">
-            <span>Restante</span>
-            <strong>{fmt(datos?.restante)}</strong>
-          </Fila>
+          {datos?.restante > 0 && (
+            <FilaRestante>
+              <span>Restante por pagar:</span>
+              <strong>{fmt(datos?.restante)}</strong>
+            </FilaRestante>
+          )}
           <Boton onClick={cerrarResumenVenta}>
             <Icon icon="solar:check-circle-bold" />
-            Cerrar
+            Aceptar y Continuar
             <span>(Esc)</span>
           </Boton>
         </Contenido>
@@ -89,7 +97,7 @@ const Overlay = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   animation: ${fadeIn} 0.18s ease both;
@@ -115,7 +123,7 @@ const Container = styled.div`
       theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
   box-shadow: ${({ theme }) =>
     theme.body === "#fff"
-      ? "0 24px 55px rgba(15,23,42,0.16)"
+      ? "0 24px 55px rgba(10, 202, 33, 0.15)"
       : "0 24px 55px rgba(0,0,0,0.65)"};
   animation: ${subir} 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
   &::before {
@@ -124,7 +132,7 @@ const Container = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 4px;
     background: ${ACCENT.primary};
   }
 `;
@@ -133,7 +141,7 @@ const Contenido = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   padding: 28px 26px 26px;
 `;
 
@@ -144,14 +152,15 @@ const Cabecera = styled.div`
   justify-content: center;
   gap: 8px;
   text-align: center;
+  margin-bottom: 5px;
   span {
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 800;
     color: ${({ theme }) => theme.text};
   }
   small {
-    font-size: 12px;
-    opacity: 0.5;
+    font-size: 13px;
+    opacity: 0.6;
   }
 `;
 
@@ -159,39 +168,59 @@ const IconoExito = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   background: ${ACCENT.primarySoft};
   color: ${ACCENT.primary};
-  font-size: 28px;
-  margin-bottom: 2px;
+  font-size: 32px;
+  margin-bottom: 4px;
 `;
 
-const Separador = styled.div`
-  width: 100%;
-  height: 1px;
-  background: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(15,23,42,0.08)" : "rgba(255,255,255,0.08)"};
+const SeccionResumen = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) =>
+    theme.body === "#fff" ? "#f8f9fa" : "rgba(255, 255, 255, 0.03)"};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(15,23,42,0.06)" : "rgba(255,255,255,0.05)"};
+  border-radius: 12px;
+  padding: 16px;
+  gap: 12px;
 `;
 
 const Fila = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  span {
-    font-size: 14px;
-    opacity: 0.6;
+
+  .label {
+    font-size: 15px;
+    opacity: 0.7;
+    font-weight: 500;
   }
-  strong {
+
+  .valor {
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .valor-total {
     font-size: 18px;
     font-variant-numeric: tabular-nums;
     font-weight: 800;
+    color: ${({ theme }) =>
+      theme.body === "#fff" ? "#088f17" : ACCENT.primary};
   }
-  &.suave {
-    opacity: 0.55;
-  }
+`;
+
+const SeparadorFino = styled.div`
+  width: 100%;
+  height: 1px;
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(15,23,42,0.06)" : "rgba(255,255,255,0.06)"};
 `;
 
 const Vuelto = styled.div`
@@ -199,27 +228,48 @@ const Vuelto = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-height: 104px;
-  padding: 14px;
+  gap: 6px;
+  min-height: 110px;
+  padding: 18px;
   box-sizing: border-box;
   border-radius: 14px;
   background: ${ACCENT.primarySoft};
-  border: 1px solid ${ACCENT.borderSoft};
+  border: 1px dashed ${ACCENT.primary};
 
   span {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
-    opacity: 0.65;
-    color: ${ACCENT.primary};
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: ${({ theme }) =>
+      theme.body === "#fff" ? ACCENT.primaryDark : ACCENT.primary};
   }
 
   strong {
-    font-size: 38px;
+    font-size: 42px;
     line-height: 1;
     font-weight: 850;
     font-variant-numeric: tabular-nums;
-    color: ${ACCENT.primary};
+    color: ${({ theme }) =>
+      theme.body === "#fff" ? ACCENT.primaryDark : ACCENT.primary};
+  }
+`;
+
+const FilaRestante = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  span {
+    font-size: 14px;
+    color: #e04040;
+    font-weight: 600;
+  }
+  strong {
+    font-size: 16px;
+    color: #e04040;
+    font-weight: 800;
   }
 `;
 
@@ -227,33 +277,39 @@ const Boton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 8px;
   width: 100%;
-  padding: 13px 14px;
-  margin-top: 4px;
+  padding: 14px 16px;
+  margin-top: 6px;
   border: none;
   border-radius: 10px;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 700;
   color: #ffffff;
   background-color: ${ACCENT.primary};
   cursor: pointer;
   transition:
     transform 0.15s ease,
-    filter 0.15s ease;
+    background-color 0.15s ease;
+
   span {
-    opacity: 0.65;
-    font-size: 12px;
-    font-weight: 600;
+    opacity: 0.7;
+    font-size: 13px;
+    font-weight: 500;
   }
+
   &:hover {
-    filter: brightness(1.06);
+    background-color: ${ACCENT.primaryDark};
   }
+
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
+
   &:focus-visible {
     outline: 2px solid ${ACCENT.primaryDark};
     outline-offset: 2px;
   }
 `;
+
+export default PantallaMuestraValoresVenta;

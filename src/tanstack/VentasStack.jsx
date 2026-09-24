@@ -109,7 +109,11 @@ export const useConfirmarVentasMutationStack = ({
       dataImpresorasXCaja?.state
         ? await imprimirDirectoTicket()
         : await imprimirConVentanaEmergente(responseVentaConfirmada);
-      mostrarResumenVenta({ total, vuelto, restante });
+      const totalPagado = Object.values(valoresPago).reduce(
+        (acc, curr) => acc + curr,
+        0,
+      );
+      mostrarResumenVenta({ total, vuelto, restante, totalPagado });
       await new Promise((r) => requestAnimationFrame(() => setTimeout(r, 50)));
     } else {
       toast.warning("Falta completar el pago, el restante tiene que ser cero");
@@ -165,8 +169,13 @@ export const useConfirmarVentasMutationStack = ({
 export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
   const { dataStockXAlmacenesYProducto, setStateModal } = useStockStore();
   const queryClien = useQueryClient();
-  const { idventa, insertarVentas, catidadInput, setCantidadInput } =
-    useVentasStore();
+  const {
+    idventa,
+    insertarVentas,
+    setIdventa,
+    catidadInput,
+    setCantidadInput,
+  } = useVentasStore();
   const { almacenSelelctItem } = useAlmacenesStore();
   const fechaActual = useFormattedDate();
   const { datausuarios } = useUsuariosStore();
@@ -190,21 +199,7 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
     await insertarDetalleVentas(pDetalleventas);
   }
   async function insertarventa() {
-    console.log("Intentando insertar venta con:", {
-      idventa,
-      dataCierreCaja,
-      dataempresa,
-    });
     if (idventa === 0) {
-      if (
-        !dataCierreCaja?.id ||
-        !dataempresa?.id ||
-        !dataCierreCaja?.caja?.id_sucursal
-      ) {
-        throw new Error(
-          "Los datos de la caja aún no han cargado, intenta de nuevo en un momento",
-        );
-      }
       const pventas = {
         fecha: fechaActual,
         id_usuario: datausuarios?.id,
@@ -213,11 +208,14 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
         id_cierre_caja: dataCierreCaja?.id,
       };
       const result = await insertarVentas(pventas);
-      console.log("Resultado insertarVentas:", result);
-      if (!(result?.id > 0)) {
-        throw new Error("No se pudo crear la venta, intenta de nuevo");
+      if (result?.id > 0) {
+        await insertarDVentas(result?.id);
+        // idventa se actualiza en el store SOLO después de que el
+        // detalle ya quedó insertado, para que la query que pinta
+        // el carrito ("mostrar detalle venta") nunca se dispare
+        // con datos a medias.
+        setIdventa(result?.id);
       }
-      await insertarDVentas(result?.id);
     } else {
       await insertarDVentas(idventa);
     }
@@ -252,8 +250,13 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
 export const useInsertarVentaDesdeAlmacenAlternoMutationStack = () => {
   const { dataStockXAlmacenesYProducto, setStateModal } = useStockStore();
   const queryClien = useQueryClient();
-  const { idventa, insertarVentas, catidadInput, setCantidadInput } =
-    useVentasStore();
+  const {
+    idventa,
+    insertarVentas,
+    setIdventa,
+    catidadInput,
+    setCantidadInput,
+  } = useVentasStore();
   const fechaActual = useFormattedDate();
   const { datausuarios } = useUsuariosStore();
   const { dataCierreCaja } = useCierreCajaStore();
@@ -290,6 +293,8 @@ export const useInsertarVentaDesdeAlmacenAlternoMutationStack = () => {
       const result = await insertarVentas(pventas);
       if (result?.id > 0) {
         await insertarDVentas(result?.id, idAlmacen);
+        // Mismo fix: idventa se fija recién cuando el detalle ya existe.
+        setIdventa(result?.id);
       }
     } else {
       await insertarDVentas(idventa, idAlmacen);
