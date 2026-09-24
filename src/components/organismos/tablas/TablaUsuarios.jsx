@@ -233,13 +233,16 @@ export function TablaUsuarios({
 }
 const Container = styled.div`
   position: relative;
-  margin: 5% 3%;
+  margin: 3% 2%;
+  color: ${({ theme }) => theme.text};
+
   @media (min-width: ${v.bpbart}) {
     margin: 2%;
   }
   @media (min-width: ${v.bphomer}) {
     margin: 2em auto;
   }
+
   .responsive-table {
     width: 100%;
     margin-bottom: 1.5em;
@@ -257,6 +260,7 @@ const Container = styled.div`
       height: 1px;
       width: 1px;
       overflow: hidden;
+
       @media (min-width: ${v.bpbart}) {
         position: relative;
         height: auto;
@@ -264,10 +268,10 @@ const Container = styled.div`
         overflow: auto;
       }
       th {
-        border-bottom: 2px solid ${({ theme }) => theme.color2};
+        border-bottom: 2px solid ${({ theme }) => theme.halloweenBorder};
         font-weight: 700;
         text-align: center;
-        color: ${({ theme }) => theme.text};
+        color: ${({ theme }) => theme.halloweenPrimary};
         &:first-of-type {
           text-align: center;
         }
@@ -287,6 +291,7 @@ const Container = styled.div`
         display: table-row;
       }
     }
+
     th,
     td {
       padding: 0.5em;
@@ -314,13 +319,13 @@ const Container = styled.div`
         @media (min-width: ${v.bpbart}) {
           display: table-row;
           border-width: 1px;
+          transition: background-color 0.2s ease;
+          &:hover {
+            background: ${({ theme }) => theme.bgAlpha};
+          }
         }
         &:last-of-type {
           margin-bottom: 0;
-        }
-        &:nth-of-type(even) {
-          @media (min-width: ${v.bpbart}) {
-          }
         }
       }
       th[scope="row"] {

@@ -13,12 +13,10 @@ import {
 import { useForm } from "react-hook-form";
 import { Toaster } from "sonner";
 import { BeatLoader } from "react-spinners";
-
 const telaranaAnim = keyframes`
   0%, 100% { opacity: 0.025; transform: rotate(0deg) scale(1); }
   50% { opacity: 0.055; transform: rotate(1.5deg) scale(1.015); }
 `;
-
 const murcielagoVolar = keyframes`
   0% { transform: translateX(-120px) translateY(0) rotate(-3deg); }
   20% { transform: translateX(20vw) translateY(-8px) rotate(3deg); }
@@ -27,27 +25,22 @@ const murcielagoVolar = keyframes`
   80% { transform: translateX(90vw) translateY(4px) rotate(-2deg); }
   100% { transform: translateX(calc(100vw + 120px)) translateY(0) rotate(2deg); }
 `;
-
 const aletear = keyframes`
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(0.55); }
 `;
-
 const arañaCaer = keyframes`
   from { transform: translateY(-45px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 `;
-
 const arañaBalancear = keyframes`
   0%, 100% { transform: rotate(-5deg); }
   50% { transform: rotate(5deg); }
 `;
-
 const aparecer = keyframes`
   from { opacity: 0; margin-top: 10px; }
   to { opacity: 1; margin-top: 0; }
 `;
-
 const telaranaPaths = `
 M0 0 L180 0
 M0 0 L165 70
@@ -60,7 +53,6 @@ M90 0 Q86 50 0 90
 M120 0 Q114 68 0 120
 M150 0 Q144 85 0 150
 `;
-
 const WebSvg = ({ flip = false }) => (
   <svg
     viewBox="0 0 180 180"
@@ -78,7 +70,6 @@ const WebSvg = ({ flip = false }) => (
     />
   </svg>
 );
-
 const MurcielagoSvg = () => (
   <svg viewBox="0 0 64 32" width="100%" height="100%" aria-hidden="true">
     <path
@@ -89,7 +80,6 @@ const MurcielagoSvg = () => (
     <circle cx="34.5" cy="13" r="0.9" fill="#ff4b55" />
   </svg>
 );
-
 const AranaSvg = () => (
   <svg viewBox="0 0 60 60" width="100%" height="100%" aria-hidden="true">
     <line
@@ -178,6 +168,7 @@ export function RegistrarCreditos({
       setClienteSeleccionado(dataclipro[0]);
     }
   }, [accion, dataSelect, dataclipro]);
+  
   return (
     <Container>
       <Toaster richColors />

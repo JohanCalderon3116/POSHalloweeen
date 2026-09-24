@@ -38,9 +38,7 @@ export function CardListCajas({
             {title} {state ? "(aperturada)" : "(libre)"}
           </span>
         </section>
-
         <span className="sucursal-text">Sucursal: {sucursal}</span>
-
         {subtitle != 0 && (
           <section className="title-section">
             <Icon
@@ -53,11 +51,9 @@ export function CardListCajas({
             <span className="subtitle">{subtitle}</span>
           </section>
         )}
-
         {!state && (
           <section className="contentInputs">
             <span className="title">Aperturar caja con:</span>
-
             <InputText2>
               <input
                 className="form__field"
@@ -70,7 +66,6 @@ export function CardListCajas({
             </InputText2>
           </section>
         )}
-
         {!state && (
           <article className="contentbtn">
             <Btn1
@@ -80,7 +75,6 @@ export function CardListCajas({
                 mutation.mutateAsync();
               }}
             />
-
             <Btn1
               titulo="APERTURAR"
               color="#ffffff"
@@ -116,27 +110,21 @@ const Container = styled.section`
     transform 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-
   transform: translateY(-2px);
-
   &:hover {
     border-color: ${({ $bgcolor }) =>
       $bgcolor === "#a94d4d" ? "rgba(169,77,77,0.20)" : "rgba(83,155,91,0.20)"};
-
     box-shadow: ${({ theme }) =>
       theme.body === "#fff"
         ? "0 7px 20px rgba(0,0,0,0.06)"
         : "0 7px 20px rgba(0,0,0,0.22)"};
-
     &::before {
       opacity: 0.8;
     }
   }
-
   &:active {
     transform: translateY(0);
   }
-
   &::before {
     content: "";
     position: absolute;
@@ -153,7 +141,6 @@ const Container = styled.section`
     transition: opacity 0.2s ease;
     pointer-events: none;
   }
-
   .content-wrapper {
     position: relative;
     z-index: 1;
@@ -163,12 +150,10 @@ const Container = styled.section`
     gap: 15px;
     width: 100%;
   }
-
   .contentInputs {
     display: flex;
     flex-direction: column;
     gap: 10px;
-
     .form__field:focus {
       font-weight: 700;
       border: 1px solid
@@ -182,58 +167,48 @@ const Container = styled.section`
           : "0 0 0 3px rgba(83,155,91,0.045)"};
     }
   }
-
   .contentbtn {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
   }
-
   .badge-container {
     display: flex;
     gap: 0.5rem;
     align-items: center;
   }
-
   .badge-button {
     font-weight: 700;
     text-transform: uppercase;
     color: ${({ $bgcolor }) => $bgcolor};
   }
-
   .sucursal-text {
     font-weight: 600;
     opacity: 0.85;
   }
-
   .title-section {
     display: flex;
     gap: 5px;
     align-items: center;
-
     .label {
       font-size: 14px;
       opacity: 0.58;
     }
-
     .subtitle {
       font-weight: 600;
       font-size: 15px;
       opacity: 0.82;
     }
-
     .icon-status {
       color: ${({ $bgcolor }) => $bgcolor};
       opacity: 0.72;
     }
   }
-
   .title {
     font-weight: 600;
     font-size: 14px;
     opacity: 0.75;
   }
-
   .emoji-container {
     position: absolute;
     right: 10px;
@@ -242,19 +217,15 @@ const Container = styled.section`
     height: 60px;
     font-size: 2rem;
   }
-
   .character-image {
     height: 100%;
     position: relative;
   }
-
   @media (max-width: 600px) {
     padding: 14px;
-
     .content-wrapper {
       gap: 12px;
     }
-
     .contentbtn {
       width: 100%;
     }

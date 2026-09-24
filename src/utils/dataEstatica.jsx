@@ -1,8 +1,4 @@
 import { v } from "../styles/variables";
-import {
-  AiOutlineHome,
-  AiOutlineSetting,
-} from "react-icons/ai";
 
 export const DesplegableUser = [
   {
@@ -22,9 +18,6 @@ export const DesplegableUser = [
   },
 ];
 
-
-
-//data SIDEBAR
 export const LinksArray = [
   {
     label: "Inicio",
@@ -66,7 +59,7 @@ export const SecondarylinksArray = [
   
 
 ];
-//temas
+
 export const TemasData = [
   {
     icono: "🌞",
@@ -80,7 +73,7 @@ export const TemasData = [
   },
 ];
 
-//tipo usuario
+
 export const TipouserData = [
   {
     descripcion: "empleado",
@@ -91,7 +84,7 @@ export const TipouserData = [
     icono: "👑",
   },
 ];
-//tipodoc
+
 export const TipoDocData = [
   {
     descripcion: "Dni",

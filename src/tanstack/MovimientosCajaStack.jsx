@@ -48,7 +48,13 @@ export const useInsertarIngresosSalidasCajasMutationStack = (
         queryKey: ["mostrar efectivo sin ventas movCaja"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["mostrar detalle efectivo sin ventas movCaja"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["mostrar ventas metodoPago movCaja"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar movimientos caja por fecha"],
       });
       if (onImprimir) {
         try {
@@ -152,6 +158,12 @@ export const useTerminarTurnoMutationStack = (diferencia, reset) => {
       });
       queryClient.invalidateQueries({
         queryKey: ["mostrar caja aperturada por usuario"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar detalle efectivo sin ventas movCaja"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar movimientos caja por fecha"],
       });
       cerrarSesion();
     },

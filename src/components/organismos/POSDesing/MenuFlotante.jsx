@@ -50,10 +50,6 @@ export const MenuFlotante = () => {
           <Icon icon="fxemoji:closedmailboxraised" />
           <Text>Cerrar caja</Text>
         </MenuItem>
-        {/* <MenuItem isOpen={isOpen} delay="0.4s">
-          <Icon icon="icon-park:preview-open" />
-          <Text>Ver ventas del día</Text>
-        </MenuItem> */}
         <MenuItem isOpen={isOpen} delay="0.3s" onClick={mutateEliminarVenta}>
           <Icon icon="flat-color-icons:delete-row" />
           <Text>Eliminar venta</Text>
@@ -76,6 +72,7 @@ const slideUp = keyframes`
     opacity: 1;
   }
 `;
+
 const Container = styled.div`
   position: fixed;
   bottom: 95px;
@@ -88,6 +85,7 @@ const Container = styled.div`
     display: none;
   }
 `;
+
 const FloatingButton = styled.button`
   border: none;
   border-radius: 50%;
@@ -103,6 +101,7 @@ const FloatingButton = styled.button`
     transform: rotate(90deg);
   }
 `;
+
 const MenuItems = styled.div`
   margin-top: 10px;
   display: flex;
@@ -111,6 +110,7 @@ const MenuItems = styled.div`
   gap: 15px;
   ${({ isOpen }) => !isOpen && "display: none;"}
 `;
+
 const MenuItem = styled.div`
   background-color: #ffffff;
   border: none;
@@ -129,6 +129,7 @@ const MenuItem = styled.div`
     background-color: #c7c7c7;
   }
 `;
+
 const Text = styled.span`
   font-size: 16px;
   color: #000;

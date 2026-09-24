@@ -15,13 +15,11 @@ export const Ganacias = () => {
   const { validarPermiso } = useValidarPermisosOpertivos();
   const { totalGanancias, porcentajeCambioGanancias } = useDetalleVentasStore();
   const { isLoading } = useMostrarGanaciasXEmpresaQueryStack();
-
   const desbloquear = () => {
     const permitido = validarPermiso("Ver ganancias");
     if (!permitido) return;
     setVisible(true);
   };
-
   if (isLoading) {
     return <BarLoader color="#ff7a18" />;
   }
@@ -36,7 +34,6 @@ export const Ganacias = () => {
           porcentage={porcentajeCambioGanancias}
         />
       </Tarjeta>
-
       {!visible && (
         <Candado type="button" onClick={desbloquear}>
           <Icon
@@ -78,7 +75,6 @@ const Candado = styled.button`
   transition:
     transform 0.2s ease,
     color 0.2s ease;
-
   svg {
     filter: drop-shadow(0 0 6px rgba(255, 122, 24, 0.4));
   }

@@ -12,6 +12,7 @@ export const CantidadVentas = () => {
   if (isLoading) {
     return <BarLoader></BarLoader>;
   }
+  
   return (
     <CardTotales
       title="Cant. Ventas"

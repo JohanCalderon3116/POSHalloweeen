@@ -9,11 +9,9 @@ import { Switch } from "../ui/toogles/Switch";
 import { SelectList } from "../ui/lists/SelectList";
 import { toast, Toaster } from "sonner";
 import { useAsignacionCajaSucursalesStore } from "../../store/AsignacionCajaSucursales";
-import { useState } from "react";
 import ticket from "../../reports/TicketPrueba";
 import { HeaderImpresoras } from "../organismos/ImpresorasDesing/HeaderImpresoras";
 export const ImpresorasTemplate = () => {
-  const [selectedFile, setselectedFile] = useState(null);
   const {
     mostrarDatosPc,
     statePrintDirecto,

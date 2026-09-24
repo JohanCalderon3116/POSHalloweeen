@@ -52,7 +52,6 @@ export const UsuariosTemplate = () => {
         <Rincon className="der">
           <Telarana />
         </Rincon>
-
         {MURCIELAGOS.map((b, i) => (
           <Murcielago
             key={i}
@@ -72,7 +71,6 @@ export const UsuariosTemplate = () => {
             </Aleteo>
           </Murcielago>
         ))}
-
         {ARANAS.map((a, i) => (
           <Colgante
             key={i}

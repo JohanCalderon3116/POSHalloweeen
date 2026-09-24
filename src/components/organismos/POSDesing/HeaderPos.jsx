@@ -83,7 +83,8 @@ export const HeaderPos = () => {
   }, []);
   useEffect(() => {
     const texto = buscador.trim();
-    const isCodigoDeBarras = /^[0-9]{3,}$/.test(texto);
+    const codigo = dataempresa.cantidad_codigo;
+    const isCodigoDeBarras = new RegExp(`^[0-9]{${codigo},}$`).test(texto);
     const timeout = setTimeout(
       () => {
         if (isCodigoDeBarras) {
@@ -178,7 +179,7 @@ export const HeaderPos = () => {
             funcion={async () => {
               try {
                 await abrirCaja();
-                toast.success("Abriendo caja registradora...")
+                toast.success("Abriendo caja registradora...");
               } catch (e) {
                 console.error(e);
                 alert("No se pudo abrir la caja");
@@ -327,6 +328,7 @@ const Header = styled.div`
     }
   }
 `;
+
 const Contentuser = styled.div`
   display: flex;
   align-items: center;
@@ -356,6 +358,7 @@ const Contentuser = styled.div`
     }
   }
 `;
+
 const ContentSucursal = styled.section`
   position: absolute;
   top: 0;
@@ -373,15 +376,12 @@ const ContentVentaManual = styled.div`
   gap: 30px;
   align-items: center;
   flex-shrink: 0;
-
   .nombreManual {
     width: 150px;
   }
-
   .montoManual {
     width: 120px;
   }
-
   .btnAgregarManual {
     width: 38px;
     height: 38px;
@@ -397,11 +397,9 @@ const ContentVentaManual = styled.div`
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-
     &:hover {
       opacity: 0.9;
     }
-
     &:active {
       transform: scale(0.95);
     }

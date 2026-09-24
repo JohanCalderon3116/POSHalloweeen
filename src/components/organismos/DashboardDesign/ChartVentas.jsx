@@ -26,7 +26,6 @@ export const ChartVentas = () => {
   const isPositive = porcentajeCambioTotal > 0;
   const isNeutral = porcentajeCambioTotal === 0;
   const { isLoading } = useMostrarVentasAgrupadasXFechaQueryStack();
-
   if (isLoading) {
     return <BarLoader color="#ff7a18" />;
   }

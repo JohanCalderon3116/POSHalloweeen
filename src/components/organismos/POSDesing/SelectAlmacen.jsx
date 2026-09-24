@@ -129,7 +129,6 @@ const Docket = styled.div`
   border: 1px solid ${({ theme }) => theme.color2};
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   animation: docket-in 0.22s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-
   @keyframes docket-in {
     from {
       opacity: 0;
@@ -199,7 +198,6 @@ const TransferTrack = styled.div`
   height: 18px;
   margin: -6px 0 -4px;
   overflow: hidden;
-
   &::before {
     content: "";
     position: absolute;
@@ -225,7 +223,6 @@ const Forklift = styled.div`
   transform: translateY(-50%);
   color: ${ACCENT_TEXT};
   animation: drive 3.6s ease-in-out infinite;
-
   @keyframes drive {
     0%,
     100% {
@@ -236,7 +233,6 @@ const Forklift = styled.div`
       left: calc(100% - 18px);
     }
   }
-
   @media (prefers-reduced-motion: reduce) {
     animation: none;
     left: 8px;
@@ -259,7 +255,6 @@ const QtyRow = styled.div`
   padding: 4px 0;
   border-top: 1px solid ${({ theme }) => theme.color2};
   border-bottom: 1px solid ${({ theme }) => theme.color2};
-
   .form__field {
     width: 90px;
     text-align: right;
@@ -285,7 +280,6 @@ const List = styled.div`
   max-height: 220px;
   overflow-y: auto;
   margin-top: -8px;
-
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -313,7 +307,6 @@ const Row = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-
   &:hover {
     border-color: ${({ $disabled }) => ($disabled ? "" : ACCENT)};
     background-color: ${({ $disabled, theme }) =>

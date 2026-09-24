@@ -187,6 +187,9 @@ export const useConfirmarVentasMutationStack = ({
       queryClient.invalidateQueries({
         queryKey: ["mostrar movimientos caja live"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar movimientos caja por fecha"],
+      });
       toast.success("😁🎉 Venta generada correctamente");
       document.getElementById("input-buscador-pos")?.focus();
     },

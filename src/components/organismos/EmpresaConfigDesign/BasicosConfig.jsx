@@ -9,6 +9,7 @@ import { useUpdatEmpresaMutateStack } from "../../../tanstack/EmpresaStack";
 import { ImageSelector } from "../../../hooks/useImageSelector";
 import { useGlobalStore } from "../../../store/GlobalStore";
 import { BeatLoader } from "react-spinners";
+
 export const BasicosConfig = () => {
   const HALLOWEEN = {
     primary: "#b86627",
@@ -29,9 +30,11 @@ export const BasicosConfig = () => {
       impuesto: dataempresa?.impuesto,
       valor_impuesto: dataempresa?.valor_impuesto,
       telefono_celular: dataempresa?.telefono_celular,
+      cantidad_codigo: dataempresa.cantidad_codigo,
     },
   });
   const { mutate: doEditar, isPending } = useUpdatEmpresaMutateStack();
+
   return (
     <Container>
       {isPending ? (
@@ -111,6 +114,15 @@ export const BasicosConfig = () => {
                 {...register("telefono_celular")}
               />
             </InputText2>
+            <Label>Cantidad de codigo: </Label>
+            <InputText2>
+              <input
+                className="form__field"
+                placeholder="Codigo"
+                type="number"
+                {...register("cantidad_codigo")}
+              />
+            </InputText2>
             <br></br>
             <Btn1
               color="#FFFFFF"
@@ -140,6 +152,7 @@ const ConteinerLoader = styled.div`
   gap: 8px;
   height: 100vh;
 `;
+
 const Container = styled.div`
   padding: 20px;
   border-radius: 10px;

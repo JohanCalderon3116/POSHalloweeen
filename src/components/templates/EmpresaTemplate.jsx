@@ -122,6 +122,7 @@ const Main = styled.div`
     z-index: 0;
   }
 `;
+
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;

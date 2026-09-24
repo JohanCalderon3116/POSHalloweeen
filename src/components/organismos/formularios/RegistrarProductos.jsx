@@ -24,7 +24,6 @@ import Swal from "sweetalert2";
 import { ContainerSelector } from "./RegistrarInventario";
 import { BeatLoader } from "react-spinners";
 import { toast } from "sonner";
-
 const telaranaAnim = keyframes`
   0% {
     opacity: 0;
@@ -35,7 +34,6 @@ const telaranaAnim = keyframes`
     transform: scale(1);
   }
 `;
-
 const murcielagoVolar = keyframes`
   0% {
     transform: translateX(-120px) translateY(0);
@@ -47,7 +45,6 @@ const murcielagoVolar = keyframes`
     transform: translateX(200px) translateY(0);
   }
 `;
-
 const aletar = keyframes`
   0%,
   100% {
@@ -57,7 +54,6 @@ const aletar = keyframes`
     transform: scaleY(0.75);
   }
 `;
-
 const arañaCaer = keyframes`
   0% {
     transform: translateY(-120px);
@@ -68,7 +64,6 @@ const arañaCaer = keyframes`
     opacity: 1;
   }
 `;
-
 const arañaBalancear = keyframes`
   0%,
   100% {
@@ -78,7 +73,6 @@ const arañaBalancear = keyframes`
     transform: rotate(5deg);
   }
 `;
-
 const aparecer = keyframes`
   from {
     opacity: 0;
@@ -89,7 +83,6 @@ const aparecer = keyframes`
     margin-top: 0;
   }
 `;
-
 const telaranaPaths = `
   M0 0 Q40 40 80 0
   M0 0 Q40 80 80 0
@@ -99,7 +92,6 @@ const telaranaPaths = `
   M0 40 Q40 80 80 40
   M0 60 Q40 100 80 60
 `;
-
 function WebSvg({ flip = false }) {
   return (
     <svg
@@ -115,7 +107,6 @@ function WebSvg({ flip = false }) {
     </svg>
   );
 }
-
 function MurcielagoSvg() {
   return (
     <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +120,6 @@ function MurcielagoSvg() {
     </svg>
   );
 }
-
 function AranaSvg() {
   return (
     <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
@@ -198,7 +188,6 @@ function AranaSvg() {
     </svg>
   );
 }
-
 const Decoracion = styled.div`
   position: absolute;
   inset: 0;
@@ -206,7 +195,6 @@ const Decoracion = styled.div`
   z-index: 1;
   overflow: hidden;
 `;
-
 const WebCorner = styled.div`
   position: absolute;
   top: 0;
@@ -226,7 +214,6 @@ const WebCorner = styled.div`
     right: 0;
   }
 `;
-
 const Bat = styled.div`
   position: absolute;
   top: 10%;
@@ -236,14 +223,12 @@ const Bat = styled.div`
   opacity: 0.5;
   animation: ${murcielagoVolar} 10s ease-in-out infinite;
 `;
-
 const BatInner = styled.div`
   animation: ${aletar} 0.4s ease-in-out infinite;
   svg {
     width: 100%;
   }
 `;
-
 const Spider = styled.div`
   position: absolute;
   top: 0;
@@ -269,7 +254,6 @@ const Spider = styled.div`
     width: 100%;
   }
 `;
-
 const SpiderSecond = styled(Spider)`
   right: auto;
   left: 8%;
@@ -290,13 +274,11 @@ export function RegistrarProductos({
   if (!state) {
     return;
   }
-
   const [isCheked1, setIsCheked1] = useState(true);
   const [isCheked2, setIsCheked2] = useState(false);
   const [stockMinimo, setStockMinimo] = useState("");
   const [stock, setStock] = useState("");
   const [ubicacion, setUbicacion] = useState("");
-
   const handleCheckboxChange = (cheboxNumber) => {
     if (cheboxNumber === 1) {
       setIsCheked1(true);
@@ -308,7 +290,6 @@ export function RegistrarProductos({
       setSevendePor("Peso (Kg)");
     }
   };
-
   const {
     generarCodigo,
     codigogenerado,
@@ -321,104 +302,81 @@ export function RegistrarProductos({
     stateInventarios,
     setStateInventarios,
   } = useProductosStore();
-
   const {
     dataalmacen,
-    eliminarAlmacen,
     almacenSelelctItem,
     setAlmacenSelelctItem,
   } = useAlmacenesStore();
-
   const [stateEnabledStock, setstatEEnabledStock] = useState(false);
-
   const { datacategorias, selectCategoria, categoriaItemSelect } =
     useCategoriasStore();
-
   const { sucursalesItemSelect, dataSucursales, selectSucursal } =
     useSucursalesStore();
-
   const theme = useTheme();
-
   const { data: dataStockXAlamacenYProducto } =
     useMostrarStckAlmacenYProductoQueryStack({
       dataSelect,
     });
-
   const { data: dataAlmacenes } =
     useMostrarAlmacenesXSucursalItemSelectQueryStack();
-
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-
   const { isPending, mutate: doInsertar } = useInsertarProductosMutationStack({
     accion,
     dataSelect,
     validarVacios,
     cerrarFormulario,
   });
-
   const handlesub = (data) => {
     doInsertar(data);
   };
-
   function cerrarFormulario() {
     onClose();
     setIsExploding(true);
   }
-
   function validarVacios(data) {
     if (!randomCodeInterno) {
       generarCodigoInterno();
     }
-
     if (!randomCodeBarras) {
       generarCodigoBarras();
     }
-
     if (data.precio_venta.trim() === "") {
       data.precio_venta = 0;
     }
-
     if (data.precio_compra.trim() === "") {
       data.precio_compra = 0;
     }
-
     if (stateInventarios) {
       if (!dataalmacen) {
         if (data.stock.trim() === "") {
           data.stock = 0;
         }
-
         if (data.stock_minimo.trim() === "") {
           data.stock_minimo = 0;
         }
       }
     }
   }
-
   function generarCodigoInterno() {
     generarCodigo();
     setRandomCodeInterno(codigogenerado);
     dataSelect.codigo_interno = codigogenerado;
   }
-
   function generarCodigoBarras() {
     generarCodigo();
     setRandomCodeBarras(codigogenerado);
     dataSelect.codigo_barra = codigogenerado;
   }
-
   const handleChangeinterno = (event) => {
     setRandomCodeInterno(event.target.value);
   };
-
   const handleChangebarras = (event) => {
     setRandomCodeBarras(event.target.value);
   };
-
   useEffect(() => {
     if (accion != "Editar") {
       generarCodigoInterno();
@@ -428,26 +386,21 @@ export function RegistrarProductos({
         id: dataSelect.id_categoria,
         nombre: dataSelect.categoria,
       });
-
       setRandomCodeInterno(dataSelect.codigo_interno);
       setRandomCodeBarras(dataSelect.codigo_barra);
-
       if (dataSelect.sevende_por === "Unidad") {
         handleCheckboxChange(1);
       } else {
         handleCheckboxChange(0);
       }
-
       dataSelect.maneja_inventarios
         ? setStateInventarios(true)
         : setStateInventarios(false);
-
       dataSelect.maneja_inventarios
         ? setstatEEnabledStock(true)
         : setstatEEnabledStock(false);
     }
   }, []);
-
   function checkUseInventarios() {
     if (accion === "Editar") {
       if (dataalmacen) {
@@ -481,7 +434,6 @@ export function RegistrarProductos({
       setStateInventarios(!stateInventarios);
     }
   }
-
   useEffect(() => {
     setStock("");
     setStockMinimo("");
@@ -494,26 +446,21 @@ export function RegistrarProductos({
         <WebCorner className="web-left">
           <WebSvg />
         </WebCorner>
-
         <WebCorner className="web-right">
           <WebSvg flip />
         </WebCorner>
-
         <Bat>
           <BatInner>
             <MurcielagoSvg />
           </BatInner>
         </Bat>
-
         <Spider>
           <AranaSvg />
         </Spider>
-
         <SpiderSecond>
           <AranaSvg />
         </SpiderSecond>
       </Decoracion>
-
       {isPending ? (
         <ConteinerLoader>
           <span>
@@ -531,7 +478,6 @@ export function RegistrarProductos({
                   : "Registrar nuevo producto"}
               </h1>
             </section>
-
             <section>
               <BtnClose
                 funcion={() => {
@@ -541,7 +487,6 @@ export function RegistrarProductos({
               ></BtnClose>
             </section>
           </div>
-
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="section1">
               <article>
@@ -557,7 +502,6 @@ export function RegistrarProductos({
                   {errors.nombre?.type === "required" && <p>Campo requerido</p>}
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -571,7 +515,6 @@ export function RegistrarProductos({
                   <label className="form__label">Precio venta</label>
                 </InputText>
               </article>
-
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -585,7 +528,6 @@ export function RegistrarProductos({
                   <label className="form__label">Precio compra</label>
                 </InputText>
               </article>
-
               <article className="contentPadregenerar">
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -597,7 +539,6 @@ export function RegistrarProductos({
                   />
                   <label className="form__label">Codigo de barras</label>
                 </InputText>
-
                 <ContainerBtnGenerar>
                   <Btngenerarcodigo
                     titulo="Generar"
@@ -605,7 +546,6 @@ export function RegistrarProductos({
                   ></Btngenerarcodigo>
                 </ContainerBtnGenerar>
               </article>
-
               <article className="contentPadregenerar">
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
@@ -617,7 +557,6 @@ export function RegistrarProductos({
                   />
                   <label className="form__label">Codigo interno</label>
                 </InputText>
-
                 <ContainerBtnGenerar>
                   <Btngenerarcodigo
                     titulo="Generar"
@@ -626,24 +565,20 @@ export function RegistrarProductos({
                 </ContainerBtnGenerar>
               </article>
             </section>
-
             <section className="section2">
               <label>Se vende por: </label>
-
               <ContainerSelector>
                 <label>Unidad</label>
                 <Checkbox1
                   isChecked={isCheked1}
                   onChange={() => handleCheckboxChange(1)}
                 ></Checkbox1>
-
                 <label>Pesado (decimales)</label>
                 <Checkbox1
                   isChecked={isCheked2}
                   onChange={() => handleCheckboxChange(2)}
                 ></Checkbox1>
               </ContainerSelector>
-
               <ContainerSelector>
                 <label>Categoria</label>
                 <SelectList
@@ -653,7 +588,6 @@ export function RegistrarProductos({
                   displayField="nombre"
                 ></SelectList>
               </ContainerSelector>
-
               <ContainerSelector>
                 <label>Controlar stock:</label>
                 <Switch1
@@ -661,7 +595,6 @@ export function RegistrarProductos({
                   setState={checkUseInventarios}
                 ></Switch1>
               </ContainerSelector>
-
               {stateInventarios && (
                 <ContainerStock>
                   <ContainerSelector>
@@ -673,9 +606,7 @@ export function RegistrarProductos({
                       displayField="nombre"
                     ></SelectList>
                   </ContainerSelector>
-
                   <br />
-
                   <ContainerSelector>
                     <label>Almacen: </label>
                     <SelectList
@@ -685,14 +616,12 @@ export function RegistrarProductos({
                       displayField="nombre"
                     ></SelectList>
                   </ContainerSelector>
-
                   {stateEnabledStock && dataStockXAlamacenYProducto && (
                     <ContainerMensajeStock>
                       💀 Para poder editar el stock, te toca en el modulo
                       'Inventario' 💀 XD
                     </ContainerMensajeStock>
                   )}
-
                   <article>
                     <InputText icono={<v.iconoflechaderecha />}>
                       <input
@@ -712,7 +641,6 @@ export function RegistrarProductos({
                       <label className="form__label">Stock</label>
                     </InputText>
                   </article>
-
                   <article>
                     <InputText icono={<v.iconoflechaderecha />}>
                       <input
@@ -732,7 +660,6 @@ export function RegistrarProductos({
                       <label className="form__label">Stock minimo</label>
                     </InputText>
                   </article>
-
                   <article>
                     <InputText icono={<v.iconoflechaderecha />}>
                       <input
@@ -754,7 +681,6 @@ export function RegistrarProductos({
                 </ContainerStock>
               )}
             </section>
-
             <Btn1
               icono={<v.iconoguardar />}
               titulo="Guardar"
@@ -780,7 +706,6 @@ const Container = styled.div`
   justify-content: center;
   z-index: 1000;
   overflow: hidden;
-
   .sub-contenedor {
     position: relative;
     max-width: 90%;
@@ -793,7 +718,6 @@ const Container = styled.div`
     z-index: 100;
     overflow-x: hidden;
     animation: ${aparecer} 0.4s ease forwards;
-
     .headers {
       position: relative;
       z-index: 5;
@@ -801,65 +725,53 @@ const Container = styled.div`
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-
       h1 {
         font-size: 25px;
         font-weight: 500;
         color: ${({ theme }) => theme.text};
       }
-
       span {
         font-size: 20px;
         cursor: pointer;
       }
     }
-
     .formulario {
       position: relative;
       z-index: 5;
       display: grid;
       grid-template-columns: 1fr;
       gap: 15px;
-
       @media ${Device.tablet} {
         grid-template-columns: repeat(2, 1fr);
       }
-
       .section1,
       .section2 {
         gap: 20px;
         display: flex;
         flex-direction: column;
       }
-
       .contentPadregenerar {
         position: relative;
       }
     }
-
     &::-webkit-scrollbar {
       width: 6px;
     }
-
     &::-webkit-scrollbar-track {
       background: transparent;
     }
-
     &::-webkit-scrollbar-thumb {
       background: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
       border-radius: 10px;
       opacity: 0.5;
     }
-
     @media ${v.bplisa} {
       max-width: 92%;
       padding: 13px 25px 20px 25px;
     }
-
     @media ${v.bpmarge} {
       max-width: 95%;
       padding: 13px 18px 20px 18px;
-
       .headers {
         h1 {
           font-size: 20px;
@@ -877,7 +789,6 @@ const ContainerStock = styled.div`
   flex-direction: column;
   background-color: transparent;
   transition: 0.3s;
-
   &:hover {
     border-color: rgba(184, 92, 24, 0.5);
   }
@@ -907,7 +818,6 @@ const ConteinerLoader = styled.div`
   gap: 8px;
   height: 100vh;
   color: ${({ theme }) => theme.text};
-
   span {
     strong {
       font-size: 18px;

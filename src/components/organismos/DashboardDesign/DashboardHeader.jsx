@@ -4,7 +4,6 @@ import { DateRangeFilter } from "./DateRangeFilter";
 import { Icon } from "@iconify/react";
 import { useUsuariosStore } from "../../../store/UsuariosStore";
 import { useEffect, useState } from "react";
-
 const flotarFantasma = keyframes`
   0%, 100% {
     transform: translateY(0);
@@ -20,7 +19,6 @@ export const DashboardHeader = () => {
   const [texto, setTexto] = useState("");
   const [idioma, setIdioma] = useState(0);
   const [borrando, setBorrando] = useState(false);
-
   const mensajes = [
     `¡Bienvenido ${nombre}!`,
     `Welcome ${nombre}!`,
@@ -33,10 +31,8 @@ export const DashboardHeader = () => {
     `환영합니다 ${nombre}!`,
     `欢迎 ${nombre}!`,
   ];
-
   useEffect(() => {
     if (!nombre) return;
-
     const mensajeActual = mensajes[idioma];
     let timeout;
 
@@ -62,7 +58,6 @@ export const DashboardHeader = () => {
         }, 250);
       }
     }
-
     return () => clearTimeout(timeout);
   }, [texto, idioma, borrando, nombre]);
 
@@ -87,12 +82,10 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-
   @media ${Device.desktop} {
     flex-direction: row;
   }
 `;
-
 const TextContainer = styled.div`
   min-width: 0;
 `;
@@ -106,11 +99,9 @@ const Title = styled.h1`
   gap: 12px;
   color: ${({ theme }) => theme.text};
   white-space: nowrap;
-
   span {
     display: inline-block;
   }
-
   .ghost-icon {
     flex-shrink: 0;
     font-size: 38px;
@@ -118,7 +109,6 @@ const Title = styled.h1`
     filter: drop-shadow(0 0 8px rgba(255, 122, 24, 0.4));
     animation: ${flotarFantasma} 3s ease-in-out infinite;
   }
-
   @media (max-width: 768px) {
     font-size: 34px;
 
@@ -126,7 +116,6 @@ const Title = styled.h1`
       font-size: 30px;
     }
   }
-
   @media (max-width: 480px) {
     font-size: 28px;
 

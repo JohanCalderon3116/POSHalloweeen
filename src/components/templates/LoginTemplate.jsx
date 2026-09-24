@@ -61,6 +61,7 @@ export const LoginTemplate = () => {
     mutate({ email: "tester1@gmail.com", password: "123456" });
   };
   const colores = PALETA.dark;
+  
   return (
     <Container>
       <link

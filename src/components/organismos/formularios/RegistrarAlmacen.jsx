@@ -9,6 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { BtnClose } from "../../ui/buttons/BtnClose";
 import { BeatLoader } from "react-spinners";
+
 export function RegistrarAlmacen() {
   const {
     accion: accionAlmacen,
@@ -26,6 +27,7 @@ export function RegistrarAlmacen() {
   const handlesub = (data) => {
     doInsertar(data);
   };
+
   return (
     <Container>
       {isPending ? (
@@ -74,7 +76,7 @@ export function RegistrarAlmacen() {
               <Btn1
                 icono={<v.iconoguardar />}
                 titulo="Guardar"
-                bgcolor="#F9D70B"
+                bgcolor="#b85c18"
               />
             </section>
           </form>
@@ -83,6 +85,7 @@ export function RegistrarAlmacen() {
     </Container>
   );
 }
+
 const Container = styled.div`
   transition: 0.5s;
   top: 0;
@@ -135,6 +138,7 @@ const Container = styled.div`
     }
   }
 `;
+
 const ConteinerLoader = styled.div`
   display: flex;
   align-items: center;

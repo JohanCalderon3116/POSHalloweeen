@@ -179,6 +179,9 @@ export const useAperturarCajasMutationStack = (item) => {
         queryKey: ["mostrar efectivo sin ventas movCaja"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["mostrar movimientos caja por fecha"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["mostrar ventas metodoPago movCaja"],
       });
     },

@@ -11,11 +11,9 @@ import vacio from "../../../assets/vacio2.json";
 export const CardMovimientosProductosTopMonto = () => {
   const { data, isLoading, error } =
     useMostrarTop10MasVendidosXMontoQueryStack();
-
   if (isLoading) {
     return <BarLoader color="#ff7a18" />;
   }
-
   if (error) {
     return <span>Error: {error.message} </span>;
   }

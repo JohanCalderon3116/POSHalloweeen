@@ -12,38 +12,31 @@ import {
 import { useForm } from "react-hook-form";
 import { CirclePicker } from "react-color";
 import { BeatLoader } from "react-spinners";
-
 const telaranaAnim = keyframes`
   0% { opacity: 0; transform: scale(0.85); }
   100% { opacity: 1; transform: scale(1); }
 `;
-
 const murcielagoVolar = keyframes`
   0% { transform: translateX(-120px) translateY(0); }
   50% { transform: translateX(40px) translateY(-20px); }
   100% { transform: translateX(200px) translateY(0); }
 `;
-
 const aletar = keyframes`
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(0.75); }
 `;
-
 const arañaCaer = keyframes`
   0% { transform: translateY(-120px); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
 `;
-
 const arañaBalancear = keyframes`
   0%, 100% { transform: rotate(-5deg); }
   50% { transform: rotate(5deg); }
 `;
-
 const aparecer = keyframes`
   from { opacity: 0; margin-top: 10px; }
   to { opacity: 1; margin-top: 0; }
 `;
-
 const telaranaPaths = `
   M0 0 Q40 40 80 0
   M0 0 Q40 80 80 0
@@ -52,8 +45,7 @@ const telaranaPaths = `
   M0 20 Q40 60 80 20
   M0 40 Q40 80 80 40
   M0 60 Q40 100 80 60
-`;
-
+`
 function WebSvg({ flip = false }) {
   return (
     <svg
@@ -69,7 +61,6 @@ function WebSvg({ flip = false }) {
     </svg>
   );
 }
-
 function MurcielagoSvg() {
   return (
     <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +74,6 @@ function MurcielagoSvg() {
     </svg>
   );
 }
-
 function AranaSvg() {
   return (
     <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +142,6 @@ function AranaSvg() {
     </svg>
   );
 }
-
 const Decoracion = styled.div`
   position: absolute;
   inset: 0;
@@ -160,7 +149,6 @@ const Decoracion = styled.div`
   z-index: 1;
   overflow: hidden;
 `;
-
 const WebCorner = styled.div`
   position: absolute;
   top: 0;
@@ -180,7 +168,6 @@ const WebCorner = styled.div`
     right: 0;
   }
 `;
-
 const Bat = styled.div`
   position: absolute;
   top: 10%;
@@ -190,14 +177,12 @@ const Bat = styled.div`
   opacity: 0.55;
   animation: ${murcielagoVolar} 10s ease-in-out infinite;
 `;
-
 const BatInner = styled.div`
   animation: ${aletar} 0.4s ease-in-out infinite;
   svg {
     width: 100%;
   }
 `;
-
 const Spider = styled.div`
   position: absolute;
   top: 0;
@@ -223,7 +208,6 @@ const Spider = styled.div`
     width: 100%;
   }
 `;
-
 const SpiderSecond = styled(Spider)`
   right: auto;
   left: 8%;

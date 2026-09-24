@@ -9,34 +9,27 @@ import { useMostrarCierreCajaPorEmpresaQueryStack } from "../../../../tanstack/C
 
 export const PantallaAperturaCaja = () => {
   const { datSucursalesAsignadas } = useAsignacionCajaSucursalesStore();
-
   const { data: dataCierreCajaEmpresa } =
     useMostrarCierreCajaPorEmpresaQueryStack();
-
   const { setCajaSelelctItem } = useCajasStore();
   const { setCierreCjaItemSelect } = useCierreCajaStore();
 
   return (
     <Container>
       <Toaster richColors />
-
       <ContainerCajas>
         <span className="title">
           Seleccione una caja para poder aperturarla.
         </span>
-
         {datSucursalesAsignadas?.map((item, index) => {
           let state = false;
           let aperturaActiva = null;
-
           if (Array.isArray(dataCierreCajaEmpresa)) {
             aperturaActiva = dataCierreCajaEmpresa.find(
               (a) => a.id_caja === item.caja.id,
             );
-
             state = Boolean(aperturaActiva);
           }
-
           return (
             <CardListCajas
               key={index}
@@ -74,7 +67,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
   &::before {
     content: "";
     position: absolute;
@@ -85,17 +77,14 @@ const Container = styled.div`
     background: rgba(184, 102, 39, 0.08);
     pointer-events: none;
   }
-
   .area1 {
     display: flex;
     gap: 12px;
     flex-direction: column;
-
     .title {
       font-size: 19px;
       font-weight: bold;
     }
-
     .contentbtn {
       display: flex;
       gap: 12px;
@@ -110,7 +99,6 @@ const ContainerCajas = styled.div`
   width: min(700px, 94%);
   margin: 10px auto;
   box-sizing: border-box;
-
   .title {
     font-weight: 600;
     font-size: 18px;
@@ -118,11 +106,9 @@ const ContainerCajas = styled.div`
     opacity: 0.82;
     margin-bottom: 5px;
   }
-
   @media ${Device.tablet} {
     width: 550px;
   }
-
   @media (max-width: 600px) {
     width: 94%;
     margin: 10px auto;

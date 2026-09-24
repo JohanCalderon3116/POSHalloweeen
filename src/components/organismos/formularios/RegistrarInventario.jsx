@@ -20,7 +20,6 @@ import { useMovStockStore } from "../../../store/MovStockStore";
 import { BuscadorList } from "../../ui/lists/Buscador";
 import { BeatLoader } from "react-spinners";
 import { RadioChecks } from "../../ui/toogles/RadioChecks";
-
 const aparecer = keyframes`
   from { opacity: 0; margin-top: 14px; }
   to { opacity: 1; margin-top: 0; }
@@ -67,6 +66,7 @@ export function RegistrarInventario({ onClose }) {
       </ConteinerLoader>
     );
   }
+  
   return (
     <Container>
       <Toaster richColors />

@@ -132,6 +132,7 @@ const Container = styled.div`
     grid-area: main;
   }
 `;
+
 const ConteinerLoader = styled.div`
   display: flex;
   align-items: center;
@@ -140,6 +141,7 @@ const ConteinerLoader = styled.div`
   gap: 8px;
   height: 100vh;
 `;
+
 const ActionsContainer = styled.div`
   border: 2px solid ${({ theme }) => theme.colortitlecard};
   border-radius: 10px;

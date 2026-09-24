@@ -177,6 +177,7 @@ const Container = styled.div`
     grid-area: main;
   }
 `;
+
 const ConteinerLoader = styled.div`
   display: flex;
   align-items: center;

@@ -18,7 +18,6 @@ export const RegistrarSerializacion = () => {
   );
   const [correlativo, setCorrelativo] = useState(itemSelect?.correlativos);
   const [serie, setSerie] = useState(itemSelect?.serie);
-  // Función para formatear el correlativo con ceros a la izquierda
   const formatearCorrelativo = (numero, longitud) => {
     return String(numero).padStart(longitud, "0");
   };
@@ -90,7 +89,6 @@ export const RegistrarSerializacion = () => {
               )}
             </InputText>
           </article>
-
           <article>
             <InputText icono={<v.iconoflechaderecha />}>
               <input
@@ -176,7 +174,6 @@ const Container = styled.div`
       font-weight: bold;
       text-transform: uppercase;
     }
-
     .numero {
       margin-top: 10px;
       font-size: 18px;
@@ -185,7 +182,6 @@ const Container = styled.div`
       padding: 5px 10px;
       border-radius: 4px;
       border: 2px solid black;
-
       span:first-child {
         color: red;
       }

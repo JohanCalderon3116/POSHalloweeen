@@ -10,6 +10,7 @@ import { BtnClose } from "../../ui/buttons/BtnClose";
 import { Toaster } from "sonner";
 import { BeatLoader } from "react-spinners";
 import { useInsertarCajasMutationStack } from "../../../tanstack/CajasStack";
+
 export function RegistrarCaja() {
   const { accion: accionCaja, cajaSelelctItem, setStateCaja } = useCajasStore();
   const theme = useTheme();
@@ -22,6 +23,7 @@ export function RegistrarCaja() {
   const handlesub = (data) => {
     doInsertar(data);
   };
+
   return (
     <Container>
       <Toaster richColors></Toaster>
@@ -47,7 +49,6 @@ export function RegistrarCaja() {
               <BtnClose funcion={() => setStateCaja(false)} />
             </section>
           </div>
-
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
               <article>
@@ -83,6 +84,7 @@ export function RegistrarCaja() {
     </Container>
   );
 }
+
 const Container = styled.div`
   transition: 0.5s;
   top: 0;
@@ -106,13 +108,11 @@ const Container = styled.div`
     z-index: 100;
     max-height: 80vh;
     overflow-y: auto;
-
     .headers {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-
       h1 {
         font-size: 30px;
         font-weight: 700;
@@ -137,6 +137,7 @@ const Container = styled.div`
     }
   }
 `;
+
 const ConteinerLoader = styled.div`
   display: flex;
   align-items: center;

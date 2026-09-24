@@ -109,6 +109,7 @@ const ContentRol = styled.div`
   font-weight: bold;
   color: #fff;
 `;
+
 const ConteinerLoader = styled.div`
   display: flex;
   align-items: center;
@@ -117,6 +118,7 @@ const ConteinerLoader = styled.div`
   height: 100vh;
   gap: 8px;
 `;
+
 const Container = styled.div`
   padding: 20px;
   border-radius: 10px;
@@ -143,10 +145,12 @@ const Container = styled.div`
     }
   }
 `;
+
 const Title = styled.h1`
   font-size: 24px;
   margin-bottom: 20px;
 `;
+
 const Avatar = styled.div`
   display: flex;
   align-items: center;
@@ -176,6 +180,7 @@ const Avatar = styled.div`
     display: none;
   }
 `;
+
 const Label = styled.label`
   display: block;
   margin: 10px 0 5px;

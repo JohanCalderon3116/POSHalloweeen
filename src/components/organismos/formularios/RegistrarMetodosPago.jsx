@@ -1,171 +1,37 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes, useTheme } from "styled-components";
 import { v } from "../../../styles/variables";
-import { InputText, Btn1, useFormattedDate, Icono, useMetodosPagoStore, useInsertarMetodosPagoMutationStack } from "../../../index";
+import {
+  InputText,
+  Btn1,
+  Icono,
+  useMetodosPagoStore,
+  useInsertarMetodosPagoMutationStack,
+} from "../../../index";
 import { useForm } from "react-hook-form";
 import { BtnClose } from "../../ui/buttons/BtnClose";
-import { toast, Toaster } from "sonner";
-import { BuscadorList } from "../../ui/lists/Buscador";
 import { BeatLoader } from "react-spinners";
-import { useCreditosStore } from "../../../store/CreditosStore";
-import { FormatearNumeroDinero } from "../../../utils/Conversiones";
-import {
-  useBuscarCreditsoQueryStack,
-  useInsertarMovimientoCreditoMutationStack,
-  useMostrarCreditosQueryStack,
-} from "../../../tanstack/CreditosStack";
-
-export function RegistrarmovimientocreditoVenta({ onClose }) {
-  const {
-    creditosItemSelect,
-    setCreditosItemSelect,
-    setBuscador: setBuscadorCreditos,
-    datacreditos,
-  } = useCreditosStore();
-  const theme = useTheme();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-  } = useForm();
-  const { error } = useMostrarCreditosQueryStack();
-  useBuscarCreditsoQueryStack();
-  const { isPending, mutate: doInsertar } =
-    useInsertarMovimientoCreditoMutationStack({ onClose, resetFuction });
-  
-  const handlesub = (data) => {
-    doInsertar(data);
-  };
-  
-  function resetFuction() {
-    reset();
-  }
-  
-  if (error) {
-    toast.error(`error: ${error.message}`);
-  }
-  
-  return (
-    <Container>
-      <Toaster richColors></Toaster>
-      {isPending ? (
-        <ConteinerLoader>
-          <span>
-            <strong>Guardando</strong>
-          </span>
-          <BeatLoader color={theme.text} size={8} />
-        </ConteinerLoader>
-      ) : (
-        <div className="sub-contenedor">
-          <div className="headers">
-            <section>
-              <h1>Registrar fiado</h1>
-            </section>
-            <section>
-              <BtnClose funcion={onClose} />
-            </section>
-          </div>
-          <form className="formulario" onSubmit={handleSubmit(handlesub)}>
-            <section className="form-subcontainer">
-              <BuscadorList
-                data={datacreditos}
-                onSelect={setCreditosItemSelect}
-                itemSelect={creditosItemSelect}
-                setBuscador={setBuscadorCreditos}
-                displayField="nombres"
-              ></BuscadorList>
-              <span>
-                Nombre:{" "}
-                <strong>
-                  {" "}
-                  {creditosItemSelect?.nombres
-                    ? creditosItemSelect?.nombres
-                    : "-"}{" "}
-                </strong>
-              </span>
-              <span>
-                Credito máximo aprobado:{" "}
-                <strong>
-                  {" "}
-                  {creditosItemSelect?.cupo_maximo
-                    ? FormatearNumeroDinero(
-                        creditosItemSelect?.cupo_maximo,
-                        "COP",
-                        "CO",
-                      )
-                    : "-"}{" "}
-                </strong>
-              </span>
-              <span>
-                Credito disponible:
-                <strong>
-                  {" "}
-                  {creditosItemSelect?.credito_disponible
-                    ? FormatearNumeroDinero(
-                        creditosItemSelect?.credito_disponible,
-                        "COP",
-                        "CO",
-                      )
-                    : "-"}{" "}
-                </strong>
-              </span>
-              <article>
-                <InputText icono={<v.iconoflechaderecha />}>
-                  <input
-                    className="form__field"
-                    type="text"
-                    placeholder="Observacion (opcional)"
-                    {...register("observacion")}
-                  />
-                  <label className="form__label">Observacion (Opcional)</label>
-                </InputText>
-              </article>
-              <Btn1
-                disabled={!creditosItemSelect?.nombres}
-                icono={<v.iconoguardar />}
-                titulo="Guardar"
-                bgcolor="#F9D70B"
-              />
-            </section>
-          </form>
-        </div>
-      )}
-    </Container>
-  );
-}
-
 const telaranaAnim = keyframes`
   0% { opacity: 0; transform: scale(0.85); }
   100% { opacity: 1; transform: scale(1); }
 `;
-
 const murcielagoVolar = keyframes`
   0% { transform: translateX(-120px) translateY(0); }
   50% { transform: translateX(40px) translateY(-20px); }
   100% { transform: translateX(200px) translateY(0); }
 `;
-
 const aletar = keyframes`
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(0.75); }
 `;
-
 const arañaCaer = keyframes`
   0% { transform: translateY(-120px); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
 `;
-
 const arañaBalancear = keyframes`
   0%, 100% { transform: rotate(-5deg); }
   50% { transform: rotate(5deg); }
 `;
-
-const aparecer = keyframes`
-  from { opacity: 0; margin-top: 10px; }
-  to { opacity: 1; margin-top: 0; }
-`;
-
 const telaranaPaths = `
   M0 0 Q40 40 80 0
   M0 0 Q40 80 80 0
@@ -175,7 +41,6 @@ const telaranaPaths = `
   M0 40 Q40 80 80 40
   M0 60 Q40 100 80 60
 `;
-
 function WebSvg({ flip = false }) {
   return (
     <svg
@@ -191,7 +56,6 @@ function WebSvg({ flip = false }) {
     </svg>
   );
 }
-
 function MurcielagoSvg() {
   return (
     <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
@@ -205,7 +69,6 @@ function MurcielagoSvg() {
     </svg>
   );
 }
-
 function AranaSvg() {
   return (
     <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
@@ -275,87 +138,6 @@ function AranaSvg() {
   );
 }
 
-const Decoracion = styled.div`
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-`;
-
-const WebCorner = styled.div`
-  position: absolute;
-  top: 0;
-  width: 120px;
-  height: 160px;
-  color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
-  opacity: 0.35;
-  animation: ${telaranaAnim} 0.8s ease forwards;
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-  &.web-left {
-    left: 0;
-  }
-  &.web-right {
-    right: 0;
-  }
-`;
-
-const Bat = styled.div`
-  position: absolute;
-  top: 10%;
-  left: -100px;
-  width: 65px;
-  color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
-  opacity: 0.55;
-  animation: ${murcielagoVolar} 10s ease-in-out infinite;
-`;
-
-const BatInner = styled.div`
-  animation: ${aletar} 0.4s ease-in-out infinite;
-  svg {
-    width: 100%;
-  }
-`;
-
-const Spider = styled.div`
-  position: absolute;
-  top: 0;
-  right: 7%;
-  width: 45px;
-  color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
-  opacity: 0.6;
-  transform-origin: top center;
-  animation:
-    ${arañaCaer} 1s ease forwards,
-    ${arañaBalancear} 4s ease-in-out infinite 1s;
-  &::before {
-    content: "";
-    position: absolute;
-    top: -90px;
-    left: 50%;
-    width: 1px;
-    height: 90px;
-    background: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
-    opacity: 0.5;
-  }
-  svg {
-    width: 100%;
-  }
-`;
-
-const SpiderSecond = styled(Spider)`
-  right: auto;
-  left: 8%;
-  width: 38px;
-  opacity: 0.45;
-  animation:
-    ${arañaCaer} 1.3s ease forwards,
-    ${arañaBalancear} 5s ease-in-out infinite 1.3s;
-`;
-
 export function RegistrarMetodosPago({
   onClose,
   dataSelect,
@@ -371,27 +153,23 @@ export function RegistrarMetodosPago({
     formState: { errors },
     handleSubmit,
   } = useForm();
-  
   const cerrarFormulario = () => {
     setFile([]);
     onClose();
     setIsExploding(true);
   };
-  
   const { isPending, mutate: doInsertar } = useInsertarMetodosPagoMutationStack(
     accion,
     dataSelect,
     cerrarFormulario,
   );
-  
   const handlesub = (data) => {
     doInsertar(data);
   };
-  
+
   function abrirImagenes() {
     ref.current.click();
   }
-  
   function prepararImagen(e) {
     let filelocal = e.target.files;
     let fileReaderlocal = new FileReader();
@@ -404,7 +182,6 @@ export function RegistrarMetodosPago({
       };
     }
   }
-  
   useEffect(() => {
     if (accion === "Editar") {
       setFileurl(dataSelect.icono);
@@ -413,7 +190,7 @@ export function RegistrarMetodosPago({
       setFileurl(undefined);
     }
   }, []);
-  
+
   return (
     <Container>
       <Decoracion>
@@ -528,7 +305,6 @@ const Container = styled.div`
     padding: 13px 36px 20px 36px;
     z-index: 100;
     overflow: hidden;
-    animation: ${aparecer} 0.4s ease forwards;
     .headers {
       position: relative;
       z-index: 5;
@@ -609,4 +385,85 @@ const ConteinerLoader = styled.div`
       font-size: 18px;
     }
   }
+`;
+
+const Decoracion = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+`;
+
+const WebCorner = styled.div`
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 160px;
+  color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
+  opacity: 0.35;
+  animation: ${telaranaAnim} 0.8s ease forwards;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  &.web-left {
+    left: 0;
+  }
+  &.web-right {
+    right: 0;
+  }
+`;
+
+const Bat = styled.div`
+  position: absolute;
+  top: 10%;
+  left: -100px;
+  width: 65px;
+  color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
+  opacity: 0.55;
+  animation: ${murcielagoVolar} 10s ease-in-out infinite;
+`;
+
+const BatInner = styled.div`
+  animation: ${aletar} 0.4s ease-in-out infinite;
+  svg {
+    width: 100%;
+  }
+`;
+
+const Spider = styled.div`
+  position: absolute;
+  top: 0;
+  right: 7%;
+  width: 45px;
+  color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
+  opacity: 0.6;
+  transform-origin: top center;
+  animation:
+    ${arañaCaer} 1s ease forwards,
+    ${arañaBalancear} 4s ease-in-out infinite 1s;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -90px;
+    left: 50%;
+    width: 1px;
+    height: 90px;
+    background: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
+    opacity: 0.5;
+  }
+  svg {
+    width: 100%;
+  }
+`;
+
+const SpiderSecond = styled(Spider)`
+  right: auto;
+  left: 8%;
+  width: 38px;
+  opacity: 0.45;
+  animation:
+    ${arañaCaer} 1.3s ease forwards,
+    ${arañaBalancear} 5s ease-in-out infinite 1.3s;
 `;

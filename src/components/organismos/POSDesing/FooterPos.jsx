@@ -67,12 +67,6 @@ export const FooterPos = () => {
           icono={<Icon icon="fluent-emoji:credit-card" />}
           titulo="Abonar Crédito"
         />
-        {/* <Btn1
-          bgcolor="#fff"
-          color="#2d2d2d"
-          icono={<Icon icon="icon-park:preview-open" />}
-          titulo="Ver ventas del día"
-        /> */}
       </article>
     </Footer>
   );
@@ -81,7 +75,6 @@ export const FooterPos = () => {
 const Footer = styled.section`
   grid-area: footer;
   display: none;
-
   @media ${Device.desktop} {
     display: flex;
   }

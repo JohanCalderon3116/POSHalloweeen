@@ -5,7 +5,6 @@ export function CardModos({ title, subtitle, img, bgcolor, funcion }) {
       <section className="card-container">
         <article className="content-wrapper">
           <section className="badge-container">
-          
             <span className="badge-button">{title} </span>
           </section>
           <section className="title-section">
@@ -37,14 +36,12 @@ const Container = styled.section`
       background-color: rgba(23, 23, 23, 1);
     }
   }
-
   .content-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 0.5rem;
   }
-
   .badge-container {
     background-color: #fff0e6;
     color: ${(props) => props.$bgcolor};
@@ -53,25 +50,20 @@ const Container = styled.section`
     display: flex;
     gap: 0.5rem;
   }
-
   .badge-button {
     font-weight: bold;
   }
-
   .title-section {
     display: flex;
     flex-direction: column;
   }
-
   .title {
     font-weight: bold;
   }
-
   .subtitle {
     color: rgba(255, 255, 255, 0.7);
     font-weight: 600;
   }
-
   .image-container {
     position: absolute;
     right: 10px;
@@ -79,7 +71,6 @@ const Container = styled.section`
     align-items: flex-end;
     height: 60px;
   }
-
   .character-image {
     height: 100%;
     position: relative;

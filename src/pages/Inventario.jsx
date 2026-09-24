@@ -120,7 +120,6 @@ const Container = styled.div`
     pointer-events: none;
     z-index: 0;
   }
-
   button[title="Nuevo"],
   button[aria-label="Nuevo"] {
     background: #9a5425 !important;

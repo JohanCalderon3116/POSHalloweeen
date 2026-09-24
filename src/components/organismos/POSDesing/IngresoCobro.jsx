@@ -20,7 +20,6 @@ import { useBuscarClientesQueryStack } from "../../../tanstack/ClientesProveedor
 import { useConfirmarVentasMutationStack } from "../../../tanstack/VentasStack";
 import { BeatLoader } from "react-spinners";
 import { useMostrarMonedaQueryStack } from "../../../tanstack/MonedaStack";
-
 const ACCENT = {
   primary: "#1f7a5c",
   primaryDark: "#155a44",
@@ -34,17 +33,14 @@ const ACCENT = {
   danger: "#b3402f",
   dangerSoft: "rgba(179, 64, 47, 0.08)",
 };
-
 const aparecer = keyframes`
   from { opacity: 0; transform: translateY(14px) scale(0.985); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 `;
-
 const aparecerFila = keyframes`
   from { opacity: 0; transform: translateY(7px); }
   to { opacity: 1; transform: translateY(0); }
 `;
-
 const LoaderAnim = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }

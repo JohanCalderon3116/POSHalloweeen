@@ -199,6 +199,7 @@ export function RegistrarUsuarios({ accion, dataSelect, onClose }) {
     </Container>
   );
 }
+
 const Container = styled.div`
   transition: 0.5s;
   top: 0;
@@ -212,6 +213,7 @@ const Container = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
 `;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -238,10 +240,12 @@ const Form = styled.form`
     }
   }
 `;
+
 const Header = styled.div`
   width: 100%;
   display: flex;
 `;
+
 const Title = styled.span`
   font-size: 30px;
   font-weight: bold;

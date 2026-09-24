@@ -137,6 +137,7 @@ const Container = styled.div`
     padding-bottom: 20px;
   }
 `;
+
 const Header = styled.div`
   margin-bottom: 20px;
   text-align: center;
@@ -146,12 +147,14 @@ const Header = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
+
 const Title = styled.h3`
   font-size: 25px;
   font-weight: bold;
   color: ${({ theme }) => theme.text};
   margin: 0;
 `;
+
 const Subtitle = styled.p`
   font-size: 18px;
   color: #6b7280;

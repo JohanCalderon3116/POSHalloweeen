@@ -16,7 +16,6 @@ import { useMostrarTop5MasVendidosXCantidadQueryStack } from "../../../tanstack/
 
 export const ChartProductosTop5 = () => {
   const { data, isLoading } = useMostrarTop5MasVendidosXCantidadQueryStack();
-
   if (isLoading) {
     return <BarLoader color="#ff7a18" />;
   }

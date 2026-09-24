@@ -14,11 +14,9 @@ export const CardMovimientosCajaLive = () => {
     options: { event: "*", schema: "public", table: "movimientos_caja" },
     queryKey: ["mostrar movimientos caja live"],
   });
-
   if (isLoading) {
     return <BarLoader color="#ff7a18" />;
   }
-
   if (error) {
     return <span>Error: {error.message} </span>;
   }

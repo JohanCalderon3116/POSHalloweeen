@@ -15,7 +15,6 @@ import {
   useMostrarVentasMetodoPagoMovCajaQueryStack,
   useMostrarDetalleEfectivoSinVentasMovCajasQueryStack,
 } from "../../../../tanstack/MovimientosCajaStack";
-
 const HALLOWEEN = {
   primary: "#b86627",
   border: "rgba(184,102,39,0.11)",
@@ -29,10 +28,8 @@ export const PantallaCierreCaja = () => {
     stateConteoCaja,
     setStateConteoCaja,
   } = useCierreCajaStore();
-
   const fechaActual = useFormattedDate();
   const theme = useTheme();
-
   const {
     totalVentasMetodoPago,
     totalVentasEfectivo,
@@ -41,28 +38,20 @@ export const PantallaCierreCaja = () => {
     totalIngresosVariosCaja,
     totalEfectivoTotalCaja,
   } = useMovCajaStore();
-
   const { dataempresa } = useEmpresaStore();
-
   const fechaInicioFormateada = format(
     new Date(dataCierreCaja?.fechainicio),
     "dd/MM/yyyy:HH:mm:ss",
   );
-
   const { isLoading: isLoading1 } =
     useMostrarEfectivoSinVentasMovCajasQueryStack();
-
   const { isLoading: isLoading2, data: dataventasmetodospago } =
     useMostrarVentasMetodoPagoMovCajaQueryStack();
-
   const { isLoading: isLoading3, data: dataDetalleMovs } =
     useMostrarDetalleEfectivoSinVentasMovCajasQueryStack();
-
   const isLoading = isLoading1 || isLoading2 || isLoading3;
-
   const formatearDescripcion = (descripcion) =>
     !descripcion || descripcion === "-" ? "Sin detalle" : descripcion;
-
   const entradasDetalle =
     dataDetalleMovs?.filter((m) => m.tipo_movimiento === "ingreso") ?? [];
   const salidasDetalle =
@@ -123,7 +112,6 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
-
               <li>
                 Ventas (Efectivo):
                 <span>
@@ -134,7 +122,6 @@ export const PantallaCierreCaja = () => {
                   )}
                 </span>
               </li>
-
               <li className="conDetalle">
                 Entradas:
                 <span>
@@ -164,7 +151,6 @@ export const PantallaCierreCaja = () => {
                   ))}
                 </DetalleList>
               )}
-
               <li className="conDetalle">
                 Salidas / Gastos:
                 <span className="gasto">
@@ -195,7 +181,6 @@ export const PantallaCierreCaja = () => {
                   ))}
                 </DetalleList>
               )}
-
               <li className="total">
                 <Divider />
                 {FormatearNumeroDinero(
@@ -206,9 +191,7 @@ export const PantallaCierreCaja = () => {
               </li>
             </ul>
           </Tabla>
-
           <DivisionY />
-
           <Tabla>
             <h4>Ventas Totales</h4>
             <ul>
@@ -224,7 +207,6 @@ export const PantallaCierreCaja = () => {
                   </span>
                 </li>
               ))}
-
               <li className="total">
                 <Divider />
                 {FormatearNumeroDinero(
@@ -235,11 +217,9 @@ export const PantallaCierreCaja = () => {
               </li>
             </ul>
           </Tabla>
-
           <DivisionY />
         </Tablas>
       </Resumen>
-
       <Btn1
         funcion={() => setStateConteoCaja(true)}
         titulo="Cerrar caja"
@@ -247,7 +227,6 @@ export const PantallaCierreCaja = () => {
         border="2px"
         bgcolor={HALLOWEEN.primary}
       />
-
       {stateConteoCaja && <PantallaConteoCaja />}
     </Container>
   );
@@ -284,7 +263,6 @@ const Division = styled.span`
   background: ${({ theme }) =>
     theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"};
   position: relative;
-
   &::after {
     content: "";
     position: absolute;
@@ -310,24 +288,20 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.bgtotal || "#fff"};
   color: ${({ theme }) => theme.text};
   z-index: 10;
-
   & > button {
     transition:
       transform 0.18s ease,
       filter 0.18s ease,
       box-shadow 0.18s ease;
-
     &:hover {
       transform: translateY(-2px);
       filter: brightness(1.03);
       box-shadow: 0 6px 16px rgba(184, 102, 39, 0.07);
     }
-
     &:active {
       transform: scale(0.98);
     }
   }
-
   @media (max-width: 768px) {
     overflow-y: auto;
     justify-content: flex-start;
@@ -341,7 +315,6 @@ const Fechas = styled.p`
   font-size: 14px;
   text-align: center;
   opacity: 0.7;
-
   @media (max-width: 768px) {
     padding: 0 10px;
   }
@@ -353,7 +326,6 @@ const Datos = styled.div`
   align-items: stretch;
   gap: 12px;
   width: min(900px, 92%);
-
   section {
     flex: 1;
     display: flex;
@@ -368,7 +340,6 @@ const Datos = styled.div`
     border: 1px solid
       ${({ theme }) =>
         theme.body === "#fff" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.05)"};
-
     span {
       font-weight: 700;
       white-space: nowrap;
@@ -376,7 +347,6 @@ const Datos = styled.div`
       opacity: 0.9;
     }
   }
-
   @media (max-width: 768px) {
     flex-direction: column;
     width: 92%;
@@ -388,7 +358,6 @@ const Resumen = styled.div`
   justify-content: center;
   width: 100%;
   gap: 20px;
-
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -401,7 +370,6 @@ const Tablas = styled.div`
   justify-content: center;
   gap: 30px;
   width: min(900px, 92%);
-
   @media (max-width: 768px) {
     flex-direction: column;
     width: 92%;
@@ -423,21 +391,18 @@ const Tabla = styled.div`
   border: 1px solid
     ${({ theme }) =>
       theme.body === "#fff" ? "rgba(0,0,0,0.055)" : "rgba(255,255,255,0.045)"};
-
   h4 {
     margin: 0 0 12px;
     font-size: 18px;
     font-weight: 700;
     color: ${({ theme }) => theme.text};
   }
-
   ul {
     width: 100%;
     padding: 0;
     margin: 0;
     list-style: none;
   }
-
   li {
     display: flex;
     align-items: center;
@@ -447,18 +412,15 @@ const Tabla = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.text};
     opacity: 0.8;
-
     span {
       white-space: nowrap;
       font-weight: 600;
     }
   }
-
   li .gasto {
     color: #c95858;
     font-weight: 700;
   }
-
   .total {
     flex-direction: column;
     align-items: flex-end;
@@ -477,7 +439,6 @@ const DetalleList = styled.ul`
   margin: -2px 0 6px !important;
   list-style: none;
   border-left: 2px solid ${HALLOWEEN.border};
-
   li {
     display: flex;
     justify-content: space-between;
@@ -486,21 +447,17 @@ const DetalleList = styled.ul`
     opacity: 0.75;
     margin-bottom: 4px;
   }
-
   .concepto {
     opacity: 0.85;
     font-weight: 400;
   }
-
   .monto {
     font-weight: 600;
     white-space: nowrap;
   }
-
   .monto.ingreso {
     color: #4caf83;
   }
-
   .monto.gasto {
     color: #c95858;
   }
@@ -515,7 +472,6 @@ const ConteinerLoader = styled.div`
   width: 100%;
   height: 100vh;
   color: ${({ theme }) => theme.text};
-
   strong {
     font-size: 14px;
     opacity: 0.7;

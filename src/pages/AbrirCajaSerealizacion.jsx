@@ -31,6 +31,7 @@ const murcielagoVolar = keyframes`
     transform: translateX(calc(100vw + 120px)) translateY(0) rotate(2deg);
   }
 `;
+
 const aletear = keyframes`
   0%, 100% {
     transform: scaleY(1);
@@ -39,6 +40,7 @@ const aletear = keyframes`
     transform: scaleY(0.55);
   }
 `;
+
 const arañaCaer = keyframes`
   from {
     transform: translateY(-45px);
@@ -49,6 +51,7 @@ const arañaCaer = keyframes`
     opacity: 1;
   }
 `;
+
 const arañaBalancear = keyframes`
   0%, 100% {
     transform: rotate(-5deg);
@@ -57,6 +60,7 @@ const arañaBalancear = keyframes`
     transform: rotate(5deg);
   }
 `;
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -65,6 +69,7 @@ const fadeIn = keyframes`
     opacity: 1;
   }
 `;
+
 const popIn = keyframes`
   from {
     opacity: 0;
@@ -75,6 +80,7 @@ const popIn = keyframes`
     transform: scale(1) translateY(0);
   }
 `;
+
 const pulse = keyframes`
   0% {
     transform: scale(0.9);
@@ -89,6 +95,7 @@ const pulse = keyframes`
     opacity: 0;
   }
 `;
+
 const shimmer = keyframes`
   0% {
     background-position: 200% 0;
@@ -97,6 +104,7 @@ const shimmer = keyframes`
     background-position: -200% 0;
   }
 `;
+
 const telaranaPaths = `
 M0 0 L180 0
 M0 0 L165 70
@@ -109,6 +117,7 @@ M90 0 Q86 50 0 90
 M120 0 Q114 68 0 120
 M150 0 Q144 85 0 150
 `;
+
 const WebSvg = ({ flip = false }) => (
   <svg
     viewBox="0 0 180 180"
@@ -128,6 +137,7 @@ const WebSvg = ({ flip = false }) => (
     />
   </svg>
 );
+
 const MurcielagoSvg = () => (
   <svg viewBox="0 0 64 32" width="100%" height="100%" aria-hidden="true">
     <path
@@ -138,6 +148,7 @@ const MurcielagoSvg = () => (
     <circle cx="34.5" cy="13" r="0.9" fill="#ff4b55" />
   </svg>
 );
+
 const AranaSvg = () => (
   <svg viewBox="0 0 60 60" width="100%" height="100%" aria-hidden="true">
     <line

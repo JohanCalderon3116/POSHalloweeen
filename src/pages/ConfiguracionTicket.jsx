@@ -50,7 +50,6 @@ export const ConfiguracionTicket = () => {
         <Rincon className="der">
           <Telarana />
         </Rincon>
-
         {MURCIELAGOS.map((b, i) => (
           <Murcielago
             key={i}
@@ -70,7 +69,6 @@ export const ConfiguracionTicket = () => {
             </Aleteo>
           </Murcielago>
         ))}
-
         {ARANAS.map((a, i) => (
           <Colgante
             key={i}
@@ -107,12 +105,10 @@ export const ConfiguracionTicket = () => {
               puedes modificar detalles de tu ticket
             </span>
           </Contentguia>
-
           <ImageSelector fileurl={fileurl || dataempresa?.logo} />
           <form className="receipt-content" onSubmit={handleSubmit(mutate)}>
             <Btn1 bgcolor={"#fad43c"} titulo={"Guardar"} />
             <br></br>
-
             <div className="company-info">
               <div className="company-name">
                 <input
@@ -129,7 +125,6 @@ export const ConfiguracionTicket = () => {
                 </div>
                 <div className="connector-line" />
               </div>
-
               <div className="company-details">
                 <input
                   type="text"
@@ -145,7 +140,6 @@ export const ConfiguracionTicket = () => {
                 </div>
                 <div className="connector-line" />
               </div>
-
               <div className="company-details">
                 <input
                   type="text"
@@ -164,7 +158,6 @@ export const ConfiguracionTicket = () => {
                 <div className="connector-line" />
               </div>
             </div>
-
             <div className="ticket-number">
               TICKET - T0001
               <div className="tech-label">
@@ -173,9 +166,7 @@ export const ConfiguracionTicket = () => {
               </div>
               <div className="connector-line" />
             </div>
-
             <div className="divider"></div>
-
             <div className="details-section">
               <div className="details-row">
                 <div className="details-label">Cajero</div>
@@ -187,7 +178,6 @@ export const ConfiguracionTicket = () => {
                 </div>
                 <div className="connector-line" />
               </div>
-
               <div className="details-row">
                 <div className="details-label">Fecha Emisión</div>
                 <div className="details-colon">:</div>
@@ -198,7 +188,6 @@ export const ConfiguracionTicket = () => {
                 </div>
                 <div className="connector-line" />
               </div>
-
               <div className="details-row">
                 <div className="details-label">Cliente</div>
                 <div className="details-colon">:</div>
@@ -210,9 +199,7 @@ export const ConfiguracionTicket = () => {
                 <div className="connector-line" />
               </div>
             </div>
-
             <div className="divider"></div>
-
             <table className="products-table">
               <thead>
                 <tr>
@@ -250,7 +237,6 @@ export const ConfiguracionTicket = () => {
                 </tr>
               </tbody>
             </table>
-
             <div className="summary-section">
               <div className="summary-row">
                 <div>Sub Total:</div>
@@ -280,7 +266,6 @@ export const ConfiguracionTicket = () => {
                 <div className="connector-line" />
               </div>
             </div>
-
             <div className="payment-info">
               <div className="son-text">
                 SON: VEINTISEIS CON 50/100
@@ -326,9 +311,7 @@ export const ConfiguracionTicket = () => {
                 <div className="connector-line" />
               </div>
             </div>
-
             <div className="divider"></div>
-
             <div className="footer-info">
               <div className="footer-row">
                 <input
@@ -348,11 +331,9 @@ export const ConfiguracionTicket = () => {
                 <div className="connector-line" />
               </div>
             </div>
-
             <div className="footer-stars">
               ************************************************
             </div>
-
             <div className="qr-code">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Codigo_QR.svg/500px-Codigo_QR.svg.png"
@@ -387,7 +368,6 @@ const Container = styled.div`
     pointer-events: none;
     z-index: 0;
   }
-
   input {
     width: 90%;
     padding: 8px 12px;

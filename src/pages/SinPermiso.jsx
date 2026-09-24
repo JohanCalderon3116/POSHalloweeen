@@ -54,7 +54,6 @@ const StyledLink = styled(Link)`
   font-size: ${({ theme }) => theme.fontButton};
   box-shadow: 0 0 15px ${({ theme }) => theme.halloweenSoft2};
   transition: all 0.3s ease;
-
   &:hover {
     background-color: ${({ theme }) => theme.halloweenPrimary};
     box-shadow: 0 0 20px ${({ theme }) => theme.halloweenGlow};

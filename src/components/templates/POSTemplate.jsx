@@ -133,7 +133,6 @@ export const POSTemplate = () => {
   const { stateIngresoSalida, stateCierreCaja } = useCierreCajaStore();
   const { stateIngresoCredito } = useMovimientosCreditosStore();
   const { stateModal } = useStockStore();
-
   useBuscarProductosCodigoQueryStack();
   useMostrarAlmacenesXSucursalQueryStack();
   useMostrarStockAlmacenesyProductoQueryStack();
@@ -277,7 +276,6 @@ const FondoHalloweenPOS = styled.div`
         transparent 30%
       );
   }
-
   .web {
     position: absolute;
     width: min(210px, 22vw);
