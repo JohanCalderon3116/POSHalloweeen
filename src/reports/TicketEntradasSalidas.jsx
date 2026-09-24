@@ -123,7 +123,8 @@ const TicketEntradasSalidas = async (output, data) => {
 
   const response = await createPdf(
     {
-      pageSize: { width: ANCHO_PAGINA, height: "auto" },
+      pageSize: { width: ANCHO_PAGINA, height: 595.28 },
+      pageOrientation: "portrait",
       pageMargins: [MARGEN, MARGEN, MARGEN, MARGEN],
       defaultStyle: { color: NEGRO, bold: true },
       content,
