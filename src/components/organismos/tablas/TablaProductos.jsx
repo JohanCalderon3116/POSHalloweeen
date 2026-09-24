@@ -31,6 +31,12 @@ export function TablaProductos({
   const [columnFilters, setColumnFilters] = useState([]);
   const { eliminarProductos } = useProductosStore();
   function eliminar(p) {
+    if (p.nombre === "VENTA_MANUAL") {
+      toast.error(
+        "Este registro es obligatorio para el sistema y no puedes modificarlo. 🔒😤",
+      );
+      return;
+    }
     Swal.fire({
       title: "¿Estás seguro(a)?",
       text: "Una vez eliminado, ¡no podrá recuperar este registro!",
@@ -51,6 +57,12 @@ export function TablaProductos({
     });
   }
   function editar(data) {
+    if (data.nombre === "VENTA_MANUAL") {
+      toast.error(
+        "Este registro es obligatorio para el sistema y no puedes modificarlo. 🔒😤",
+      );
+      return;
+    }
     SetopenRegistro(true);
     setdataSelect(data);
     setAccion("Editar");
