@@ -24,7 +24,7 @@ export const Perfil = () => {
   });
   return (
     <Container>
-      <Toaster richColors />
+      <Toaster richColors position="top-center"/>
       {isPending ? (
         <ConteinerLoader>
           <span>

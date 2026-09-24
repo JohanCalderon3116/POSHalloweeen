@@ -93,7 +93,7 @@ export const ProductosTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       <RegistrarProductos
         setIsExploding={setIsExploding}
         onClose={() => setOpenRegistro(!openRegistro)}

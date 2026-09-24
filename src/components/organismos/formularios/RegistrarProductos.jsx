@@ -302,11 +302,8 @@ export function RegistrarProductos({
     stateInventarios,
     setStateInventarios,
   } = useProductosStore();
-  const {
-    dataalmacen,
-    almacenSelelctItem,
-    setAlmacenSelelctItem,
-  } = useAlmacenesStore();
+  const { dataalmacen, almacenSelelctItem, setAlmacenSelelctItem } =
+    useAlmacenesStore();
   const [stateEnabledStock, setstatEEnabledStock] = useState(false);
   const { datacategorias, selectCategoria, categoriaItemSelect } =
     useCategoriasStore();
@@ -410,8 +407,8 @@ export function RegistrarProductos({
             text: "Si desactiva esta opción se elimina el stock",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: theme.halloweenPrimary,
+            cancelButtonColor: theme.halloweenDanger,
             confirmButtonText: "Si, eliminar",
             background: theme.bg2,
             color: theme.text,

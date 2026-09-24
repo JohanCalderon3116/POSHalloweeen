@@ -27,7 +27,6 @@ export const MenuMovil = ({ setState }) => {
       cancelButtonText: "Cancelar",
       background: theme.bg2,
       color: theme.text,
-      color: theme.text,
     }).then(async (result) => {
       if (result.isConfirmed) {
         cerrarSesion();

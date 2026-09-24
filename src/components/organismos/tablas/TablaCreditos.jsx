@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import {
   ContentAccionesTabla,
   Paginacion,
@@ -17,7 +17,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { FaArrowsAltV } from "react-icons/fa";
-import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 export function TablaCreditos({
@@ -27,26 +26,27 @@ export function TablaCreditos({
   setAccion,
 }) {
   if (data == null) return;
+  const theme = useTheme();
   const [pagina, setPagina] = useState(1);
   const [datas, setData] = useState(data);
   const [columnFilters, setColumnFilters] = useState([]);
-  const { deleteCreditos, setCreditosItemSelect } = useCreditosStore();
+  const { setCreditosItemSelect } = useCreditosStore();
   const { abrirHistorial } = useMovimientosCreditosStore();
-  const queryClient = useQueryClient();
   function eliminar(p) {
     Swal.fire({
       title: "¿Estás seguro(a)?",
       text: "Una vez eliminado, ¡no podrá recuperar este registro!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: theme.halloweenPrimary,
+      cancelButtonColor: theme.halloweenDanger,
       confirmButtonText: "Si, eliminar",
+      background: theme.bg2,
+      color: theme.text,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await deleteCreditos({ id: p.id });
-        queryClient.invalidateQueries({ queryKey: ["mostrar creditos"] });
-        toast.success("Se eliminó correctamente el crédito 🙌");
+        await eliminarCliPro({ id: p.id });
+        toast.success("Se eliminó correctamente 🙌");
       } else {
         toast.info("Eliminación cancelada, no se hizo ningún cambio. 😮✅");
       }

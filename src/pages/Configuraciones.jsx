@@ -24,7 +24,7 @@ export const Configuraciones = () => {
   }
   return (
     <>
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       <ConfiguracionesTemplate></ConfiguracionesTemplate>
     </>
   );

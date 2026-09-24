@@ -184,7 +184,7 @@ export const POSTemplate = () => {
         <PantallaMuestraValoresVenta />
         <HeaderPos />
         <Main>
-          <Toaster richColors />
+          <Toaster richColors position="top-center"/>
           <AreaDetalleventaPos />
           <AreaTecladoPos />
           {stateModal && <SelectAlmacen />}

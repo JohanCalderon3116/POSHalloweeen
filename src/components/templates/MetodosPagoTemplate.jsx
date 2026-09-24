@@ -89,7 +89,7 @@ export const MetodosPagoTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       {openRegistro && (
         <RegistrarMetodosPago
           setIsExploding={setIsExploding}

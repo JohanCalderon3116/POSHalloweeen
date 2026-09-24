@@ -93,7 +93,7 @@ export const ClientesProveedoresTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors />
+      <Toaster richColors position="top-center"/>
       {openRegistro && (
         <RegistrarClientesProveedores
           setIsExploding={setIsExploding}

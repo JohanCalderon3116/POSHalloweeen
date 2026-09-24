@@ -80,7 +80,7 @@ export const SucursalesCajaTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       {stateSucursal && <RegistrarSucursal></RegistrarSucursal>}
       {stateCaja && <RegistrarCaja></RegistrarCaja>}
       <section className="area1">

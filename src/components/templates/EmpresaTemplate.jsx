@@ -28,8 +28,8 @@ export const EmpresaTemplate = () => {
       text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: theme.halloweenPrimary,
+      cancelButtonColor: theme.halloweenDanger,
       confirmButtonText: "Si, cerrar sesión",
       background: theme.bg2,
       color: theme.text,
@@ -87,7 +87,7 @@ export const EmpresaTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors />
+      <Toaster richColors position="top-center" />
       <PageContainer>
         <Content>
           <Outlet />

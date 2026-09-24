@@ -69,7 +69,7 @@ export const LoginTemplate = () => {
       />
       <Globales />
       <EscenaHalloween />
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       <div className="card">
         <CardWeb className="izq">
           <Telarana />

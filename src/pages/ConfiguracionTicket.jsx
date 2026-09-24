@@ -89,7 +89,7 @@ export const ConfiguracionTicket = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors />
+      <Toaster richColors position="top-center"/>
       {isPending ? (
         <ConteinerLoader>
           <span>

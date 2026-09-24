@@ -143,6 +143,9 @@ export const useConfirmarVentasMutationStack = ({
         Swal.fire({
           icon: "warning",
           title: "Stock bajo",
+          showCancelButton: true,
+          confirmButtonColor: theme.halloweenPrimary,
+          cancelButtonColor: theme.halloweenDanger,
           html: `Los siguientes productos quedaron con poco stock: <ul style="text-align:left;">${listaHtml}</ul>`,
           confirmButtonText: "Entendido",
           background: theme.bg2,
@@ -151,45 +154,6 @@ export const useConfirmarVentasMutationStack = ({
       }
       resetDetalleVenta();
       resetState();
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar detalle venta"],
-        refetchType: "none",
-      });
-      queryClient.invalidateQueries({ queryKey: ["mostrar stock"] });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar Stock Almacenes y Producto"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar stock almacen y producto"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar efectivo sin ventas movCaja"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar ventas metodoPago movCaja"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar cantidad ventas"],
-      });
-      queryClient.invalidateQueries({ queryKey: ["sumar ventas"] });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar ganacias x empresa"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar ventas agrupadas x fecha"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar top 5 mas vendidos por cantidad"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar top 10 productos mas venidos por monto"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar movimientos caja live"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["mostrar movimientos caja por fecha"],
-      });
       toast.success("😁🎉 Venta generada correctamente");
       document.getElementById("input-buscador-pos")?.focus();
     },
@@ -226,7 +190,21 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
     await insertarDetalleVentas(pDetalleventas);
   }
   async function insertarventa() {
+    console.log("Intentando insertar venta con:", {
+      idventa,
+      dataCierreCaja,
+      dataempresa,
+    });
     if (idventa === 0) {
+      if (
+        !dataCierreCaja?.id ||
+        !dataempresa?.id ||
+        !dataCierreCaja?.caja?.id_sucursal
+      ) {
+        throw new Error(
+          "Los datos de la caja aún no han cargado, intenta de nuevo en un momento",
+        );
+      }
       const pventas = {
         fecha: fechaActual,
         id_usuario: datausuarios?.id,
@@ -235,9 +213,11 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
         id_cierre_caja: dataCierreCaja?.id,
       };
       const result = await insertarVentas(pventas);
-      if (result?.id > 0) {
-        await insertarDVentas(result?.id);
+      console.log("Resultado insertarVentas:", result);
+      if (!(result?.id > 0)) {
+        throw new Error("No se pudo crear la venta, intenta de nuevo");
       }
+      await insertarDVentas(result?.id);
     } else {
       await insertarDVentas(idventa);
     }

@@ -83,7 +83,7 @@ export const Inventario = () => {
         ))}
       </div>
       <div className="contenido">
-        <Toaster richColors />
+        <Toaster richColors position="top-center" />
         <CrudTemplate
           stateBtnAdd={true}
           stateBuscador={true}

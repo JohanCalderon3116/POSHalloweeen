@@ -107,7 +107,7 @@ export const CreditosTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       {openRegistro && (
         <RegistrarCreditos
           setIsExploding={setIsExploding}
