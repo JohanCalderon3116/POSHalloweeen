@@ -32,8 +32,6 @@ export const TotalPos = () => {
           <Btn1
             funcion={validarPermisosCobrar}
             border="2px"
-            bgcolor="#6d05e5"
-            color="#3300E3"
             icono={<Icon icon="emojione:money-bag" width="20" height="20" />}
             titulo="Cobrar"
           />
