@@ -158,10 +158,49 @@ export const useConfirmarVentasMutationStack = ({
       }
       resetDetalleVenta();
       resetState();
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar detalle venta"],
+        refetchType: "none",
+      });
+      queryClient.invalidateQueries({ queryKey: ["mostrar stock"] });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar Stock Almacenes y Producto"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar stock almacen y producto"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar efectivo sin ventas movCaja"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar ventas metodoPago movCaja"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar cantidad ventas"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["sumar ventas"] });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar ganacias x empresa"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar ventas agrupadas x fecha"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar top 5 mas vendidos por cantidad"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar top 10 productos mas venidos por monto"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar movimientos caja live"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrar movimientos caja por fecha"],
+      });
       toast.success("😁🎉 Venta generada correctamente");
       document.getElementById("input-buscador-pos")?.focus();
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Tuvimos un error al insertar la venta");
     },
   });
