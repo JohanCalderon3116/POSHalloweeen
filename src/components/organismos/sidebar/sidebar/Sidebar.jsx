@@ -318,7 +318,11 @@ const ThemeContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 15px 8px 30px;
+  padding: 15px 0 30px;
+
+  > * {
+    margin: 0 !important;
+  }
 `;
 
 const Main = styled.div``;
