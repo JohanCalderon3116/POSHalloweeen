@@ -11,6 +11,7 @@ import { useThemeStore } from "./store/ThemeStore";
 import { useLocation } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect } from "react";
+import { LimpiezaVentas } from "./hooks/LimpiezaVentas";
 function App() {
   const { setTheme, themeStyle, theme } = useThemeStore();
   const { datausuarios } = useUsuariosStore();
@@ -35,6 +36,7 @@ function App() {
     <ThemeProvider theme={themeStyle}>
       <AuthContextProvider>
         <GlobalStyles></GlobalStyles>
+        <LimpiezaVentas />
         <Myroutes></Myroutes>
         <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools>
       </AuthContextProvider>

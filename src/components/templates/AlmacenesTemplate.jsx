@@ -78,7 +78,7 @@ export const AlmacenesTemplate = () => {
           </Colgante>
         ))}
       </div>
-      <Toaster richColors></Toaster>
+      <Toaster richColors position="top-center"></Toaster>
       {stateSucursal && <RegistrarSucursal></RegistrarSucursal>}
       {stateAlmacen && <RegistrarAlmacen></RegistrarAlmacen>}
       <section className="area1">

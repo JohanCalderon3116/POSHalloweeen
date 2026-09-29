@@ -21,7 +21,8 @@ import { abrirCaja } from "../components/atomos/AbrirCajaImpresora";
 import { useResumenVentaStore } from "../store/ResumenVentaStore";
 
 export const useEliminarVentasIncompletasMutateStack = () => {
-  const { eliminarventasIncompletas } = useVentasStore();
+  const { resetDetalleVenta } = useDetalleVentasStore();
+  const { eliminarventasIncompletas, resetState } = useVentasStore();
   const { datausuarios } = useUsuariosStore();
   const { dataCierreCaja } = useCierreCajaStore();
   const queryClient = useQueryClient();
@@ -37,6 +38,8 @@ export const useEliminarVentasIncompletasMutateStack = () => {
       toast.error(error.message);
     },
     onSuccess: () => {
+      resetState();
+      resetDetalleVenta();
       queryClient.invalidateQueries({ queryKey: ["mostrar detalle venta"] });
       queryClient.invalidateQueries({ queryKey: ["mostrar stock"] });
       queryClient.invalidateQueries({
@@ -266,7 +269,7 @@ export const useInsertarVentasConDetalleVentasMutationStack = (buscadorRef) => {
       queryClien.invalidateQueries({
         queryKey: ["mostrar Stock Almacenes y Producto"],
       });
-      if (dataStockXAlmacenesYProducto) {
+      if (error.message?.includes("Stock insuficiente")) {
         setStateModal(true);
       }
     },
@@ -328,7 +331,6 @@ export const useInsertarVentaDesdeAlmacenAlternoMutationStack = () => {
       const result = await insertarVentas(pventas);
       if (result?.id > 0) {
         await insertarDVentas(result?.id, idAlmacen);
-        // Mismo fix: idventa se fija recién cuando el detalle ya existe.
         setIdventa(result?.id);
       }
     } else {
@@ -346,7 +348,7 @@ export const useInsertarVentaDesdeAlmacenAlternoMutationStack = () => {
       queryClien.invalidateQueries({
         queryKey: ["mostrar Stock Almacenes y Producto"],
       });
-      if (dataStockXAlmacenesYProducto) {
+      if (error.message?.includes("Stock insuficiente")) {
         setStateModal(true);
       }
     },

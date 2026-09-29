@@ -87,7 +87,9 @@ const Container = styled.div`
   }
 `;
 const TextContainer = styled.div`
+  flex: 1;
   min-width: 0;
+  max-width: 100%;
 `;
 
 const Title = styled.h1`
@@ -97,10 +99,14 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
   color: ${({ theme }) => theme.text};
   white-space: nowrap;
   span {
     display: inline-block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .ghost-icon {
     flex-shrink: 0;
@@ -124,8 +130,8 @@ const Title = styled.h1`
     }
   }
 `;
-
 const ActionsContainer = styled.div`
+  flex-shrink: 0;
   border: 1px solid
     ${({ theme }) => theme.halloweenBorder || theme.colortitlecard};
   border-radius: 12px;

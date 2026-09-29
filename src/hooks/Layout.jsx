@@ -6,8 +6,6 @@ import {
   Sidebar,
   Spinner1,
   Toogle,
-  useCierreCajaStore,
-  useEliminarVentasIncompletasMutateStack,
   useMostrarEmpresaQueryStack,
   useMostrarSucursalesAsignadsQueryStack,
   useMostrarUsuariosQueryStack,
@@ -19,14 +17,12 @@ import { IndicadorConexion } from "../components/moleculas/IndicadorConexion";
 export const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stateMenu, setStateMenu] = useState(false);
-  const { dataCierreCaja } = useCierreCajaStore();
   const location = useLocation();
   const {
     refetch: refetchUsuarios,
     data: datausuarios,
     isLoading: isLoadingUsuarios,
   } = useMostrarUsuariosQueryStack();
-  const { mutate } = useEliminarVentasIncompletasMutateStack();
   const { isLoading: isLoadingSucursales } =
     useMostrarSucursalesAsignadsQueryStack();
   const { isLoading: isLoadingEmpresa } = useMostrarEmpresaQueryStack();
@@ -34,12 +30,6 @@ export const Layout = ({ children }) => {
   useEffect(() => {
     if (!datausuarios) refetchUsuarios();
   }, [datausuarios]);
-
-  useEffect(() => {
-    if (datausuarios?.id && dataCierreCaja?.id) {
-      mutate();
-    }
-  }, [datausuarios?.id, dataCierreCaja?.id]);
 
   const isLoading =
     isLoadingEmpresa || isLoadingSucursales || isLoadingUsuarios;
@@ -103,6 +93,7 @@ const Containerbody = styled.section`
   grid-column: 1;
   width: 100%;
   @media ${Device.tablet} {
+    grid-template-columns: 88px 1fr;
     grid-column: 2;
   }
 `;

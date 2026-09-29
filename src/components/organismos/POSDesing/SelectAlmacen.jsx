@@ -7,18 +7,38 @@ import { BtnClose } from "../../ui/buttons/BtnClose";
 import { Icon } from "@iconify/react";
 import { InputText2 } from "../formularios/InputText2";
 import { useInsertarVentaDesdeAlmacenAlternoMutationStack } from "../../../tanstack/VentasStack";
+import { useCierreCajaStore } from "../../../store/CierreCajaStore";
+import { useSucursalesStore } from "../../../store/SucursalesStore";
+import { useMostrarSucursalesXEmpresaStack } from "../../../tanstack/SucursalesStack";
 
 export const SelectAlmacen = () => {
   const { ProductosItemSelect } = useProductosStore();
   const { catidadInput, setCantidadInput } = useVentasStore();
-  const { dataStockXAlmacenesYProducto: data, setStateModal } = useStockStore();
+  const { dataStockXAlmacenesYProducto, setStateModal } = useStockStore();
+  const { dataCierreCaja } = useCierreCajaStore();
+  const { data: dataSucursales } = useMostrarSucursalesXEmpresaStack();
   const { mutate: doInsertarVentas, isPending } =
     useInsertarVentaDesdeAlmacenAlternoMutationStack();
+  const idSucursal = dataCierreCaja?.caja?.id_sucursal;
+  const todos = dataStockXAlmacenesYProducto ?? [];
+  const data = todos.filter((i) => i.almacenes?.id_sucursal === idSucursal);
+  const otras = todos.filter((i) => i.almacenes?.id_sucursal !== idSucursal);
+  const nombreSucursal = (id) =>
+    dataSucursales?.find((s) => s.id === id)?.nombre ?? "Otra sucursal";
+  const otrasPorSucursal = Object.values(
+    otras.reduce((acc, item) => {
+      const id = item.almacenes?.id_sucursal;
+      acc[id] = acc[id] || { id, items: [] };
+      acc[id].items.push(item);
+      return acc;
+    }, {}),
+  );
+
   const ValidarCantidad = (e) => {
     const value = Math.max(0, parseFloat(e.target.value));
     setCantidadInput(value);
   };
-  const maxStock = Math.max(1, ...(data?.map((i) => i.stock) || [1]));
+  const maxStock = Math.max(1, ...data.map((i) => i.stock));
 
   return (
     <Overlay>
@@ -40,8 +60,9 @@ export const SelectAlmacen = () => {
           </Forklift>
         </TransferTrack>
         <Message>
-          Encontramos stock de este producto en otro almacén. Elige uno para
-          continuar con la venta.
+          {data.length > 0
+            ? "No hay existencias en el almacén actual, pero sí en estos almacenes de esta sucursal. Elige uno para continuar con la venta."
+            : "Este producto no tiene existencias en esta sucursal."}
         </Message>
         <QtyRow>
           <QtyLabel htmlFor="cantidad-almacen">Cantidad</QtyLabel>
@@ -57,34 +78,61 @@ export const SelectAlmacen = () => {
             ></input>
           </InputText2>
         </QtyRow>
-        <ListLabel>Almacenes disponibles</ListLabel>
-        {data?.length > 0 ? (
-          <List>
-            {data.map((item, index) => (
-              <Row
-                key={index}
-                onClick={() => !isPending && doInsertarVentas(item)}
-                $disabled={isPending}
-              >
-                <RowMain>
-                  <RowName>{item?.almacenes?.nombre}</RowName>
-                  <RowStock>
-                    {item?.stock} <unit>u.</unit>
-                  </RowStock>
-                </RowMain>
-                <Bar>
-                  <BarFill
-                    style={{ width: `${(item.stock / maxStock) * 100}%` }}
-                  />
-                </Bar>
-              </Row>
+
+        {data.length > 0 && (
+          <>
+            <ListLabel>Almacenes de esta sucursal</ListLabel>
+            <List>
+              {data.map((item) => (
+                <Row
+                  key={item.id}
+                  onClick={() => !isPending && doInsertarVentas(item)}
+                  $disabled={isPending}
+                >
+                  <RowMain>
+                    <RowName>{item?.almacenes?.nombre}</RowName>
+                    <RowStock>
+                      {item?.stock} <unit>u.</unit>
+                    </RowStock>
+                  </RowMain>
+                  <Bar>
+                    <BarFill
+                      style={{ width: `${(item.stock / maxStock) * 100}%` }}
+                    />
+                  </Bar>
+                </Row>
+              ))}
+            </List>
+          </>
+        )}
+
+        {otrasPorSucursal.length > 0 && (
+          <OtrasSucursales>
+            <ListLabel>
+              Sí hay existencias en otras sucursales (solo consulta)
+            </ListLabel>
+            {otrasPorSucursal.map((grupo) => (
+              <div key={grupo.id}>
+                <SucursalTitle>{nombreSucursal(grupo.id)}</SucursalTitle>
+                {grupo.items.map((item) => (
+                  <InfoRow key={item.id}>
+                    <span>{item?.almacenes?.nombre}</span>
+                    <span>
+                      {item?.stock} <unit>u.</unit>
+                    </span>
+                  </InfoRow>
+                ))}
+              </div>
             ))}
-          </List>
-        ) : (
+          </OtrasSucursales>
+        )}
+
+        {data.length === 0 && otrasPorSucursal.length === 0 && (
           <EmptyState>
-            No hay stock disponible en ningún otro almacén.
+            No hay stock de este producto en ninguna sucursal.
           </EmptyState>
         )}
+
         <Footer>
           <Btn1
             titulo="Volver"
@@ -102,6 +150,31 @@ const ACCENT_TEXT = "#a15c00";
 const GREEN = "#178a4c";
 const GREEN_FILL = "#34c481";
 
+const OtrasSucursales = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px dashed ${({ theme }) => theme.color2};
+  border-radius: 6px;
+`;
+
+const SucursalTitle = styled.span`
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: ${ACCENT_TEXT};
+  margin-bottom: 2px;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: ${({ theme }) => theme.text};
+  opacity: 0.8;
+  padding: 2px 0;
+`;
 const Overlay = styled.div`
   position: fixed;
   top: 0;

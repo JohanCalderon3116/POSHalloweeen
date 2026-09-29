@@ -26,7 +26,6 @@ export function RegistrarCaja() {
 
   return (
     <Container>
-      <Toaster richColors></Toaster>
       {isPending ? (
         <ConteinerLoader>
           <span>

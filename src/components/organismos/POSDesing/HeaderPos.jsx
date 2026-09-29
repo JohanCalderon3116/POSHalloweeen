@@ -242,7 +242,13 @@ const Header = styled.div`
   flex-direction: column;
   gap: 10px;
   @media ${Device.desktop} {
-    border-bottom: 2px solid ${({ theme }) => theme.color2};
+    border-bottom: 2px solid
+      color-mix(in srgb, ${({ theme }) => theme.text} 25%, transparent);
+  }
+  .form__field {
+    border: 1px solid
+      color-mix(in srgb, ${({ theme }) => theme.text} 30%, transparent);
+    border-radius: 8px;
   }
   .contentprincipal {
     width: 100%;
@@ -367,7 +373,8 @@ const ContentSucursal = styled.section`
   display: flex;
   justify-content: center;
   height: 45px;
-  border-bottom: 2px solid ${({ theme }) => theme.color2};
+  border-bottom: 2px solid
+    color-mix(in srgb, ${({ theme }) => theme.text} 25%, transparent);
   gap: 8px;
 `;
 

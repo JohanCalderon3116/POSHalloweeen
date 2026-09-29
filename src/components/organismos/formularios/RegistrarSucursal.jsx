@@ -22,7 +22,6 @@ export function RegistrarSucursal() {
   };
   return (
     <Container>
-      <Toaster richColors position="top-center"></Toaster>
       {isPending ? (
         <ConteinerLoader>
           <span>

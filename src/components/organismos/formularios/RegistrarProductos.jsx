@@ -376,6 +376,7 @@ export function RegistrarProductos({
   };
   useEffect(() => {
     if (accion != "Editar") {
+      setSevendePor("Unidad");
       generarCodigoInterno();
       setRandomCodeBarras("");
     } else {
