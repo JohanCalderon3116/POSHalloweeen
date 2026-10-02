@@ -371,6 +371,10 @@ export const IngresoCobro = forwardRef((props, ref) => {
                     ></Btn1>
                     <Linea></Linea>
                     <Btn1
+                      funcion={() => {
+                        if (mutation.isPending) return;
+                        mutation.mutateAsync();
+                      }}
                       border="2px"
                       titulo="Cobrar (Enter)"
                       bgcolor="#0aca21"
