@@ -150,7 +150,7 @@ export const LoginTemplate = () => {
                 setStateModos(!stateModos);
               }}
             ></CardModos>
-            <CardModos
+            {/* <CardModos
               title={"Invitado"}
               subtitle={"Obten acceso a una cuenta comunitaria."}
               bgcolor={colores.invitado}
@@ -159,7 +159,7 @@ export const LoginTemplate = () => {
                 setStateModo("invitado");
                 setStateModos(!stateModos);
               }}
-            ></CardModos>
+            ></CardModos> */}
           </ContentModos>
         )}
         {stateModo === "empleado" && stateModos === false && (
