@@ -150,16 +150,16 @@ export const LoginTemplate = () => {
                 setStateModos(!stateModos);
               }}
             ></CardModos>
-            {/* <CardModos
+             <CardModos
               title={"Invitado"}
-              subtitle={"Obten acceso a una cuenta comunitaria."}
+              subtitle={"Cuenta comunitaria."}
               bgcolor={colores.invitado}
               img={"https://i.ibb.co/DDqXMfYP/ataud.png"}
               funcion={() => {
                 setStateModo("invitado");
                 setStateModos(!stateModos);
               }}
-            ></CardModos> */}
+            ></CardModos> 
           </ContentModos>
         )}
         {stateModo === "empleado" && stateModos === false && (
