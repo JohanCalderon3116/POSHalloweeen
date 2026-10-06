@@ -2,7 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
 import { Btn1 } from "../moleculas/Btn1";
 import { Toaster } from "sonner";
-import { useAuthStore } from "../../store/AuthStore";
+import { useCerrarSesion } from "../../hooks/useCerrarSesion";
 import Swal from "sweetalert2";
 import {
   Telarana,
@@ -20,7 +20,7 @@ import {
 } from "../organismos/LoginDesing/EscenaHalloween";
 
 export const EmpresaTemplate = () => {
-  const { cerrarSesion } = useAuthStore();
+  const cerrarSesion = useCerrarSesion();
   const theme = useTheme();
   function cerrarseion() {
     Swal.fire({

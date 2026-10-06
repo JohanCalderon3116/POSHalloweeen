@@ -5,7 +5,7 @@ import { useUsuariosStore } from "../store/UsuariosStore";
 import { useMovCajaStore } from "../store/MovCajaStore";
 import { toast } from "sonner";
 import { useFormattedDate } from "../hooks/useFormattedDate";
-import { useAuthStore } from "../store/AuthStore";
+import { useCerrarSesion } from "../hooks/useCerrarSesion";
 import { useEmpresaStore } from "../store/EmpresaStore";
 import { abrirCaja } from "../components/atomos/AbrirCajaImpresora";
 
@@ -125,7 +125,7 @@ export const useTerminarTurnoMutationStack = (diferencia, reset) => {
   const fechaActual = useFormattedDate();
   const { datausuarios } = useUsuariosStore();
   const { totalEfectivoTotalCaja } = useMovCajaStore();
-  const { cerrarSesion } = useAuthStore();
+  const cerrarSesion = useCerrarSesion();
   const queryClient = useQueryClient();
   const insertar = async (data) => {
     const p = {

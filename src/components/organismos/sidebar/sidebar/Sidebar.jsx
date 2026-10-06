@@ -3,15 +3,15 @@ import {
   LinksArray,
   SecondarylinksArray,
   ToggleTema,
-  useAuthStore,
   v,
 } from "../../../../index";
 import { NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
+import { useCerrarSesion } from "../../../../hooks/useCerrarSesion";
 
 export function Sidebar({ state, setState }) {
-  const { cerrarSesion } = useAuthStore();
+  const cerrarSesion = useCerrarSesion();
   const theme = useTheme();
   function cerrarSesionConfirmacion() {
     Swal.fire({
@@ -168,7 +168,8 @@ const SidebarContainer = styled.div`
   left: 0;
   z-index: 20;
   width: 88px;
-  height: 100%;
+  height: 100vh;
+  min-height: 100vh;
   padding-top: 20px;
   overflow-x: hidden;
   overflow-y: auto;

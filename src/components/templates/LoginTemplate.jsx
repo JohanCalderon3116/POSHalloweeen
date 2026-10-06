@@ -1,5 +1,5 @@
 import halloween from "../../assets/Frankenstein.json";
-import styled, { createGlobalStyle, keyframes } from "styled-components";
+import styled, { createGlobalStyle, keyframes, useTheme } from "styled-components";
 import {
   Btn1,
   Footer,
@@ -26,11 +26,20 @@ import {
   useIniciarSesionConEmailMutationStack,
   useMostrarContraseñaQueryStack,
 } from "../../tanstack/LoginStack";
+import { useThemeStore } from "../../store/ThemeStore";
+import { Dark, Light } from "../../styles/themes";
+import { Icon } from "@iconify/react";
+
 const PALETA = {
   dark: {
-    superadmin: "#9a3412", 
-    empleado: "#7f1d1d", 
-    invitado: "#14532d", 
+    superadmin: "#9a3412",
+    empleado: "#7f1d1d",
+    invitado: "#14532d",
+  },
+  light: {
+    superadmin: "#ea580c",
+    empleado: "#dc2626",
+    invitado: "#16a34a",
   },
 };
 
@@ -43,6 +52,21 @@ export const LoginTemplate = () => {
   const { dataContraseña } = useContraseñaStore();
   const { register, handleSubmit } = useForm();
   useMostrarContraseñaQueryStack();
+
+  const theme = useTheme();
+  const { theme: storeTheme, setTheme } = useThemeStore();
+  const isDark = storeTheme === "dark" || theme?.bgtotal === "#101010";
+  const colores = isDark ? PALETA.dark : PALETA.light;
+
+  const toggleTema = () => {
+    const nuevoTema = isDark ? "light" : "dark";
+    const nuevoStyle = nuevoTema === "light" ? Light : Dark;
+    setTheme({
+      tema: nuevoTema,
+      style: nuevoStyle,
+    });
+  };
+
   const validarContraseña = () => {
     const data = dataContraseña;
     const contraseñaReal = data[0]?.contraseña;
@@ -57,10 +81,10 @@ export const LoginTemplate = () => {
   const manejadorEmailSesion = (data) => {
     mutate({ email: data.email, password: data.password });
   };
-  const manejadorEmailSesionTester = (data) => {
+  const manejadorEmailSesionTester = () => {
     mutate({ email: "tester1@gmail.com", password: "123456" });
   };
-  const colores = PALETA.dark;
+
   return (
     <Container>
       <link
@@ -70,6 +94,16 @@ export const LoginTemplate = () => {
       <Globales />
       <EscenaHalloween />
       <Toaster richColors position="top-center"></Toaster>
+
+      <BotonToggleTemaLogin
+        type="button"
+        onClick={toggleTema}
+        title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+        aria-label="Cambiar tema de inicio de sesión"
+      >
+        <Icon icon={isDark ? "solar:sun-2-bold" : "solar:moon-stars-bold"} />
+      </BotonToggleTemaLogin>
+
       <div className="card">
         <CardWeb className="izq">
           <Telarana />
@@ -186,7 +220,8 @@ export const LoginTemplate = () => {
                   border="2px"
                   funcion={loginGoogle}
                   titulo="Google"
-                  color={(theme) => theme.bgtotal}
+                  bgcolor="#ffffff"
+                  color="#1e293b"
                   icono={<v.iconogoogle />}
                 />
                 <Linea>
@@ -204,7 +239,8 @@ export const LoginTemplate = () => {
               border="2px"
               funcion={manejadorEmailSesionTester}
               titulo="Invitado"
-              bgcolor="#9a3412"
+              bgcolor={colores.invitado}
+              color="255,255,255"
             />
           </PanelModo>
         )}
@@ -270,13 +306,27 @@ const Container = styled.div`
   flex-direction: column;
   padding: 20px;
   overflow-x: hidden;
-  color: #d8d0bc;
-  background: radial-gradient(
-    ellipse at 50% -10%,
-    #140803 0%,
-    #060302 45%,
-    #000000 100%
-  );
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010" ? "#d8d0bc" : "#2e2118"};
+  background: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? `radial-gradient(
+          ellipse at 50% -10%,
+          #140803 0%,
+          #060302 45%,
+          #000000 100%
+        )`
+      : `radial-gradient(
+          ellipse at 50% -10%,
+          #fff7ed 0%,
+          #ffedd5 35%,
+          #fed7aa 70%,
+          #fbd0a0 100%
+        )`};
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+
   .card {
     position: relative;
     z-index: 2;
@@ -287,19 +337,39 @@ const Container = styled.div`
     margin: 20px;
     padding: 22px 22px 26px;
     border-radius: 24px;
-    background: linear-gradient(
-      160deg,
-      rgba(12, 6, 3, 0.92),
-      rgba(2, 1, 1, 0.96)
-    );
+    background: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? `linear-gradient(
+            160deg,
+            rgba(12, 6, 3, 0.92),
+            rgba(2, 1, 1, 0.96)
+          )`
+        : `linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.94),
+            rgba(253, 248, 244, 0.97)
+          )`};
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid rgba(255, 122, 24, 0.15);
-    box-shadow:
-      0 30px 80px -20px rgba(0, 0, 0, 1),
-      0 0 30px rgba(255, 122, 24, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    border: 1px solid
+      ${({ theme }) =>
+        theme.bgtotal === "#101010"
+          ? "rgba(255, 122, 24, 0.15)"
+          : "rgba(217, 119, 6, 0.28)"};
+    box-shadow: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? `0 30px 80px -20px rgba(0, 0, 0, 1),
+           0 0 30px rgba(255, 122, 24, 0.04),
+           inset 0 1px 0 rgba(255, 255, 255, 0.03)`
+        : `0 25px 60px -15px rgba(180, 83, 9, 0.16),
+           0 0 35px rgba(249, 115, 22, 0.1),
+           inset 0 1px 0 rgba(255, 255, 255, 0.9)`};
     animation: ${surgir} 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    transition:
+      background 0.3s ease,
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
+
     &::before {
       content: "";
       position: absolute;
@@ -307,7 +377,7 @@ const Container = styled.div`
       padding: 1.5px;
       border-radius: 25.5px;
       pointer-events: none;
-      opacity: 0.55;
+      opacity: ${({ theme }) => (theme.bgtotal === "#101010" ? 0.55 : 0.7)};
       background: conic-gradient(
         from var(--ang),
         transparent 0 55%,
@@ -340,11 +410,59 @@ const Container = styled.div`
   }
 `;
 
+const BotonToggleTemaLogin = styled.button`
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid
+    ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? "rgba(255, 122, 24, 0.3)"
+        : "rgba(217, 119, 6, 0.35)"};
+  background: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "rgba(18, 10, 5, 0.75)"
+      : "rgba(255, 255, 255, 0.85)"};
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010" ? "#ff8a2b" : "#d97706"};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "0 4px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 122, 24, 0.15)"
+      : "0 4px 15px rgba(180, 83, 9, 0.15), 0 0 10px rgba(249, 115, 22, 0.1)"};
+  transition:
+    transform 0.2s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  &:hover {
+    transform: scale(1.08);
+  }
+  &:active {
+    transform: scale(0.92);
+  }
+  svg {
+    font-size: 22px;
+  }
+`;
+
 const CardWeb = styled.div`
   position: absolute;
   top: 0;
   width: 96px;
-  color: rgba(244, 236, 216, 0.15);
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "rgba(244, 236, 216, 0.15)"
+      : "rgba(217, 119, 6, 0.22)"};
   overflow: hidden;
   pointer-events: none;
   border-top-left-radius: 24px;
@@ -402,7 +520,8 @@ const TituloWrap = styled.div`
     font-weight: 400;
     line-height: 1.1;
     letter-spacing: 3px;
-    color: #e07a26;
+    color: ${({ theme }) =>
+      theme.bgtotal === "#101010" ? "#e07a26" : "#c2410c"};
     animation: ${titilar} 4.5s infinite;
   }
 `;
@@ -467,24 +586,42 @@ const PanelModo = styled.div`
     font-family: "Creepster", cursive;
     font-size: 28px;
     letter-spacing: 2px;
-    color: #e07a26;
-    text-shadow: 0 0 6px rgba(255, 122, 24, 0.2);
+    color: ${({ theme }) =>
+      theme.bgtotal === "#101010" ? "#e07a26" : "#c2410c"};
+    text-shadow: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? "0 0 6px rgba(255, 122, 24, 0.2)"
+        : "0 0 4px rgba(217, 119, 6, 0.15)"};
   }
   .form__field {
-    color: #d8d0bc !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 122, 24, 0.25) !important;
+    color: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? "#d8d0bc !important"
+        : "#292929 !important"};
+    background: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? "rgba(255, 255, 255, 0.03) !important"
+        : "rgba(255, 255, 255, 0.9) !important"};
+    border: 1px solid
+      ${({ theme }) =>
+        theme.bgtotal === "#101010"
+          ? "rgba(255, 122, 24, 0.25) !important"
+          : "rgba(217, 119, 6, 0.35) !important"};
     border-radius: 12px;
     transition:
       border-color 0.2s ease,
-      box-shadow 0.2s ease;
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
     &::placeholder {
-      color: rgba(244, 236, 216, 0.5);
+      color: ${({ theme }) =>
+        theme.bgtotal === "#101010"
+          ? "rgba(244, 236, 216, 0.5)"
+          : "rgba(120, 113, 108, 0.65)"};
     }
     &:focus {
       outline: none;
       border-color: #c2570f !important;
-      box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.12);
+      box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.2);
     }
   }
   button {
@@ -493,7 +630,7 @@ const PanelModo = styled.div`
       filter 0.15s ease;
     &:hover {
       transform: translateY(-2px);
-      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
     }
     &:active {
       transform: scale(0.98);
@@ -504,8 +641,9 @@ const PanelModo = styled.div`
 const FooterWrap = styled.div`
   position: relative;
   z-index: 2;
-  color: #b8a58c;
-  opacity: 0.8;
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010" ? "#b8a58c" : "#786450"};
+  opacity: 0.85;
   a {
     color: #ff8a2b;
   }

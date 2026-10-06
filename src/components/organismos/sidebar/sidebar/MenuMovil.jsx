@@ -3,17 +3,17 @@ import {
   LinksArray,
   SecondarylinksArray,
   ToggleTema,
-  useAuthStore,
 } from "../../../../index";
 import { v } from "../../../../styles/variables";
 import { NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import React from "react";
+import { useCerrarSesion } from "../../../../hooks/useCerrarSesion";
 
 export const MenuMovil = ({ setState }) => {
   const [state, setstate] = React.useState(true);
-  const { cerrarSesion } = useAuthStore();
+  const cerrarSesion = useCerrarSesion();
   const theme = useTheme();
   function cerrarSesionConfirmacion() {
     Swal.fire({

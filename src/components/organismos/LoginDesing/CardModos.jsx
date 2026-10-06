@@ -32,8 +32,9 @@ const Container = styled.section`
     padding: 1rem;
     display: flex;
     gap: 1.25rem;
+    transition: filter 0.2s ease;
     &:hover {
-      background-color: rgba(23, 23, 23, 1);
+      filter: brightness(1.12);
     }
   }
   .content-wrapper {

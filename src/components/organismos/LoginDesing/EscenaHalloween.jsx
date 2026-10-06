@@ -293,11 +293,18 @@ const Fondo = styled.div`
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(
-      ellipse at center,
-      transparent 30%,
-      rgba(0, 0, 0, 0.75) 100%
-    );
+    background: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? `radial-gradient(
+            ellipse at center,
+            transparent 30%,
+            rgba(0, 0, 0, 0.75) 100%
+          )`
+        : `radial-gradient(
+            ellipse at center,
+            transparent 40%,
+            rgba(217, 119, 6, 0.08) 100%
+          )`};
   }
 `;
 
@@ -313,7 +320,7 @@ const Estrellas = styled.i`
   width: 2px;
   height: 2px;
   border-radius: 50%;
-  opacity: 0.6;
+  opacity: ${({ theme }) => (theme.bgtotal === "#101010" ? 0.6 : 0.2)};
   box-shadow: ${({ $sombras }) => $sombras};
   animation: ${parpadeo} 3.4s ease-in-out infinite
     ${({ $retraso }) => $retraso || "0s"};
@@ -354,7 +361,10 @@ export const Rincon = styled.div`
   position: absolute;
   top: 0;
   width: clamp(140px, 22vw, 300px);
-  color: rgba(255, 190, 130, 0.12);
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "rgba(255, 190, 130, 0.12)"
+      : "rgba(217, 119, 6, 0.18)"};
   svg {
     display: block;
     width: 100%;
