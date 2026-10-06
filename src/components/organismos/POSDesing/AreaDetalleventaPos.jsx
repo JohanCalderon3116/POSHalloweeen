@@ -269,6 +269,8 @@ const AreaDetalleventa = styled.section`
   }
   @media ${Device.laptop} {
     max-height: initial;
+    height: 100%;
+    min-height: 0;
   }
 `;
 
