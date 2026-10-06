@@ -33,7 +33,7 @@ const fila = (label, value) => ({
 });
 
 const TicketEntradasSalidas = async (output, data) => {
-  const esEntrada = `${data.tipo}`.toLowerCase() === "entrada";
+  const esEntrada = `${data.tipo}`.toLowerCase() === "ingreso";
   const titulo = esEntrada ? "ENTRADA" : "SALIDA";
 
   let logoempresa = null;
