@@ -99,7 +99,7 @@ export const useConfirmarVentasMutationStack = ({
             id_usuario: datausuarios?.id,
             id_cierre_caja: dataCierreCaja?.id,
             id_venta: idventa,
-            vuelto: tipo === "Efectivo" ? vuelto : 0,
+            vuelto: 0,
           };
           await insertarMovcaja(pmovcaja);
         }
