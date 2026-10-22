@@ -72,6 +72,17 @@ export const useConfirmarVentasMutationStack = ({
   const theme = useTheme();
   async function ConfirmarVenta() {
     if (restante === 0) {
+      if (queryClient.isFetching({ queryKey: ["mostrar detalle venta"] }) > 0) {
+        throw new Error("La venta se está actualizando, intenta de nuevo");
+      }
+      const pagadoNeto = Object.entries(valoresPago).reduce(
+        (acc, [tipo, monto]) =>
+          acc + (tipo === "Efectivo" ? monto - vuelto : monto),
+        0,
+      );
+      if (Math.abs(pagadoNeto - total) > 0.5) {
+        throw new Error("El pago no coincide con el total, vuelve a intentar");
+      }
       const pventas = {
         _id_venta: idventa,
         _id_usuario: datausuarios?.id,
@@ -203,8 +214,9 @@ export const useConfirmarVentasMutationStack = ({
       toast.success("😁🎉 Venta generada correctamente");
       document.getElementById("input-buscador-pos")?.focus();
     },
-    onError: () => {
-      toast.error("Tuvimos un error al insertar la venta");
+    onError: (error) => {
+      console.error(error);
+      toast.error(error?.message || "Tuvimos un error al insertar la venta");
     },
   });
 };
