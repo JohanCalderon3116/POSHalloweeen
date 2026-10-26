@@ -12,20 +12,6 @@ import Confetti from "react-confetti-boom";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import { Icon } from "@iconify/react";
-import {
-  Telarana,
-  AranaSvg,
-  MurcielagoSvg,
-  Rincon,
-  Colgante,
-  Pendulo,
-  Hilo,
-  Cuerpo,
-  Murcielago,
-  Aleteo,
-  ARANAS,
-  MURCIELAGOS,
-} from "../organismos/LoginDesing/EscenaHalloween";
 
 export const ClientesProveedoresTemplate = () => {
   const { dataclipro, setBuscador, setTipo } = useClientesProveedoresStore();
@@ -47,53 +33,7 @@ export const ClientesProveedoresTemplate = () => {
 
   return (
     <Container>
-      <div className="decorations" aria-hidden="true">
-        <Rincon className="izq">
-          <Telarana />
-        </Rincon>
-        <Rincon className="der">
-          <Telarana />
-        </Rincon>
-        {MURCIELAGOS.map((b, i) => (
-          <Murcielago
-            key={i}
-            className="bat"
-            style={{
-              "--y": b.y,
-              width: b.w,
-              animationDuration: b.t,
-              animationDelay: b.d,
-              animationDirection: b.rev ? "reverse" : "normal",
-            }}
-          >
-            <Aleteo>
-              <MurcielagoSvg
-                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
-              />
-            </Aleteo>
-          </Murcielago>
-        ))}
-        {ARANAS.map((a, i) => (
-          <Colgante
-            key={i}
-            className={a.extra ? "extra" : ""}
-            style={{ left: a.x, animationDelay: a.d }}
-          >
-            <Pendulo
-              style={{
-                animationDuration: a.t,
-                animationDelay: `-${i * 0.9}s`,
-              }}
-            >
-              <Hilo style={{ height: a.largo }} />
-              <Cuerpo style={{ width: a.ancho }}>
-                <AranaSvg />
-              </Cuerpo>
-            </Pendulo>
-          </Colgante>
-        ))}
-      </div>
-      <Toaster richColors position="top-center"/>
+      <Toaster richColors position="top-center" />
       {openRegistro && (
         <RegistrarClientesProveedores
           setIsExploding={setIsExploding}
@@ -106,11 +46,11 @@ export const ClientesProveedoresTemplate = () => {
         <Title>{titulo}</Title>
         <Btn1
           funcion={nuevoRegistro}
-          bgcolor="#171719"
-          color="#f5f5f5"
+          bgcolor="#18181B"
+          color="255,255,255"
           titulo="Nuevo"
           border="1px"
-          icono={<Icon icon="solar:add-circle-bold" />}
+          icono={<Icon icon="lucide:plus" />}
         />
       </section>
       <section className="area2">
@@ -140,13 +80,6 @@ const Container = styled.div`
     "area2" 60px
     "main" auto;
   overflow: auto;
-  .decorations {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
-  }
   .area1 {
     grid-area: area1;
     display: flex;
@@ -171,15 +104,10 @@ const Container = styled.div`
     min-height: 0;
   }
   button {
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease,
-      filter 0.18s ease;
+    transition: all 0.2s ease-out;
   }
   button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.28);
-    filter: brightness(1.08);
+    transform: translateY(-1px);
   }
   button:active {
     transform: scale(0.98);

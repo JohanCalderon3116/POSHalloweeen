@@ -35,7 +35,7 @@ export function RegistrarAlmacen() {
           <span>
             <strong>Guardando</strong>
           </span>
-          <BeatLoader color={theme.text} size={8} />
+          <BeatLoader color={theme.color1 || "#8B5CF6"} size={8} />
         </ConteinerLoader>
       ) : (
         <div className="sub-contenedor">
@@ -76,7 +76,8 @@ export function RegistrarAlmacen() {
               <Btn1
                 icono={<v.iconoguardar />}
                 titulo="Guardar"
-                bgcolor="#b85c18"
+                bgcolor="#18181B"
+                color="#FFFFFF"
               />
             </section>
           </form>
@@ -97,15 +98,17 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  background-color: rgba(9, 9, 11, 0.55);
   backdrop-filter: blur(5px);
   .sub-contenedor {
     position: relative;
     width: 500px;
     max-width: 85%;
-    border-radius: 20px;
-    background: ${({ theme }) => theme.body};
-    box-shadow: -10px 15px 30px rgba(10, 9, 9, 0.4);
-    padding: 13px 36px 20px 36px;
+    border-radius: 16px;
+    background: ${({ theme }) => theme.bgcards || theme.body};
+    border: 1px solid ${({ theme }) => theme.color2};
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28);
+    padding: 16px 36px 24px 36px;
     z-index: 100;
     max-height: 80vh;
     overflow-y: auto;
@@ -115,7 +118,7 @@ const Container = styled.div`
       align-items: center;
       margin-bottom: 20px;
       h1 {
-        font-size: 30px;
+        font-size: 22px;
         font-weight: 700;
       }
       span {

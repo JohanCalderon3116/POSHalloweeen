@@ -13,11 +13,12 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Toaster } from "sonner";
 import { useTerminarTurnoMutationStack } from "../../../../tanstack/MovimientosCajaStack";
-const HALLOWEEN = {
-  primary: "#b86627",
-  primarySoft: "rgba(184, 102, 39, 0.04)",
-  primaryBorder: "rgba(184, 102, 39, 0.11)",
-  primaryGlow: "rgba(184, 102, 39, 0.06)",
+
+const ACCENT = {
+  primary: "#8B5CF6",
+  primarySoft: "rgba(139, 92, 246, 0.06)",
+  primaryBorder: "rgba(139, 92, 246, 0.22)",
+  primaryGlow: "rgba(139, 92, 246, 0.08)",
 };
 
 export const PantallaConteoCaja = () => {
@@ -45,7 +46,7 @@ export const PantallaConteoCaja = () => {
     diferencia === 0
       ? "¡Excelente trabajo! La caja ha cuadrado perfectamente. Gracias por tu honestidad y orden."
       : "Existe una diferencia en el cierre. El reporte se enviará automáticamente al administrador. Por favor, asegúrate de haber anotado todos los gastos y entradas.";
-  const anuncioColor = diferencia === 0 ? "#09bc42" : "#ff3f56";
+  const anuncioColor = diferencia === 0 ? "#10b981" : "#ef4444";
 
   return (
     <Container>
@@ -62,7 +63,7 @@ export const PantallaConteoCaja = () => {
       {isPending ? (
         <LoaderContainer>
           <span className="loading-text">Cerrando turno...</span>
-          <BarLoader color={HALLOWEEN.primary} width={180} />
+          <BarLoader color={ACCENT.primary} width={180} />
         </LoaderContainer>
       ) : (
         <form onSubmit={handleSubmit(handleSub)}>
@@ -96,9 +97,9 @@ export const PantallaConteoCaja = () => {
             <article className="contentbtn">
               <Btn1
                 titulo="Cerrar turno"
-                color="#ffffff"
-                border="2px"
-                bgcolor="#1da393"
+                color="255,255,255"
+                border="1px"
+                bgcolor="#18181B"
               />
             </article>
           </section>
@@ -141,7 +142,7 @@ const Container = styled.div`
     left: 0;
     right: 0;
     height: 1px;
-    background: ${HALLOWEEN.primaryBorder};
+    background: ${ACCENT.primaryBorder};
     opacity: 0.8;
     pointer-events: none;
   }
@@ -152,23 +153,21 @@ const Container = styled.div`
     width: min(500px, 94vw);
   }
   p {
-    color: #ff0062;
+    color: #ef4444;
     font-weight: 700;
     font-size: 13px;
     margin: 3px 0 0;
   }
   .title {
-    font-size: 25px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 1.2;
-    opacity: 0.9;
     margin-top: 2px;
   }
   .amount {
     font-size: 30px;
     font-weight: 800;
-    color: ${HALLOWEEN.primary};
-    opacity: 0.92;
+    color: ${({ theme }) => theme.text};
     line-height: 1.15;
     margin-bottom: 8px;
   }
@@ -180,8 +179,7 @@ const Container = styled.div`
   }
   .area1 .question {
     font-size: 15px;
-    color: ${({ theme }) => theme.text};
-    opacity: 0.75;
+    color: ${({ theme }) => theme.colorSubtitle};
     margin-bottom: 2px;
   }
   .area1 .diferencia {
@@ -191,14 +189,13 @@ const Container = styled.div`
     gap: 6px;
     font-size: 16px;
     color: ${({ theme }) => theme.text};
-    opacity: 0.8;
   }
   .area1 .diferencia .correcta {
-    color: ${HALLOWEEN.primary};
+    color: #10b981;
     font-weight: 800;
   }
   .area1 .diferencia .incorrecta {
-    color: #ff3f56;
+    color: #ef4444;
     font-weight: 800;
   }
   .area1 .contentbtn {
@@ -212,41 +209,14 @@ const Container = styled.div`
     width: min(680px, 92vw);
     font-size: 13px;
     line-height: 1.5;
-    opacity: 0.8;
     margin-top: 5px;
-  }
-  @media (max-width: 700px) {
-    padding: 20px 15px;
-  }
-  @media (max-width: 700px) {
-    .title {
-      font-size: 21px;
-    }
-  }
-  @media (max-width: 700px) {
-    .amount {
-      font-size: 27px;
-    }
-  }
-  @media (max-width: 700px) {
-    .question {
-      font-size: 14px !important;
-    }
-  }
-  @media (max-width: 700px) {
-    .anuncio {
-      font-size: 12px;
-    }
   }
 `;
 
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) =>
-    theme.body === "#fff"
-      ? "rgba(0, 0, 0, 0.08)"
-      : "rgba(255, 255, 255, 0.075)"};
+  background-color: ${({ theme }) => theme.color2};
   margin: 3px 0;
   position: relative;
   &::after {
@@ -256,8 +226,7 @@ const Divider = styled.div`
     right: 30%;
     top: 0;
     height: 1px;
-    background: ${HALLOWEEN.primaryBorder};
-    opacity: 0.8;
+    background: ${ACCENT.primaryBorder};
   }
 `;
 
@@ -271,10 +240,6 @@ const LoaderContainer = styled.div`
   margin-top: 4px;
   .loading-text {
     font-size: 14px;
-    color: ${({ theme }) => theme.text};
-    opacity: 0.65;
-  }
-  .css-8dxl8u {
-    border-radius: 10px;
+    color: ${({ theme }) => theme.colorSubtitle};
   }
 `;

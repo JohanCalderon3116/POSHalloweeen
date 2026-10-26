@@ -4,6 +4,7 @@ import { v } from "../../styles/variables";
 import { useState } from "react";
 import Confetti from "react-confetti-boom";
 import { BuscadorList } from "../ui/lists/Buscador";
+
 export const CrudTemplate = ({
   Formularioregistro,
   title,
@@ -42,7 +43,8 @@ export const CrudTemplate = ({
         {stateBtnAdd && (
           <Btn1
             funcion={nuevoRegistro}
-            bgcolor="#9a5425"
+            bgcolor="#121216"
+            color="#FFFFFF"
             titulo="Nuevo"
             icono={<v.iconoagregar />}
           ></Btn1>

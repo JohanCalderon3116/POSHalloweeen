@@ -17,6 +17,7 @@ import { Device } from "../../../styles/breakpoints";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { abrirCaja } from "../../atomos/AbrirCajaImpresora";
+import { UserAvatarBadge } from "../../../pages/Perfil";
 
 export const HeaderPos = () => {
   const [stateListaProductos, setStateListaProductos] = useState(false);
@@ -123,13 +124,14 @@ export const HeaderPos = () => {
       </ContentSucursal>
       <section className="contentprincipal">
         <Contentuser className="area1">
+          <UserAvatarBadge size={38} />
           <div className="textos">
             <span className="usuario"> {datausuarios?.nombres} </span>
-            <span> {datausuarios?.roles.nombre} </span>
+            <span className="rol-label"> {datausuarios?.roles?.nombre} </span>
           </div>
         </Contentuser>
         <article className="contentlogo area2">
-          <img src={v.logo}></img>
+          <img src={v.logo} alt="SoftCreate POS" />
           <span>SoftCreate POS</span>
         </article>
         <article className="contentfecha area3">
@@ -158,6 +160,7 @@ export const HeaderPos = () => {
               onChange={buscar}
               className="form__field"
               type="search"
+              autoComplete="off"
               placeholder="Buscar"
               onKeyDown={(e) => {
                 if (e.key === "ArrowDown" && stateListaProductos) {
@@ -242,13 +245,12 @@ const Header = styled.div`
   flex-direction: column;
   gap: 10px;
   @media ${Device.desktop} {
-    border-bottom: 2px solid
-      color-mix(in srgb, ${({ theme }) => theme.text} 25%, transparent);
+    border-bottom: 1px solid ${({ theme }) => theme.color2};
   }
   .form__field {
-    border: 1px solid
-      color-mix(in srgb, ${({ theme }) => theme.text} 30%, transparent);
-    border-radius: 8px;
+    border: 1px solid ${({ theme }) => theme.color2};
+    background: ${({ theme }) => theme.bgcards};
+    border-radius: 10px;
   }
   .contentprincipal {
     width: 100%;
@@ -268,6 +270,7 @@ const Header = styled.div`
     @media ${Device.desktop} {
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
     .contentlogo {
       @media ${Device.desktop} {
@@ -275,20 +278,13 @@ const Header = styled.div`
       }
       display: none;
       align-items: center;
+      gap: 8px;
       font-weight: 700;
       img {
-        width: 30px;
+        width: 64px;
+        height: 40px;
         object-fit: contain;
-      }
-    }
-    .contentlogo1 {
-      display: flex;
-      align-items: center;
-      font-weight: 700;
-      gap: 5px;
-      img {
-        width: 30px;
-        object-fit: contain;
+        filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.22));
       }
     }
   }
@@ -304,10 +300,10 @@ const Header = styled.div`
     .area1 {
       grid-area: area1;
       display: flex;
-      gap: 20px;
+      gap: 14px;
       align-items: center;
       .contentCantidad {
-        width: 150px;
+        width: 130px;
         flex-shrink: 0;
       }
       .inputBuscador {
@@ -323,7 +319,7 @@ const Header = styled.div`
     }
     @media ${Device.desktop} {
       display: flex;
-      gap: 20px;
+      gap: 16px;
       .area1 {
         flex: 1 1 40%;
         min-width: 0;
@@ -338,25 +334,19 @@ const Header = styled.div`
 const Contentuser = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   grid-area: area1;
-  .contentimg {
-    display: flex;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    img {
-      width: 100%;
-      object-fit: cover;
-    }
-  }
   .textos {
     display: none;
     flex-direction: column;
+    line-height: 1.2;
     .usuario {
       font-weight: 700;
+      font-size: 14px;
+    }
+    .rol-label {
+      font-size: 12px;
+      color: ${({ theme }) => theme.colorSubtitle};
     }
     @media ${Device.laptop} {
       display: flex;
@@ -371,16 +361,17 @@ const ContentSucursal = styled.section`
   left: 0;
   right: 0;
   display: flex;
+  align-items: center;
   justify-content: center;
-  height: 45px;
-  border-bottom: 2px solid
-    color-mix(in srgb, ${({ theme }) => theme.text} 25%, transparent);
-  gap: 8px;
+  height: 40px;
+  border-bottom: 1px solid ${({ theme }) => theme.color2};
+  font-size: 13px;
+  gap: 14px;
 `;
 
 const ContentVentaManual = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 16px;
   align-items: center;
   flex-shrink: 0;
   .nombreManual {
@@ -390,11 +381,11 @@ const ContentVentaManual = styled.div`
     width: 120px;
   }
   .btnAgregarManual {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     border: none;
-    background-color: #0aca21;
+    background-color: #10b981;
     color: #fff;
     font-size: 22px;
     font-weight: 700;
@@ -404,8 +395,11 @@ const ContentVentaManual = styled.div`
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.28);
+    transition: all 0.18s ease-out;
     &:hover {
-      opacity: 0.9;
+      background-color: #059669;
+      transform: translateY(-1px);
     }
     &:active {
       transform: scale(0.95);

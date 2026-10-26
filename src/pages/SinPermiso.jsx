@@ -5,13 +5,15 @@ import { Link } from "react-router-dom";
 export const SinPermiso = () => {
   return (
     <Container>
-      <Icon icon="fluent-emoji:jack-o-lantern" width="90" height="90" />
-      <Title>¡Acceso Denegado por los Espíritus!</Title>
+      <IconWrapper>
+        <Icon icon="lucide:shield-alert" width="44" height="44" />
+      </IconWrapper>
+      <Title>Acceso Restringido</Title>
       <Subtitle>
-        Esta zona está maldita o no tienes el nivel de magia suficiente.
-        Contacta a un administrador.
+        No cuentas con los permisos necesarios para acceder a este módulo.
+        Contacta al administrador del sistema.
       </Subtitle>
-      <StyledLink to="/">Huir al inicio</StyledLink>
+      <StyledLink to="/">Volver al inicio</StyledLink>
     </Container>
   );
 };
@@ -22,41 +24,56 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 14px;
   text-align: center;
-  padding: 20px;
-  background-color: ${({ theme }) => theme.body2};
+  padding: 24px;
+  background-color: ${({ theme }) => theme.bgtotal};
   color: ${({ theme }) => theme.text};
 `;
 
+const IconWrapper = styled.div`
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  color: #8b5cf6;
+  margin-bottom: 4px;
+`;
+
 const Title = styled.h2`
-  font-size: ${({ theme }) => theme.fontxxl};
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0;
-  color: ${({ theme }) => theme.halloweenPrimary};
-  text-shadow: 0 0 12px ${({ theme }) => theme.halloweenGlow};
+  color: ${({ theme }) => theme.text};
 `;
 
 const Subtitle = styled.p`
-  color: ${({ theme }) => theme.colorsubtitlecard};
+  color: ${({ theme }) => theme.colorSubtitle};
   margin: 0;
-  max-width: 400px;
-  font-size: ${({ theme }) => theme.fontmd};
+  max-width: 420px;
+  font-size: 15px;
+  line-height: 1.5;
 `;
 
 const StyledLink = styled(Link)`
-  margin-top: 15px;
-  padding: 12px 24px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.halloweenSecondary};
-  color: ${({ theme }) => theme.color3};
+  margin-top: 12px;
+  padding: 11px 22px;
+  border-radius: 10px;
+  background-color: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   text-decoration: none;
   font-weight: 600;
-  font-size: ${({ theme }) => theme.fontButton};
-  box-shadow: 0 0 15px ${({ theme }) => theme.halloweenSoft2};
-  transition: all 0.3s ease;
+  font-size: 14px;
+  transition: all 0.2s ease-out;
   &:hover {
-    background-color: ${({ theme }) => theme.halloweenPrimary};
-    box-shadow: 0 0 20px ${({ theme }) => theme.halloweenGlow};
-    transform: scale(1.05);
+    transform: translateY(-1px);
+    border-color: rgba(139, 92, 246, 0.35);
+    background-color: #27272a;
   }
 `;

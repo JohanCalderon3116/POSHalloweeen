@@ -1,3 +1,4 @@
+import { useTheme } from "styled-components";
 import { CardTotales } from "./CardTotales";
 import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
 import {
@@ -6,11 +7,12 @@ import {
 import { BarLoader } from "react-spinners";
 
 export const CantidadVentas = () => {
+  const __theme = useTheme();
   const { cantidadVentas, porcentajeCambio } =
     useDetalleVentasStore();
   const { isLoading } = useMostrarCantidadVentasQueryStack();
   if (isLoading) {
-    return <BarLoader></BarLoader>;
+    return <BarLoader color={__theme?.text} />;
   }
   
   return (
@@ -19,6 +21,6 @@ export const CantidadVentas = () => {
       icon="mdi:dollar"
       value={cantidadVentas}
       porcentage={porcentajeCambio}
-    ></CardTotales>
+    />
   );
 };

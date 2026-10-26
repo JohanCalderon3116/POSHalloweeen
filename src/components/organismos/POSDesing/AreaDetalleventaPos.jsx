@@ -7,7 +7,7 @@ import {
   Lottieanimation,
   useEmpresaStore,
 } from "../../../index";
-import animaciovacio from "../../../assets/Handchi spooky.json";
+import animaciovacio from "../../../assets/vacioanimation.json.json";
 import { Device } from "../../../styles/breakpoints";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
@@ -16,15 +16,6 @@ import {
   useEliminarCantidadDetalleVentaMutationStack,
   useMostrarDetalleVentaQueryStack,
 } from "../../../tanstack/DetallesVentaStack";
-const HALLOWEEN = {
-  primary: "#c56a20",
-  primarySoft: "rgba(197, 106, 32, 0.045)",
-  primaryFocus: "rgba(197, 106, 32, 0.20)",
-  border: "rgba(197, 106, 32, 0.11)",
-  borderStrong: "rgba(197, 106, 32, 0.16)",
-  hover: "rgba(197, 106, 32, 0.045)",
-  icon: "rgba(197, 106, 32, 0.72)",
-};
 
 export const AreaDetalleventaPos = () => {
   const { dataempresa } = useEmpresaStore();
@@ -67,7 +58,7 @@ export const AreaDetalleventaPos = () => {
                 <span className="descripcion">{item.descripcion}</span>
                 <span className="importe">
                   <strong>Precio unit:</strong>
-                  <span className="precio-icon">◈</span>
+                  <span className="precio-icon">•</span>
                   {FormatearNumeroDinero(
                     item.precio_venta,
                     dataempresa?.currency,
@@ -77,7 +68,7 @@ export const AreaDetalleventaPos = () => {
                 <ContentTotalResponsive>
                   <span className="importerespo">
                     <strong>Precio unit:</strong>
-                    <span className="precio-icon">◈</span>
+                    <span className="precio-icon">•</span>
                     {FormatearNumeroDinero(
                       item.precio_venta,
                       dataempresa?.currency,
@@ -98,7 +89,7 @@ export const AreaDetalleventaPos = () => {
                       className="delete"
                       onClick={() => mutateEliminarDV(item)}
                     >
-                      <Icon icon="weui:delete-filled" width="22" height="22" />
+                      <Icon icon="lucide:trash-2" width="18" height="18" />
                     </span>
                   </article>
                 </ContentTotalResponsive>
@@ -111,9 +102,9 @@ export const AreaDetalleventaPos = () => {
                       cantidad: item.cantidad - 1,
                     })
                   }
-                  width="20px"
-                  height="35px"
-                  icono={<Icon icon="subway:subtraction-1" />}
+                  width="36px"
+                  height="36px"
+                  icono={<Icon icon="lucide:minus" />}
                 />
                 {editIndex === index ? (
                   <InputText2>
@@ -131,7 +122,7 @@ export const AreaDetalleventaPos = () => {
                   <>
                     <span className="cantidad">{item.cantidad}</span>
                     <Icon
-                      icon="mdi:pencil"
+                      icon="lucide:pencil"
                       onClick={() => handleEditClick(index, item.cantidad)}
                       className="edit-icon"
                     />
@@ -144,9 +135,9 @@ export const AreaDetalleventaPos = () => {
                       cantidad: item.cantidad + 1,
                     })
                   }
-                  width="20px"
-                  height="35px"
-                  icono={<Icon icon="mdi:add-bold" />}
+                  width="36px"
+                  height="36px"
+                  icono={<Icon icon="lucide:plus" />}
                 />
               </article>
               <article className="contentTotaldetalleventa">
@@ -160,18 +151,53 @@ export const AreaDetalleventaPos = () => {
                   </strong>
                 </span>
                 <span className="delete" onClick={() => mutateEliminarDV(item)}>
-                  <Icon icon="weui:delete-filled" width="22" height="22" />
+                  <Icon icon="lucide:trash-2" width="18" height="18" />
                 </span>
               </article>
             </Itemventa>
           );
         })
       ) : (
-        <Lottieanimation animacion={animaciovacio} alto="200" ancho="200" />
+        <EmptyCartState>
+          <div className="lottie-monochrome">
+            <Lottieanimation animacion={animaciovacio} alto="180" ancho="180" />
+          </div>
+          <span className="empty-title">Sin productos en la venta actual</span>
+          <span className="empty-sub">Escanea un código de barras o busca un producto para comenzar</span>
+        </EmptyCartState>
       )}
     </AreaDetalleventa>
   );
 };
+
+const EmptyCartState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 24px;
+  user-select: none;
+
+  .lottie-monochrome {
+    filter: grayscale(1) opacity(0.65);
+    transition: opacity 0.25s ease;
+  }
+
+  .empty-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.text};
+    opacity: 0.85;
+  }
+
+  .empty-sub {
+    font-size: 13px;
+    color: ${({ theme }) => theme.colorSubtitle};
+    max-width: 320px;
+  }
+`;
 
 const ContentTotalResponsive = styled.div`
   display: flex;
@@ -194,7 +220,7 @@ const ContentTotalResponsive = styled.div`
   }
   .precio-icon {
     margin: 0 5px;
-    color: ${HALLOWEEN.icon};
+    color: ${({ theme }) => theme.colorSubtitle};
     font-size: 11px;
     opacity: 0.8;
   }
@@ -214,17 +240,14 @@ const ContentTotalResponsive = styled.div`
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      width: 22px;
-      height: 22px;
-      color: ${({ theme }) => theme.text};
-      opacity: 0.42;
-      transition:
-        color 0.18s ease,
-        opacity 0.18s ease,
-        transform 0.18s ease;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+      transition: all 0.2s ease-out;
       &:hover {
-        color: ${HALLOWEEN.icon};
-        opacity: 0.9;
+        background: rgba(239, 68, 68, 0.2);
         transform: scale(1.05);
       }
       &:active {
@@ -245,24 +268,15 @@ const AreaDetalleventa = styled.section`
   overflow-x: hidden;
   padding-right: 3px;
   &::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
   }
   &::-webkit-scrollbar-track {
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) =>
-      theme.body === "#fff"
-        ? "rgba(0, 0, 0, 0.12)"
-        : "rgba(255, 255, 255, 0.10)"};
+    background: ${({ theme }) => theme.colorScroll};
     border-radius: 10px;
-    transition: background 0.2s ease;
   }
-  &:hover::-webkit-scrollbar-thumb {
-    background: rgba(197, 106, 32, 0.18);
-  }
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
   &.animacion {
     height: 100%;
     justify-content: center;
@@ -278,11 +292,7 @@ const Itemventa = styled.section`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  border-bottom: 1px dashed
-    ${({ theme }) =>
-      theme.body === "#fff"
-        ? "rgba(0, 0, 0, 0.10)"
-        : "rgba(255, 255, 255, 0.09)"};
+  border-bottom: 1px dashed ${({ theme }) => theme.color2};
   animation: ${blur_in} 0.2s linear both;
   flex-direction: column;
   gap: 10px;
@@ -294,24 +304,21 @@ const Itemventa = styled.section`
     width: 100%;
     .descripcion {
       font-weight: 700;
-      font-size: 20px;
+      font-size: 18px;
       color: ${({ theme }) => theme.text};
     }
     .importe {
-      font-size: 15px;
+      font-size: 14px;
       display: none;
       align-items: center;
-      color: ${({ theme }) => theme.text};
-      opacity: 0.72;
+      color: ${({ theme }) => theme.colorSubtitle};
       .precio-icon {
         margin: 0 5px;
-        color: ${HALLOWEEN.icon};
+        color: ${({ theme }) => theme.colorSubtitle};
         font-size: 11px;
-        opacity: 0.8;
       }
       strong {
         font-weight: 600;
-        opacity: 0.72;
       }
       @media ${Device.laptop} {
         display: flex;
@@ -326,26 +333,17 @@ const Itemventa = styled.section`
     align-items: center;
     justify-content: center;
     .cantidad {
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: ${({ theme }) => theme.text};
     }
     .edit-icon {
       cursor: pointer;
-      font-size: 18px;
-      color: ${({ theme }) => theme.text};
-      opacity: 0.38;
-      transition:
-        color 0.18s ease,
-        opacity 0.18s ease,
-        transform 0.18s ease;
+      font-size: 16px;
+      color: #10b981;
+      transition: all 0.2s ease-out;
       &:hover {
-        color: ${HALLOWEEN.icon};
-        opacity: 0.85;
-        transform: rotate(-4deg) scale(1.06);
-      }
-      &:active {
-        transform: scale(0.95);
+        transform: scale(1.1);
       }
     }
   }
@@ -357,6 +355,7 @@ const Itemventa = styled.section`
       justify-content: center;
       text-align: end;
       align-items: center;
+      gap: 10px;
       margin-bottom: 10px;
       width: 100%;
       .delete {
@@ -364,21 +363,15 @@ const Itemventa = styled.section`
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        width: 22px;
-        height: 22px;
-        color: ${({ theme }) => theme.text};
-        opacity: 0.42;
-        transition:
-          color 0.18s ease,
-          opacity 0.18s ease,
-          transform 0.18s ease;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        transition: all 0.2s ease-out;
         &:hover {
-          color: ${HALLOWEEN.icon};
-          opacity: 0.9;
+          background: rgba(239, 68, 68, 0.2);
           transform: scale(1.05);
-        }
-        &:active {
-          transform: scale(0.95);
         }
       }
     }
@@ -387,46 +380,5 @@ const Itemventa = styled.section`
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    .contentdescripcion {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      .descripcion {
-        font-weight: 700;
-        font-size: 20px;
-      }
-      .importe {
-        font-size: 15px;
-        display: flex;
-      }
-    }
-    .contentbtn {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      .cantidad {
-        font-size: 1.8rem;
-        font-weight: 700;
-      }
-      .edit-icon {
-        cursor: pointer;
-        font-size: 18px;
-        color: ${({ theme }) => theme.text};
-        opacity: 0.38;
-        transition:
-          color 0.18s ease,
-          opacity 0.18s ease,
-          transform 0.18s ease;
-        &:hover {
-          color: ${HALLOWEEN.icon};
-          opacity: 0.85;
-          transform: rotate(-4deg) scale(1.06);
-        }
-      }
-    }
   }
 `;

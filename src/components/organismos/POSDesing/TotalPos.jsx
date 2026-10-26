@@ -25,14 +25,17 @@ export const TotalPos = () => {
   return (
     <Container>
       <section className="imagen">
-        <img src="https://i.ibb.co/pvpwN1jf/dulce-de-halloween.png" alt="" />
+        <div className="icon-box">
+          <Icon icon="lucide:receipt" width="26" height="26" />
+        </div>
       </section>
       <section className="contentTotal">
         <section className="contentTituloTotal">
           <Btn1
             funcion={validarPermisosCobrar}
-            border="2px"
-            icono={<Icon icon="emojione:money-bag" width="20" height="20" />}
+            bgcolor="#10B981"
+            color="#FFFFFF"
+            icono={<Icon icon="lucide:banknote" width="20" height="20" />}
             titulo="Cobrar"
           />
         </section>
@@ -51,68 +54,49 @@ export const TotalPos = () => {
 const Container = styled.div`
   display: flex;
   text-align: center;
+  align-items: center;
   justify-content: space-between;
-  border-radius: 15px;
+  border-radius: 14px;
   font-weight: 700;
-  font-size: 38px;
-  background-color: ${({ theme }) => theme.bg2 || theme.bgtotal};
-  padding: 10px;
+  font-size: 36px;
+  background-color: ${({ theme }) => theme.bgcards};
+  border: 1px solid ${({ theme }) => theme.color2};
+  padding: 12px 16px;
   color: ${({ theme }) => theme.text};
   position: relative;
   overflow: hidden;
 
-  &::after {
-    content: "";
-    display: block;
-    width: 100px;
-    height: 100px;
-    background-color: ${({ theme }) =>
-      theme.halloweenSoft2 || theme.color2 || theme.bgtotal};
-    position: absolute;
-    border-radius: 50%;
-    top: -20px;
-    left: -15px;
-  }
-
-  &::before {
-    content: "";
-    display: block;
-    width: 20px;
-    height: 20px;
-    background-color: ${({ theme }) => theme.bgtotal};
-    position: absolute;
-    border-radius: 50%;
-    top: 5px;
-    right: 5px;
-  }
-
   .imagen {
     z-index: 1;
-    width: 55px;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    @media ${Device.desktop} {
-      bottom: initial;
-    }
-
-    img {
-      width: 100%;
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: ${({ theme }) => theme.bgAlpha};
+      border: 1px solid ${({ theme }) => theme.color2};
+      color: ${({ theme }) => theme.text};
     }
   }
 
   .contentTotal {
     z-index: 10;
-    margin-top: 10px;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
 
     .contentTituloTotal {
       display: flex;
       align-items: center;
       position: relative;
-      margin-top: 30px;
-      justify-content: end;
-      align-content: end;
+      margin-bottom: 6px;
+      justify-content: flex-end;
 
       @media ${Device.desktop} {
         display: none;

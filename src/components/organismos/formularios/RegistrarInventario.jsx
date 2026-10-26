@@ -62,7 +62,7 @@ export function RegistrarInventario({ onClose }) {
         <span>
           <strong>Cargando</strong>
         </span>
-        <BeatLoader color={theme.text} size={8} />
+        <BeatLoader color={theme.color1 || "#8B5CF6"} size={8} />
       </ConteinerLoader>
     );
   }
@@ -75,7 +75,7 @@ export function RegistrarInventario({ onClose }) {
           <span>
             <strong>Guardando</strong>
           </span>
-          <BeatLoader color={theme.text} size={8} />
+          <BeatLoader color={theme.color1 || "#8B5CF6"} size={8} />
         </ConteinerLoader>
       ) : (
         <SubContenedor>
@@ -157,7 +157,7 @@ export function RegistrarInventario({ onClose }) {
                   disabled={!ProductosItemSelect?.nombre}
                   icono={<v.iconoguardar />}
                   titulo="Guardar"
-                  bgcolor={theme.body === "#fff" ? "#2b2b2b" : "#242424"}
+                  bgcolor="#18181B"
                   color="#ffffff"
                 />
               </div>
@@ -180,6 +180,7 @@ const Container = styled.div`
   z-index: 1000;
   padding: 20px;
   box-sizing: border-box;
+  background-color: rgba(9, 9, 11, 0.55);
   backdrop-filter: blur(6px);
   @media (max-width: 600px) {
     padding: 12px;
@@ -193,12 +194,13 @@ const SubContenedor = styled.div`
   max-height: 88vh;
   overflow-y: auto;
   box-sizing: border-box;
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 18px 28px 24px;
-  background: ${({ theme }) => theme.body};
+  background: ${({ theme }) => theme.bgcards || theme.body};
   color: ${({ theme }) => theme.text};
-  box-shadow: -10px 15px 30px rgba(10, 9, 9, 0.4);
-  animation: ${aparecer} 0.4s ease forwards;
+  border: 1px solid ${({ theme }) => theme.color2};
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28);
+  animation: ${aparecer} 0.3s ease forwards;
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -206,7 +208,7 @@ const SubContenedor = styled.div`
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(184, 102, 39, 0.18);
+    background: ${({ theme }) => theme.colorScroll || "#3F3F46"};
     border-radius: 10px;
   }
   .headers {
@@ -218,8 +220,8 @@ const SubContenedor = styled.div`
     margin-bottom: 18px;
     h1 {
       margin: 0;
-      font-size: 28px;
-      font-weight: 750;
+      font-size: 24px;
+      font-weight: 700;
       line-height: 1.15;
     }
   }
@@ -229,7 +231,7 @@ const SubContenedor = styled.div`
       flex-direction: column;
       gap: 16px;
       .form__field:focus {
-        border-color: rgba(184, 102, 39, 0.35);
+        border-color: rgba(139, 92, 246, 0.45);
       }
     }
   }
@@ -243,7 +245,7 @@ const SubContenedor = styled.div`
     max-height: 92vh;
     .headers {
       h1 {
-        font-size: 23px;
+        font-size: 20px;
       }
     }
   }
@@ -256,14 +258,11 @@ const InfoRow = styled.div`
   gap: 14px;
   padding: 10px 12px;
   border-radius: 9px;
-  background: ${({ theme }) =>
-    theme.body === "#fff" ? "rgba(0,0,0,0.025)" : "rgba(255,255,255,0.018)"};
-  border: 1px solid
-    ${({ theme }) =>
-      theme.body === "#fff" ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.05)"};
+  background: ${({ theme }) => theme.bg3};
+  border: 1px solid ${({ theme }) => theme.color2};
   span {
     font-size: 13px;
-    opacity: 0.58;
+    opacity: 0.65;
   }
   strong {
     font-size: 14px;
@@ -271,7 +270,7 @@ const InfoRow = styled.div`
     text-align: right;
   }
   .stock {
-    color: ${({ theme }) => (theme.body === "#fff" ? "#347a42" : "#72bc7d")};
+    color: #10B981;
   }
 `;
 

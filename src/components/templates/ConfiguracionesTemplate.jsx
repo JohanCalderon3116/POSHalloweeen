@@ -3,20 +3,6 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { usePermisosStore } from "../../index";
 import { fadeUp, reducedMotion } from "../../utils/animations";
-import {
-  Telarana,
-  AranaSvg,
-  MurcielagoSvg,
-  Rincon,
-  Colgante,
-  Pendulo,
-  Hilo,
-  Cuerpo,
-  Murcielago,
-  Aleteo,
-  ARANAS,
-  MURCIELAGOS,
-} from "../organismos/LoginDesing/EscenaHalloween";
 
 export function ConfiguracionesTemplate() {
   const { dataPermisosConfiguraciones } = usePermisosStore();
@@ -41,52 +27,6 @@ export function ConfiguracionesTemplate() {
 
   return (
     <Container>
-      <div className="decorations">
-        <Rincon className="izq">
-          <Telarana />
-        </Rincon>
-        <Rincon className="der">
-          <Telarana />
-        </Rincon>
-        {MURCIELAGOS.map((b, i) => (
-          <Murcielago
-            key={i}
-            className="bat"
-            style={{
-              "--y": b.y,
-              width: b.w,
-              animationDuration: b.t,
-              animationDelay: b.d,
-              animationDirection: b.rev ? "reverse" : "normal",
-            }}
-          >
-            <Aleteo>
-              <MurcielagoSvg
-                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
-              />
-            </Aleteo>
-          </Murcielago>
-        ))}
-        {ARANAS.map((a, i) => (
-          <Colgante
-            key={i}
-            className={a.extra ? "extra" : ""}
-            style={{ left: a.x, animationDelay: a.d }}
-          >
-            <Pendulo
-              style={{
-                animationDuration: a.t,
-                animationDelay: `-${i * 0.9}s`,
-              }}
-            >
-              <Hilo style={{ height: a.largo }} />
-              <Cuerpo style={{ width: a.ancho }}>
-                <AranaSvg />
-              </Cuerpo>
-            </Pendulo>
-          </Colgante>
-        ))}
-      </div>
       <div id="cards">
         {dataPermisosConfiguraciones?.map((item, index) => {
           return (
@@ -98,11 +38,10 @@ export function ConfiguracionesTemplate() {
             >
               <div className="card-content">
                 <div className="card-image">
-                  <img src={item.modulos.icono} />
+                  <img src={item.modulos.icono} alt={item.modulos.nombre} />
                 </div>
                 <div className="card-info-wrapper">
                   <div className="card-info">
-                    <i className="fa-duotone fa-unicorn"></i>
                     <div className="card-info-title">
                       <h3>{item.modulos.nombre}</h3>
                       <h4>{item.modulos.descripcion}</h4>
@@ -119,13 +58,7 @@ export function ConfiguracionesTemplate() {
 }
 
 const Container = styled.div`
-  --bg-color: rgb(20, 20, 20);
-  --card-color: rgb(23, 23, 23);
   position: relative;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat, repeat;
-  align-items: center;
   background-color: ${({ theme }) => theme.bgtotal};
   display: flex;
   height: 100vh;
@@ -134,13 +67,6 @@ const Container = styled.div`
   align-items: flex-start;
   overflow-y: auto;
   ${reducedMotion}
-  .decorations {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
   #cards {
     position: relative;
     z-index: 2;
@@ -149,24 +75,27 @@ const Container = styled.div`
     gap: 16px;
     max-width: 980px;
     width: 100%;
-    padding: 20px;
+    padding: 28px 20px;
     justify-content: center;
   }
   #cards:hover > .card::after {
     opacity: 1;
   }
   .card {
-    background-color: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(90, 90, 90, 0.22);
-    border-radius: 10px;
+    background-color: ${({ theme }) => theme.color2};
+    border: 1px solid ${({ theme }) => theme.color2};
+    border-radius: 14px;
     cursor: pointer;
     display: flex;
-    height: 260px;
+    height: 250px;
     flex-direction: column;
     position: relative;
     width: 300px;
-    animation: ${fadeUp} 0.4s ease-out both;
+    animation: ${fadeUp} 0.35s ease-out both;
+    transition: transform 0.2s ease-out, border-color 0.2s ease-out;
     &:hover {
+      transform: translateY(-2px);
+      border-color: rgba(139, 92, 246, 0.35);
       .card-image {
         img {
           filter: grayscale(0);
@@ -186,21 +115,21 @@ const Container = styled.div`
     opacity: 0;
     position: absolute;
     top: 0;
-    transition: opacity 500ms;
+    transition: opacity 400ms;
     width: 100%;
   }
   .card::before {
     background: radial-gradient(
-      800px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.06),
+      600px circle at var(--mouse-x) var(--mouse-y),
+      rgba(139, 92, 246, 0.06),
       transparent 40%
     );
     z-index: 3;
   }
   .card::after {
     background: radial-gradient(
-      600px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.4),
+      500px circle at var(--mouse-x) var(--mouse-y),
+      rgba(139, 92, 246, 0.28),
       transparent 40%
     );
     z-index: 1;
@@ -212,7 +141,7 @@ const Container = styled.div`
     flex-direction: column;
     flex-grow: 1;
     inset: 1px;
-    padding: 10px;
+    padding: 14px;
     position: absolute;
     z-index: 2;
   }
@@ -221,22 +150,19 @@ const Container = styled.div`
   h3,
   h4,
   span {
-    color: ${({ theme }) => theme.colorsubtitlecard};
-    font-family: "Rubik", sans-serif;
+    color: ${({ theme }) => theme.text};
+    font-family: "Poppins", sans-serif;
     font-weight: 600;
     margin: 0;
-  }
-  i {
-    color: ${({ theme }) => theme.colorsubtitlecard};
   }
   .card-image {
     align-items: center;
     display: flex;
-    height: 140px;
+    height: 130px;
     justify-content: center;
     img {
-      transition: 0.3s;
-      height: 70%;
+      transition: 0.25s ease-out;
+      height: 68%;
       filter: grayscale(100%);
     }
   }
@@ -245,27 +171,23 @@ const Container = styled.div`
     display: flex;
     flex-grow: 1;
     justify-content: flex-start;
-    padding: 0 20px;
+    padding: 0 16px;
   }
   .card-info {
     align-items: flex-start;
     display: flex;
     gap: 10px;
   }
-  .card-info > i {
-    font-size: 1em;
-    height: 20px;
-    line-height: 20px;
-  }
   .card-info-title > h3 {
-    font-size: 1.1em;
+    font-size: 1.05em;
     line-height: 20px;
+    color: ${({ theme }) => theme.colortitlecard};
   }
   .card-info-title > h4 {
-    color: ${({ theme }) => theme.colortitlecard};
-    font-size: 0.85em;
-    margin-top: 8px;
-    font-weight: 500;
+    color: ${({ theme }) => theme.colorSubtitle};
+    font-size: 0.82em;
+    margin-top: 6px;
+    font-weight: 400;
   }
   @media (max-width: 1000px) {
     #cards {
@@ -293,9 +215,6 @@ const Container = styled.div`
     }
     .card-info-wrapper {
       padding: 0 10px;
-    }
-    .card-info > i {
-      font-size: 0.8em;
     }
     .card-info-title > h3 {
       font-size: 0.9em;

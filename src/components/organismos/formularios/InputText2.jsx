@@ -10,10 +10,8 @@ export function InputText2({ children }) {
 
 const Container = styled.div`
   position: relative;
-
   display: flex;
   align-items: center;
-
   width: 100%;
 
   .form__group {
@@ -31,69 +29,55 @@ const Container = styled.div`
   }
 
   .form__field {
-    border: 1px solid
-      ${({ theme }) =>
-        theme.body === "#fff"
-          ? "rgba(0, 0, 0, 0.12)"
-          : "rgba(255, 255, 255, 0.10)"};
-
-    border-radius: 12px;
-
+    border: 1px solid ${({ theme }) => theme.color2};
+    border-radius: 10px;
     font-family: inherit;
-
     outline: 0;
-
-    font-size: 17px;
-
+    font-size: 15px;
     color: ${({ theme }) => theme.text};
-
-    padding: 12px;
-
-    background: transparent;
-
+    padding: 11px 14px;
+    background: ${({ theme }) => theme.bgcards};
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease,
       background-color 0.2s ease;
-
-    width: 94%;
+    width: 100%;
+    box-sizing: border-box;
 
     &.disabled {
-      color: #696969;
-
-      background: #2d2d2d;
-
+      color: #71717a;
+      background: ${({ theme }) => theme.bgAlpha};
       border-radius: 8px;
-
       margin-top: 8px;
-
-      border-bottom: 1px dashed #656565;
+      border-bottom: 1px dashed #71717a;
     }
   }
 
   .form__field:placeholder-shown ~ .form__label {
-    font-size: 17px;
+    font-size: 15px;
     cursor: text;
   }
 
   .form__field:focus {
-    font-weight: 700;
-
-    border: 1px solid rgba(197, 106, 32, 0.42);
-
-    box-shadow: 0 0 0 3px rgba(197, 106, 32, 0.055);
-
-    background: ${({ theme }) =>
-      theme.body === "#fff"
-        ? "rgba(197, 106, 32, 0.012)"
-        : "rgba(197, 106, 32, 0.018)"};
+    font-weight: 600;
+    border: 1px solid
+      ${({ theme }) =>
+        theme.text === "#FFFFFF"
+          ? "rgba(255, 255, 255, 0.48)"
+          : "rgba(17, 17, 17, 0.45)"};
+    box-shadow: 0 0 0 3px
+      ${({ theme }) =>
+        theme.text === "#FFFFFF"
+          ? "rgba(255, 255, 255, 0.08)"
+          : "rgba(17, 17, 17, 0.07)"};
+    background: ${({ theme }) => theme.bgcards};
   }
 
   .form__field:hover:not(:focus) {
     border-color: ${({ theme }) =>
-      theme.body === "#fff"
-        ? "rgba(0, 0, 0, 0.17)"
-        : "rgba(255, 255, 255, 0.14)"};
+      theme.text === "#FFFFFF"
+        ? "rgba(255, 255, 255, 0.22)"
+        : "rgba(17, 17, 17, 0.22)"};
   }
 
   .form__field:required,
@@ -102,7 +86,7 @@ const Container = styled.div`
   }
 
   .form__field::placeholder {
-    color: ${({ theme }) => theme.text};
-    opacity: 0.42;
+    color: ${({ theme }) => theme.colorSubtitle};
+    opacity: 0.7;
   }
 `;
