@@ -7,6 +7,20 @@ import { useUpdatEmpresaTicketMutateStack } from "../tanstack/EmpresaStack";
 import { ImageSelector } from "../hooks/useImageSelector";
 import { useGlobalStore } from "../store/GlobalStore";
 import { BeatLoader } from "react-spinners";
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../components/organismos/LoginDesing/EscenaHalloween";
 
 export const ConfiguracionTicket = () => {
   const theme = useTheme();
@@ -29,7 +43,53 @@ export const ConfiguracionTicket = () => {
 
   return (
     <Container>
-      <Toaster richColors position="top-center" />
+      <div className="decorations" aria-hidden="true">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
+      <Toaster richColors position="top-center"/>
       {isPending ? (
         <ConteinerLoader>
           <span>
@@ -47,7 +107,7 @@ export const ConfiguracionTicket = () => {
           </Contentguia>
           <ImageSelector fileurl={fileurl || dataempresa?.logo} />
           <form className="receipt-content" onSubmit={handleSubmit(mutate)}>
-            <Btn1 bgcolor={"#18181B"} color="255,255,255" titulo={"Guardar"} />
+            <Btn1 bgcolor={"#fad43c"} titulo={"Guardar"} />
             <br></br>
             <div className="company-info">
               <div className="company-name">
@@ -297,28 +357,36 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   min-height: 100vh;
-  font-family: "Poppins", sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   position: relative;
   color: ${({ theme }) => theme.text};
   padding: 40px 20px;
+  .decorations {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
   input {
     width: 90%;
     padding: 8px 12px;
     font-size: 12px;
     text-align: center;
-    border: 1.5px solid ${({ theme }) => theme.color2};
-    border-radius: 8px;
-    background-color: ${({ theme }) => theme.bg2};
-    color: ${({ theme }) => theme.text};
+    border: 1.5px solid #ffd600;
+    border-radius: 6px;
+    background-color: #fffde7;
+    color: #000;
     font-weight: 500;
-    transition: all 0.2s ease-out;
+    transition: all 0.25s ease;
     &::placeholder {
-      color: ${({ theme }) => theme.colorSubtitle};
+      color: #a89b3d;
     }
     &:hover,
     &:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+      border-color: #ffc107;
+      background-color: #fff9c4;
+      box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.15);
       transform: translateY(-1px);
     }
     &:focus {
@@ -332,15 +400,100 @@ const Container = styled.div`
     margin-bottom: 20px;
     background-color: ${({ theme }) => theme.bgcards};
     color: ${({ theme }) => theme.colortitlecard};
-    border: 1px solid ${({ theme }) => theme.color2};
     padding: 32px 24px;
     border-radius: 16px;
-    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.25);
+    box-shadow:
+      0 20px 50px -12px rgba(0, 0, 0, 0.35),
+      0 4px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background-image: linear-gradient(
+        to right,
+        transparent 0%,
+        transparent 5%,
+        ${({ theme }) => theme.bgcards} 5%,
+        ${({ theme }) => theme.bgcards} 10%,
+        transparent 10%,
+        transparent 15%,
+        ${({ theme }) => theme.bgcards} 15%,
+        ${({ theme }) => theme.bgcards} 20%,
+        transparent 20%,
+        transparent 25%,
+        ${({ theme }) => theme.bgcards} 25%,
+        ${({ theme }) => theme.bgcards} 30%,
+        transparent 30%,
+        transparent 35%,
+        ${({ theme }) => theme.bgcards} 35%,
+        ${({ theme }) => theme.bgcards} 40%,
+        transparent 40%,
+        transparent 45%,
+        ${({ theme }) => theme.bgcards} 45%,
+        ${({ theme }) => theme.bgcards} 50%,
+        transparent 50%,
+        transparent 55%,
+        ${({ theme }) => theme.bgcards} 55%,
+        ${({ theme }) => theme.bgcards} 60%,
+        transparent 60%,
+        transparent 65%,
+        ${({ theme }) => theme.bgcards} 65%,
+        ${({ theme }) => theme.bgcards} 70%,
+        transparent 70%,
+        transparent 75%,
+        ${({ theme }) => theme.bgcards} 75%,
+        ${({ theme }) => theme.bgcards} 80%,
+        transparent 80%,
+        transparent 85%,
+        ${({ theme }) => theme.bgcards} 85%,
+        ${({ theme }) => theme.bgcards} 90%,
+        transparent 90%,
+        transparent 95%,
+        ${({ theme }) => theme.bgcards} 95%,
+        ${({ theme }) => theme.bgcards} 100%
+      );
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+    }
+    &::before {
+      top: -10px;
+    }
+    &::after {
+      bottom: -10px;
+    }
+  }
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    align-items: center;
+    display: flex;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colortitlecard};
+  }
+  .camera-icon {
+    margin: 30px 0;
+    position: relative;
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
   }
   .company-info {
     width: 100%;
@@ -351,6 +504,15 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 14px;
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
   }
   .company-name {
     font-weight: bold;
@@ -358,11 +520,30 @@ const Container = styled.div`
     input {
       font-size: 15px;
       font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
     }
   }
   .company-details {
     font-size: 12px;
     position: relative;
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
   }
   .ticket-number {
     font-weight: bold;
@@ -370,10 +551,39 @@ const Container = styled.div`
     letter-spacing: 1px;
     margin: 16px 0;
     padding: 8px 16px;
-    background: ${({ theme }) => theme.bgAlpha};
+    background: ${({ theme }) => theme.color2}33;
     border-radius: 8px;
     position: relative;
     color: ${({ theme }) => theme.colortitlecard};
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
+  }
+  .barcode {
+    width: 100%;
+    max-width: 600px;
+    height: 50px;
+    margin: 10px 0;
+    position: relative;
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
   }
   .divider {
     width: 100%;
@@ -386,7 +596,7 @@ const Container = styled.div`
     max-width: 600px;
     margin: 0 auto;
     position: relative;
-    background: ${({ theme }) => theme.bgAlpha};
+    background: ${({ theme }) => theme.color2}1a;
     border-radius: 10px;
     padding: 4px 12px;
   }
@@ -399,6 +609,16 @@ const Container = styled.div`
     position: relative;
     &:last-child {
       border-bottom: none;
+    }
+    &:hover {
+      background-color: rgba(74, 108, 247, 0.08);
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
     }
   }
   .details-label {
@@ -426,6 +646,16 @@ const Container = styled.div`
       padding: 12px 10px;
       text-align: left;
       position: relative;
+      &:hover {
+        background-color: rgba(74, 108, 247, 0.08);
+        .tech-label {
+          opacity: 1;
+        }
+        .connector-line {
+          opacity: 1;
+          width: 50px;
+        }
+      }
     }
     th {
       font-weight: 600;
@@ -433,7 +663,7 @@ const Container = styled.div`
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: ${({ theme }) => theme.colorSubtitle};
-      background: ${({ theme }) => theme.bgAlpha};
+      background: ${({ theme }) => theme.color2}33;
       border-bottom: 1px solid ${({ theme }) => theme.color2};
     }
     td {
@@ -446,7 +676,7 @@ const Container = styled.div`
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
-    background: ${({ theme }) => theme.bgAlpha};
+    background: ${({ theme }) => theme.color2}1a;
     border-radius: 10px;
     padding: 10px 14px;
   }
@@ -458,6 +688,16 @@ const Container = styled.div`
     padding: 6px 0;
     position: relative;
     color: ${({ theme }) => theme.colorsubtitlecard};
+    &:hover {
+      background-color: rgba(74, 108, 247, 0.08);
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
   }
   .summary-row.total {
     font-weight: bold;
@@ -481,13 +721,34 @@ const Container = styled.div`
     padding: 8px 0;
     font-style: italic;
     position: relative;
+    &:hover {
+      background-color: rgba(74, 108, 247, 0.08);
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
   }
+
   .payment-row {
     display: flex;
     justify-content: space-between;
     margin: 6px 0;
     padding: 6px 0;
     position: relative;
+    &:hover {
+      background-color: rgba(74, 108, 247, 0.08);
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
   }
   .footer-info {
     width: 100%;
@@ -501,12 +762,42 @@ const Container = styled.div`
     margin: 2px 0;
     font-size: 12px;
     position: relative;
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+        width: 50px;
+      }
+    }
+    input {
+      width: 90%;
+      padding: 8px 12px;
+      font-size: 12px;
+      text-align: center;
+      font-style: italic;
+      border: 1.5px solid #ffd600;
+      border-radius: 6px;
+      background-color: #fffde7;
+      color: #000;
+      transition: all 0.25s ease;
+      &:hover,
+      &:focus {
+        border-color: #ffc107;
+        background-color: #fff9c4;
+        box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.15);
+      }
+      &:focus {
+        outline: none;
+      }
+    }
   }
   .footer-stars {
     width: 100%;
     max-width: 600px;
     text-align: center;
-    color: ${({ theme }) => theme.colorSubtitle};
+    color: #ffd700;
     letter-spacing: 2px;
     margin: 16px auto;
   }
@@ -519,6 +810,14 @@ const Container = styled.div`
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    &:hover {
+      .tech-label {
+        opacity: 1;
+      }
+      .connector-line {
+        opacity: 1;
+      }
+    }
     img {
       max-width: 100%;
       height: auto;
@@ -532,10 +831,103 @@ const Container = styled.div`
     gap: 4px;
   }
   .tech-label {
-    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    left: -120px;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    z-index: 20;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  .tech-type {
+    color: #ff7e33;
+    font-size: 11px;
   }
   .connector-line {
-    display: none;
+    position: absolute;
+    left: -70px;
+    top: 50%;
+    height: 2px;
+    background-color: ${({ theme }) => theme.colortitlecard};
+    opacity: 0;
+    width: 0;
+    transition: all 0.3s ease;
+    z-index: 19;
+  }
+  .help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #1a1a1a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid #333;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    transition: all 0.3s ease;
+  }
+  .help-button:hover {
+    background-color: #333;
+    transform: scale(1.1);
+  }
+  @media (max-width: 768px) {
+    .company-name,
+    .company-details,
+    .ticket-number,
+    .barcode,
+    .details-row,
+    .summary-row,
+    .payment-row,
+    .son-text,
+    .footer-row,
+    .qr-code,
+    .camera-icon,
+    th,
+    td {
+      margin-bottom: 30px;
+    }
+    .tech-label {
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin-top: 5px;
+      transform: none;
+      text-align: center;
+      justify-content: center;
+    }
+    .connector-line {
+      top: 100%;
+      left: 50%;
+      width: 2px !important;
+      height: 5px;
+      margin-top: 0;
+    }
+    .receipt-content {
+      padding-bottom: 40px;
+    }
+    input {
+      padding: 10px !important;
+      font-size: 16px !important;
+    }
   }
 `;
 
@@ -548,13 +940,16 @@ const Contentguia = styled.div`
   font-size: 14px;
   width: 100%;
   padding-bottom: 20px;
-  border-bottom: 1px dashed ${({ theme }) => theme.color2};
+  border-bottom: 2px dashed ${({ theme }) => theme.color2};
   color: ${({ theme }) => theme.colortitlecard};
   .title {
-    font-size: 30px;
+    font-size: 36px;
     font-weight: 800;
-    letter-spacing: -0.02em;
-    color: ${({ theme }) => theme.text};
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fad43c, #f9743b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .format-title {
     color: ${({ theme }) => theme.colorSubtitle};

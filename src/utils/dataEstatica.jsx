@@ -21,48 +21,58 @@ export const DesplegableUser = [
 export const LinksArray = [
   {
     label: "Inicio",
-    icon: "lucide:home",
+    icon: "noto-v1:house",
     to: "/",
   },
   {
     label: "Dashboard",
-    icon: "lucide:layout-dashboard",
+    icon: "streamline-flex-color:dashboard-3-flat",
     to: "/dashboard",
   },
   {
     label: "Vender",
-    icon: "lucide:shopping-cart",
+    icon: "flat-color-icons:shop",
     to: "/pos",
   },
   {
     label: "Inventario",
-    icon: "lucide:package",
+    icon: "flat-ui:box",
     to: "/inventario",
   },
+
 ];
 export const SecondarylinksArray = [
+ 
   {
     label: "Configuración",
-    icon: "lucide:settings",
+    icon:"icon-park:setting-two",
     to: "/configuracion",
+    color:"#CE82FF"
   },
   {
     label: "Mi perfil",
-    icon: "lucide:user",
+    icon:"glyphs-poly:person",
     to: "/miperfil",
+    color:"#CE82FF"
   },
+  
+  
+
 ];
 
 export const TemasData = [
   {
     icono: "🌞",
     descripcion: "light",
+   
   },
   {
     icono: "🌚",
     descripcion: "dark",
+    
   },
 ];
+
 
 export const TipouserData = [
   {

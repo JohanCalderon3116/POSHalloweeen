@@ -1,9 +1,11 @@
-import styled, { keyframes, useTheme } from "styled-components";
+import halloween from "../../assets/Frankenstein.json";
+import styled, { createGlobalStyle, keyframes, useTheme } from "styled-components";
 import {
   Btn1,
   Footer,
   InputText2,
   Linea,
+  Lottieanimation,
   Title,
   useAuthStore,
   VolverBtn,
@@ -14,7 +16,11 @@ import { useForm } from "react-hook-form";
 import { toast, Toaster } from "sonner";
 import { useState } from "react";
 import { CardModos } from "../organismos/LoginDesing/CardModos";
-import { EscenaHalloween } from "../organismos/LoginDesing/EscenaHalloween";
+import {
+  EscenaHalloween,
+  Sombrero,
+  Telarana,
+} from "../organismos/LoginDesing/EscenaHalloween";
 import { useContraseñaStore } from "../../store/ContraseñaStore";
 import {
   useIniciarSesionConEmailMutationStack,
@@ -26,14 +32,14 @@ import { Icon } from "@iconify/react";
 
 const PALETA = {
   dark: {
-    superadmin: "#18181D",
-    empleado: "#18181D",
-    invitado: "#18181D",
+    superadmin: "#9a3412",
+    empleado: "#7f1d1d",
+    invitado: "#14532d",
   },
   light: {
-    superadmin: "#121216",
-    empleado: "#121216",
-    invitado: "#121216",
+    superadmin: "#ea580c",
+    empleado: "#dc2626",
+    invitado: "#16a34a",
   },
 };
 
@@ -49,14 +55,7 @@ export const LoginTemplate = () => {
 
   const theme = useTheme();
   const { theme: storeTheme, setTheme } = useThemeStore();
-  const isDark =
-    storeTheme === "dark" ||
-    theme?.text === "#FFFFFF" ||
-    theme?.bgtotal === "#050505" ||
-    theme?.bgtotal === "#000000" ||
-    theme?.bgtotal === "#121216" ||
-    theme?.bgtotal === "#09090B" ||
-    theme?.bgtotal === "#101010";
+  const isDark = storeTheme === "dark" || theme?.bgtotal === "#101010";
   const colores = isDark ? PALETA.dark : PALETA.light;
 
   const toggleTema = () => {
@@ -88,6 +87,11 @@ export const LoginTemplate = () => {
 
   return (
     <Container>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+      />
+      <Globales />
       <EscenaHalloween />
       <Toaster richColors position="top-center"></Toaster>
 
@@ -97,28 +101,40 @@ export const LoginTemplate = () => {
         title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
         aria-label="Cambiar tema de inicio de sesión"
       >
-        <Icon icon={isDark ? "lucide:sun" : "lucide:moon"} />
+        <Icon icon={isDark ? "solar:sun-2-bold" : "solar:moon-stars-bold"} />
       </BotonToggleTemaLogin>
 
       <div className="card">
+        <CardWeb className="izq">
+          <Telarana />
+        </CardWeb>
+        <CardWeb className="der">
+          <Telarana />
+        </CardWeb>
         <ContentLogo>
           <span className="marca">
-            <img src={v.logo} alt="SoftCreate POS" />
+            <img src={v.logo} alt="" />
+            <Sombrero className="sombrero" />
           </span>
+          <span className="nombre">SoftCreate POS</span>
         </ContentLogo>
         <TituloWrap>
-          <Title $paddingBottom="8px">Iniciar sesión</Title>
-          <p className="subtitulo-login">
-            Selecciona tu perfil de acceso para continuar
-          </p>
+          <Title $paddingBottom="20px">Iniciar sesión</Title>
         </TituloWrap>
+        <LottieHalo>
+          <Lottieanimation
+            ancho={200}
+            alto={200}
+            animacion={halloween}
+          ></Lottieanimation>
+        </LottieHalo>
         {stateModos && (
           <ContentModos>
             <CardModos
               title={"Super Administrador"}
               subtitle={"Crea y gestiona tu empresa."}
               bgcolor={colores.superadmin}
-              img={"lucide:shield-check"}
+              img={"https://i.ibb.co/Wp7FPzZQ/jack-o-linterna.png"}
               funcion={() => {
                 setStateModo("superadmin");
                 setStateModos(!stateModos);
@@ -128,22 +144,22 @@ export const LoginTemplate = () => {
               title={"Empleado"}
               subtitle={"Vende y haz crecer tu negocio."}
               bgcolor={colores.empleado}
-              img={"lucide:briefcase"}
+              img={"https://i.ibb.co/XkttsY0J/fantasma.png"}
               funcion={() => {
                 setStateModo("empleado");
                 setStateModos(!stateModos);
               }}
             ></CardModos>
-            <CardModos
+             <CardModos
               title={"Invitado"}
               subtitle={"Cuenta comunitaria."}
               bgcolor={colores.invitado}
-              img={"lucide:users"}
+              img={"https://i.ibb.co/DDqXMfYP/ataud.png"}
               funcion={() => {
                 setStateModo("invitado");
                 setStateModos(!stateModos);
               }}
-            ></CardModos>
+            ></CardModos> 
           </ContentModos>
         )}
         {stateModo === "empleado" && stateModos === false && (
@@ -168,10 +184,10 @@ export const LoginTemplate = () => {
                 ></input>
               </InputText2>
               <Btn1
-                border="1px"
+                border="2px"
                 titulo="Ingresar"
-                bgcolor="#121216"
-                color="#FFFFFF"
+                bgcolor="#e8590c"
+                color="255,255,255"
                 width="100%"
               ></Btn1>
             </form>
@@ -195,19 +211,17 @@ export const LoginTemplate = () => {
                 <Btn1
                   titulo="Verificar"
                   funcion={validarContraseña}
-                  bgcolor="#121216"
-                  color="#FFFFFF"
                   width="100%"
                 />
               </>
             ) : (
               <>
                 <Btn1
-                  border="1px"
+                  border="2px"
                   funcion={loginGoogle}
                   titulo="Google"
                   bgcolor="#ffffff"
-                  color="18,18,22"
+                  color="#1e293b"
                   icono={<v.iconogoogle />}
                 />
                 <Linea>
@@ -222,11 +236,11 @@ export const LoginTemplate = () => {
             <VolverBtn funcion={() => setStateModos(!stateModos)}></VolverBtn>
             <span>Modo Invitado</span>
             <Btn1
-              border="1px"
+              border="2px"
               funcion={manejadorEmailSesionTester}
               titulo="Invitado"
-              bgcolor="#121216"
-              color="#FFFFFF"
+              bgcolor={colores.invitado}
+              color="255,255,255"
             />
           </PanelModo>
         )}
@@ -238,23 +252,48 @@ export const LoginTemplate = () => {
   );
 };
 
+const Globales = createGlobalStyle`
+  @property --ang {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+`;
+
 const surgir = keyframes`
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(40px) scale(0.96); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: none; }
+`;
+
+const girar = keyframes`
+  to { --ang: 360deg; }
+`;
+
+const titilar = keyframes`
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 4px rgba(255, 122, 24, 0.45), 0 0 12px rgba(255, 122, 24, 0.2);
+  }
+  46% { opacity: 0.9; }
+  50% { opacity: 0.5; text-shadow: none; }
+  54% { opacity: 1; }
+  78% { opacity: 0.85; }
 `;
 
 const entrar = keyframes`
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
 `;
 
-const isDarkTheme = (theme) =>
-  theme?.text === "#FFFFFF" ||
-  theme?.bgtotal === "#050505" ||
-  theme?.bgtotal === "#000000" ||
-  theme?.bgtotal === "#121216" ||
-  theme?.bgtotal === "#09090B" ||
-  theme?.bgtotal === "#101010";
+const latido = keyframes`
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+`;
+
+const respirar = keyframes`
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+`;
 
 const Container = styled.div`
   position: relative;
@@ -265,14 +304,28 @@ const Container = styled.div`
   align-items: center;
   text-align: center;
   flex-direction: column;
-  padding: 24px;
+  padding: 20px;
   overflow-x: hidden;
-  color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
-  background-color: ${({ theme }) =>
-    isDarkTheme(theme) ? "#050505" : "#EEEEF0"};
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010" ? "#d8d0bc" : "#2e2118"};
+  background: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? `radial-gradient(
+          ellipse at 50% -10%,
+          #140803 0%,
+          #060302 45%,
+          #000000 100%
+        )`
+      : `radial-gradient(
+          ellipse at 50% -10%,
+          #fff7ed 0%,
+          #ffedd5 35%,
+          #fed7aa 70%,
+          #fbd0a0 100%
+        )`};
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+    background 0.3s ease,
+    color 0.3s ease;
 
   .card {
     position: relative;
@@ -282,67 +335,147 @@ const Container = styled.div`
     justify-content: center;
     width: 100%;
     margin: 20px;
-    padding: 32px 28px;
-    border-radius: 20px;
+    padding: 22px 22px 26px;
+    border-radius: 24px;
     background: ${({ theme }) =>
-      isDarkTheme(theme) ? "#0D0D0D" : "#F7F7F8"};
+      theme.bgtotal === "#101010"
+        ? `linear-gradient(
+            160deg,
+            rgba(12, 6, 3, 0.92),
+            rgba(2, 1, 1, 0.96)
+          )`
+        : `linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.94),
+            rgba(253, 248, 244, 0.97)
+          )`};
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border: 1px solid
       ${({ theme }) =>
-        isDarkTheme(theme)
-          ? "rgba(255, 255, 255, 0.09)"
-          : "rgba(17, 17, 17, 0.10)"};
+        theme.bgtotal === "#101010"
+          ? "rgba(255, 122, 24, 0.15)"
+          : "rgba(217, 119, 6, 0.28)"};
     box-shadow: ${({ theme }) =>
-      isDarkTheme(theme)
-        ? "0 24px 48px -12px rgba(0, 0, 0, 0.7)"
-        : "0 12px 32px -8px rgba(17, 17, 17, 0.06)"};
-    animation: ${surgir} 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+      theme.bgtotal === "#101010"
+        ? `0 30px 80px -20px rgba(0, 0, 0, 1),
+           0 0 30px rgba(255, 122, 24, 0.04),
+           inset 0 1px 0 rgba(255, 255, 255, 0.03)`
+        : `0 25px 60px -15px rgba(180, 83, 9, 0.16),
+           0 0 35px rgba(249, 115, 22, 0.1),
+           inset 0 1px 0 rgba(255, 255, 255, 0.9)`};
+    animation: ${surgir} 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
     transition:
-      background 0.25s ease,
-      box-shadow 0.25s ease,
-      border-color 0.25s ease;
+      background 0.3s ease,
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
 
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1.5px;
+      padding: 1.5px;
+      border-radius: 25.5px;
+      pointer-events: none;
+      opacity: ${({ theme }) => (theme.bgtotal === "#101010" ? 0.55 : 0.7)};
+      background: conic-gradient(
+        from var(--ang),
+        transparent 0 55%,
+        #ff7a18 72%,
+        #c2570f 88%,
+        transparent 100%
+      );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: ${girar} 6s linear infinite;
+    }
     @media ${Device.tablet} {
-      width: 420px;
+      width: 400px;
     }
     form {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    & *,
+    & *::before {
+      animation: none !important;
     }
   }
 `;
 
 const BotonToggleTemaLogin = styled.button`
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 18px;
+  right: 18px;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   cursor: pointer;
   border: 1px solid
     ${({ theme }) =>
-      isDarkTheme(theme)
-        ? "rgba(255, 255, 255, 0.09)"
-        : "rgba(17, 17, 17, 0.10)"};
-  background: ${({ theme }) => (isDarkTheme(theme) ? "#0D0D0D" : "#F7F7F8")};
-  color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease-out;
-
+      theme.bgtotal === "#101010"
+        ? "rgba(255, 122, 24, 0.3)"
+        : "rgba(217, 119, 6, 0.35)"};
+  background: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "rgba(18, 10, 5, 0.75)"
+      : "rgba(255, 255, 255, 0.85)"};
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010" ? "#ff8a2b" : "#d97706"};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "0 4px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 122, 24, 0.15)"
+      : "0 4px 15px rgba(180, 83, 9, 0.15), 0 0 10px rgba(249, 115, 22, 0.1)"};
+  transition:
+    transform 0.2s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
   &:hover {
-    transform: translateY(-1px);
-    border-color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
+    transform: scale(1.08);
   }
   &:active {
-    transform: scale(0.96);
+    transform: scale(0.92);
   }
   svg {
-    font-size: 18px;
+    font-size: 22px;
+  }
+`;
+
+const CardWeb = styled.div`
+  position: absolute;
+  top: 0;
+  width: 96px;
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010"
+      ? "rgba(244, 236, 216, 0.15)"
+      : "rgba(217, 119, 6, 0.22)"};
+  overflow: hidden;
+  pointer-events: none;
+  border-top-left-radius: 24px;
+  svg {
+    display: block;
+    width: 100%;
+  }
+  &.izq {
+    left: 0;
+  }
+  &.der {
+    right: 0;
+    transform: scaleX(-1);
   }
 `;
 
@@ -350,99 +483,157 @@ const ContentLogo = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin: 0 0 18px;
+  gap: 12px;
+  margin: 10px 0 14px;
   .marca {
     position: relative;
     display: inline-flex;
-    align-items: center;
   }
   img {
-    width: 190px;
-    height: auto;
-    object-fit: contain;
-    filter: ${({ theme }) =>
-      isDarkTheme(theme)
-        ? "drop-shadow(0 0 12px rgba(139, 92, 246, 0.28))"
-        : "drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12))"};
+    width: 46px;
+    filter: drop-shadow(0 0 4px rgba(255, 122, 24, 0.25));
+    animation: ${respirar} 3.6s ease-in-out infinite;
+  }
+  .sombrero {
+    position: absolute;
+    top: -20px;
+    left: -8px;
+    width: 34px;
+    transform: rotate(-16deg);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
   }
   .nombre {
-    font-family: "Poppins", sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
+    font-family: "Creepster", cursive;
+    font-size: 24px;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff8a2b, #ffb347);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 `;
 
 const TituloWrap = styled.div`
-  margin-bottom: 22px;
-  && h1,
-  && span {
-    font-family: "Poppins", sans-serif;
-    font-size: 1.65rem;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.025em;
-    color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
-  }
-  .subtitulo-login {
-    margin: 4px 0 0;
-    font-size: 0.85rem;
-    color: ${({ theme }) => (isDarkTheme(theme) ? "#A1A1AA" : "#52525B")};
+  && * {
+    font-family: "Creepster", cursive;
+    font-size: 44px;
     font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 3px;
+    color: ${({ theme }) =>
+      theme.bgtotal === "#101010" ? "#e07a26" : "#c2410c"};
+    animation: ${titilar} 4.5s infinite;
+  }
+`;
+
+const LottieHalo = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 122, 24, 0.1),
+      rgba(255, 122, 24, 0.04) 45%,
+      transparent 70%
+    );
+    animation: ${latido} 3.2s ease-in-out infinite;
+  }
+  > * {
+    position: relative;
+    filter: saturate(0.8) hue-rotate(-40deg) brightness(0.85);
   }
 `;
 
 const ContentModos = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   > * {
-    animation: ${entrar} 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation: ${entrar} 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    transition:
+      transform 0.2s ease,
+      filter 0.2s ease;
   }
   > *:nth-child(1) {
-    animation-delay: 0.08s;
+    animation-delay: 0.25s;
   }
   > *:nth-child(2) {
-    animation-delay: 0.16s;
+    animation-delay: 0.4s;
   }
   > *:nth-child(3) {
-    animation-delay: 0.24s;
+    animation-delay: 0.55s;
+  }
+  > *:hover {
+    transform: translateY(-4px) scale(1.02);
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.7));
   }
 `;
 
 const PanelModo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  animation: ${entrar} 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  gap: 12px;
+  animation: ${entrar} 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   > span {
-    font-family: "Poppins", sans-serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
+    font-family: "Creepster", cursive;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: ${({ theme }) =>
+      theme.bgtotal === "#101010" ? "#e07a26" : "#c2410c"};
+    text-shadow: ${({ theme }) =>
+      theme.bgtotal === "#101010"
+        ? "0 0 6px rgba(255, 122, 24, 0.2)"
+        : "0 0 4px rgba(217, 119, 6, 0.15)"};
   }
   .form__field {
     color: ${({ theme }) =>
-      isDarkTheme(theme) ? "#FFFFFF !important" : "#111111 !important"};
+      theme.bgtotal === "#101010"
+        ? "#d8d0bc !important"
+        : "#292929 !important"};
     background: ${({ theme }) =>
-      isDarkTheme(theme) ? "#050505 !important" : "#EEEEF0 !important"};
+      theme.bgtotal === "#101010"
+        ? "rgba(255, 255, 255, 0.03) !important"
+        : "rgba(255, 255, 255, 0.9) !important"};
     border: 1px solid
       ${({ theme }) =>
-        isDarkTheme(theme)
-          ? "rgba(255, 255, 255, 0.12) !important"
-          : "rgba(17, 17, 17, 0.14) !important"};
-    border-radius: 10px;
-    transition: all 0.2s ease-out;
+        theme.bgtotal === "#101010"
+          ? "rgba(255, 122, 24, 0.25) !important"
+          : "rgba(217, 119, 6, 0.35) !important"};
+    border-radius: 12px;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
     &::placeholder {
-      color: ${({ theme }) => (isDarkTheme(theme) ? "#71717A" : "#71717A")};
+      color: ${({ theme }) =>
+        theme.bgtotal === "#101010"
+          ? "rgba(244, 236, 216, 0.5)"
+          : "rgba(120, 113, 108, 0.65)"};
     }
     &:focus {
       outline: none;
-      border-color: ${({ theme }) =>
-        isDarkTheme(theme) ? "#FFFFFF !important" : "#111111 !important"};
+      border-color: #c2570f !important;
+      box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.2);
+    }
+  }
+  button {
+    transition:
+      transform 0.15s ease,
+      filter 0.15s ease;
+    &:hover {
+      transform: translateY(-2px);
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+    }
+    &:active {
+      transform: scale(0.98);
     }
   }
 `;
@@ -450,11 +641,10 @@ const PanelModo = styled.div`
 const FooterWrap = styled.div`
   position: relative;
   z-index: 2;
-  color: ${({ theme }) => (isDarkTheme(theme) ? "#A1A1AA" : "#52525B")};
+  color: ${({ theme }) =>
+    theme.bgtotal === "#101010" ? "#b8a58c" : "#786450"};
   opacity: 0.85;
   a {
-    color: ${({ theme }) => (isDarkTheme(theme) ? "#FFFFFF" : "#111111")};
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    color: #ff8a2b;
   }
 `;

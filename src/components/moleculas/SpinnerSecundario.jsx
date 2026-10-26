@@ -5,7 +5,7 @@ export const SpinnerSecundario = ({ texto }) => {
   const theme = useTheme();
   return (
     <Container>
-      <RotateLoader color={theme?.color1 || "#8B5CF6"} size={14}></RotateLoader>
+      <RotateLoader color={theme.halloweenAccent} size={15}></RotateLoader>
       <span>{texto}</span>
     </Container>
   );
@@ -19,6 +19,6 @@ const Container = styled.div`
   width: 100%;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 18px;
   color: ${({ theme }) => theme.text};
 `;

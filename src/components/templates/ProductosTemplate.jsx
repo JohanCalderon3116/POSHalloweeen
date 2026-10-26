@@ -11,7 +11,20 @@ import { useState } from "react";
 import Confetti from "react-confetti-boom";
 import { Toaster } from "sonner";
 import { Icon } from "@iconify/react";
-
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../organismos/LoginDesing/EscenaHalloween";
 export const ProductosTemplate = () => {
   const {
     dataProductos,
@@ -34,6 +47,52 @@ export const ProductosTemplate = () => {
   }
   return (
     <Container>
+      <div className="decorations" aria-hidden="true">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
       <Toaster richColors position="top-center"></Toaster>
       <RegistrarProductos
         setIsExploding={setIsExploding}
@@ -46,11 +105,11 @@ export const ProductosTemplate = () => {
         <Title>Productos</Title>{" "}
         <Btn1
           funcion={nuevoRegistro}
-          bgcolor="#18181B"
-          color="255,255,255"
+          bgcolor="#171719"
+          color="#f5f5f5"
           titulo="Nuevo"
           border="1px"
-          icono={<Icon icon="lucide:plus" />}
+          icono={<Icon icon="solar:add-circle-bold" />}
         />
       </section>
       <section className="area2">
@@ -88,6 +147,13 @@ const Container = styled.div`
     display: flex;
     justify-content: end;
     align-items: center;
+  }
+  .decorations {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
   }
   .main {
     grid-area: main;

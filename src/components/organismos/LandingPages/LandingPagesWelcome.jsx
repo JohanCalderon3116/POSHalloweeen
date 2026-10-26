@@ -1,606 +1,792 @@
-import styled, { keyframes, css } from "styled-components";
-import { useState, useEffect } from "react";
+import styled, { css, keyframes } from "styled-components";
+import { useMemo, useState } from "react";
 import { Icon } from "@iconify/react";
-import { NavLink } from "react-router-dom";
-import { UserAvatarBadge } from "../../../pages/Perfil";
-import { useUsuariosStore } from "../../../store/UsuariosStore";
-import { v } from "../../../styles/variables";
 
-export const Telarana = () => null;
-export const AranaSvg = () => null;
-export const MurcielagoSvg = () => null;
-export const CementerioSvg = () => null;
+/* =========================================================
+   UTILIDADES & DIBUJO VECTORIAL (ESTRELLAS, TELARAÑA, ARAÑAS, ETC.)
+========================================================= */
+const semilla = (s) => () => (s = (s * 16807) % 2147483647) / 2147483647;
 
-const isDarkTheme = (theme) =>
-  theme?.text === "#FFFFFF" ||
-  theme?.bgtotal === "#050505" ||
-  theme?.bgtotal === "#000000" ||
-  theme?.bgtotal === "#121216" ||
-  theme?.bgtotal === "#09090B" ||
-  theme?.bgtotal === "#101010";
+const campoEstrellas = (cantidad, seed) => {
+  const azar = semilla(seed);
+  return Array.from(
+    { length: cantidad },
+    () =>
+      `${(azar() * 100).toFixed(1)}vw ${(azar() * 75).toFixed(1)}vh 0 0 rgba(255, 244, 225, ${(0.35 + azar() * 0.65).toFixed(2)})`,
+  ).join(",");
+};
+const ESTRELLAS_A = campoEstrellas(45, 7);
+const ESTRELLAS_B = campoEstrellas(35, 13);
 
-const FLOATING_EMOJIS = [
-  { emoji: "⚡", x: "6%", y: "14%", size: "26px", dur: "5.2s", delay: "0s" },
-  { emoji: "⚔️", x: "92%", y: "18%", size: "28px", dur: "6.4s", delay: "0.8s" },
-  { emoji: "🔥", x: "14%", y: "72%", size: "26px", dur: "5.8s", delay: "1.3s" },
-  { emoji: "👑", x: "86%", y: "66%", size: "28px", dur: "6.1s", delay: "0.4s" },
-  { emoji: "🗡️", x: "48%", y: "10%", size: "24px", dur: "7.0s", delay: "1.9s" },
-  { emoji: "💎", x: "78%", y: "86%", size: "24px", dur: "5.5s", delay: "2.2s" },
-  { emoji: "🚀", x: "26%", y: "88%", size: "25px", dur: "6.7s", delay: "1.1s" },
-  { emoji: "🛡️", x: "4%", y: "44%", size: "24px", dur: "6.3s", delay: "1.6s" },
+// Telaraña: 5 radios + hilos concéntricos
+const ANG = [0, 18, 36, 54, 72, 90].map((a) => (a * Math.PI) / 180);
+const pt = (r, a) =>
+  `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
+const RAYOS = ANG.map((a) => `M0 0 L${pt(200, a)}`).join(" ");
+const ANILLOS = [38, 76, 114, 152, 190]
+  .flatMap((r) =>
+    ANG.slice(0, -1).map(
+      (a, i) =>
+        `M${pt(r, a)} Q${pt(r * 0.9, (a + ANG[i + 1]) / 2)} ${pt(r, ANG[i + 1])}`,
+    ),
+  )
+  .join(" ");
+
+const MURCIELAGOS = [
+  { y: "16vh", t: "28s", d: "2s", w: 54, rev: false },
+  { y: "34vh", t: "36s", d: "11s", w: 40, rev: true },
+  { y: "8vh", t: "44s", d: "20s", w: 34, rev: false },
 ];
 
-const SKILLS_MONARCA = [
-  {
-    rank: "SKILL RANGO S+",
-    emoji: "⚡",
-    titulo: "Corte Relámpago en Caja",
-    subtitulo: "VELOCIDAD DE COBRO 0.2 SEGUNDOS",
-    descripcion:
-      "Despacha filas enteras sin parpadear. Escaneo letal por código de barras, venta libre instantánea, cálculo exacto de vuelto y disparo inmediato de cajón.",
-    stat: "99.9% Más Rápido",
-    color: "#10B981",
-  },
-  {
-    rank: "SKILL DOMINIO",
-    emoji: "👑",
-    titulo: "Autoridad del Soberano",
-    subtitulo: "PRECISIÓN FINANCIERA ABSOLUTA",
-    descripcion:
-      "Ningún centavo escapa a tu vista. Monitoreo en vivo de ganancias netas, entradas, salidas y cortes de turno auditables con comprobantes PDF impecables.",
-    stat: "0% Margen de Error",
-    color: "#8B5CF6",
-  },
-  {
-    rank: "SKILL INVOCACIÓN",
-    emoji: "🗡️",
-    titulo: "Ejército de Sombras Multi-Almacén",
-    subtitulo: "CONTROL TOTAL DE INVENTARIO",
-    descripcion:
-      "Tus productos custodiados 24/7. Alertas automáticas cuando el stock baja al límite crítico, kardex sincronizado y gestión multi-sucursal en tiempo real.",
-    stat: "Sincronización < 15ms",
-    color: "#3B82F6",
-  },
-  {
-    rank: "SKILL PACTO",
-    emoji: "🔥",
-    titulo: "Cadenas del Monarca en Cartera",
-    subtitulo: "CRÉDITOS Y ABONOS SIN FUGAS",
-    descripcion:
-      "Domina las cuentas por cobrar por cliente. Cada abono entra directo al flujo de caja activo y genera su propio historial y factura individual al instante.",
-    stat: "Control 100% Blindado",
-    color: "#F59E0B",
-  },
+const ARANAS = [
+  { x: "8%", largo: "17vh", ancho: 52, t: "4.6s", d: "0.3s" },
+  { x: "91%", largo: "27vh", ancho: 66, t: "5.4s", d: "0.7s" },
+  { x: "23%", largo: "8vh", ancho: 34, t: "3.8s", d: "1.1s", extra: true },
+  { x: "74%", largo: "13vh", ancho: 42, t: "4.2s", d: "0.9s", extra: true },
+  { x: "97%", largo: "7vh", ancho: 30, t: "3.4s", d: "1.4s", extra: true },
 ];
 
-const COMBAT_LOGS = [
-  { text: "⚡ ¡CORTE RELÁMPAGO! Venta procesada en 0.18s", dmg: "CRÍTICO +9,999" },
-  { text: "⚔️ ¡SURGE! Arqueo de caja ejecutado con 0 errores", dmg: "PERFECTO x100" },
-  { text: "🔥 ¡IRA DE KAMISH! 50 productos sincronizados al instante", dmg: "VELOCIDAD S+" },
-  { text: "👑 ¡AUTORIDAD DEL MONARCA! Ganancias protegidas en vivo", dmg: "DOMINIO TOTAL" },
-];
+/* ---------- COMPONENTES SVG ---------- */
+export const Telarana = (props) => (
+  <svg
+    viewBox="0 0 200 200"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1"
+    strokeLinecap="round"
+    aria-hidden="true"
+    {...props}
+  >
+    <path d={RAYOS} />
+    <path d={ANILLOS} strokeWidth="0.8" />
+  </svg>
+);
 
+export const AranaSvg = () => (
+  <svg viewBox="0 0 60 60" width="100%" aria-hidden="true">
+    <line x1="30" y1="0" x2="30" y2="17" stroke="#8a7f70" strokeWidth="0.8" />
+    <g
+      stroke="#c2570f"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    >
+      <path d="M36 24 L49 11 L56 19" />
+      <path d="M37 28 L53 21 L58 31" />
+      <path d="M37 32 L53 35 L57 47" />
+      <path d="M35 36 L47 45 L49 55" />
+      <path d="M24 24 L11 11 L4 19" />
+      <path d="M23 28 L7 21 L2 31" />
+      <path d="M23 32 L7 35 L3 47" />
+      <path d="M25 36 L13 45 L11 55" />
+    </g>
+    <ellipse
+      cx="30"
+      cy="38"
+      rx="10"
+      ry="12"
+      fill="#120a05"
+      stroke="#c2570f"
+      strokeWidth="1.2"
+    />
+    <circle
+      cx="30"
+      cy="24"
+      r="6.5"
+      fill="#120a05"
+      stroke="#c2570f"
+      strokeWidth="1.2"
+    />
+    <path d="M30 32 L34 38 L30 44 L26 38 Z" fill="#ff7a18" />
+    <circle cx="27.5" cy="22.5" r="1.5" fill="#ff3b3b" />
+    <circle cx="32.5" cy="22.5" r="1.5" fill="#ff3b3b" />
+  </svg>
+);
+
+export const MurcielagoSvg = (props) => (
+  <svg viewBox="0 0 64 32" width="100%" aria-hidden="true" {...props}>
+    <path
+      d="M32 10 C30 6 28 4 26 3 C26 7 25 9 23 10 C18 6 10 5 2 8 C6 10 7 13 6 17 C10 14 14 14 17 17 C19 14 22 14 24 16 C26 18 29 19 32 24 C35 19 38 18 40 16 C42 14 45 14 47 17 C50 14 54 14 58 17 C57 13 58 10 62 8 C54 5 46 6 41 10 C39 9 38 7 38 3 C36 4 34 6 32 10 Z"
+      fill="#0c0604"
+      stroke="#c2570f"
+      strokeWidth="0.8"
+      strokeLinejoin="round"
+    />
+    <circle cx="29.5" cy="13" r="0.9" fill="#ff3b3b" />
+    <circle cx="34.5" cy="13" r="0.9" fill="#ff3b3b" />
+  </svg>
+);
+
+export const CementerioSvg = (props) => (
+  <svg
+    viewBox="0 0 1440 200"
+    preserveAspectRatio="xMidYMax slice"
+    aria-hidden="true"
+    {...props}
+  >
+    <g fill="#08040f" stroke="#08040f">
+      <path
+        d="M0 200 V152 C120 136 240 158 360 150 C520 140 640 160 800 152 C960 144 1100 158 1240 148 C1330 142 1400 152 1440 148 V200 Z"
+        stroke="none"
+      />
+      <path d="M110 154 V112 Q110 96 128 96 Q146 96 146 112 V154 Z" />
+      <path d="M232 156 V122 Q232 110 244 110 Q256 110 256 122 V156 Z" />
+      <path d="M420 152 V106 Q420 88 440 88 Q460 88 460 106 V152 Z" />
+      <path d="M700 158 V126 Q700 114 712 114 Q724 114 724 126 V158 Z" />
+      <path d="M980 154 V110 Q980 94 998 94 Q1016 94 1016 110 V154 Z" />
+      <path
+        d="M330 152 V104 M314 118 H346"
+        strokeWidth="7"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M880 156 V116 M866 128 H894"
+        strokeWidth="6"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <g fill="none" strokeLinecap="round">
+        <path d="M1290 152 C1292 122 1286 98 1298 60" strokeWidth="9" />
+        <path d="M1294 100 C1312 88 1328 84 1344 68" strokeWidth="5" />
+        <path d="M1292 86 C1276 76 1262 74 1250 58" strokeWidth="5" />
+        <path d="M1298 60 C1306 48 1318 42 1326 28" strokeWidth="4" />
+        <path d="M1298 62 C1290 46 1282 40 1276 24" strokeWidth="4" />
+        <path d="M1344 68 C1352 66 1358 60 1364 52" strokeWidth="3" />
+        <path d="M1250 58 C1242 56 1236 50 1232 42" strokeWidth="3" />
+      </g>
+    </g>
+  </svg>
+);
+
+/* =========================================================
+   COMPONENTE PRINCIPAL
+========================================================= */
 export const LandingPagesWelcome = () => {
-  const { datausuarios } = useUsuariosStore();
-  const [combo, setCombo] = useState(128);
-  const [isSlashing, setIsSlashing] = useState(false);
-  const [logIndex, setLogIndex] = useState(0);
-  const [bossHp, setBossHp] = useState(18);
+  const [categoria, setCategoria] = useState("Todas");
+  const [limite, setLimite] = useState(6);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLogIndex((prev) => (prev + 1) % COMBAT_LOGS.length);
-      setIsSlashing(true);
-      const t = setTimeout(() => setIsSlashing(false), 600);
-      return () => clearTimeout(t);
-    }, 3200);
-    return () => clearInterval(interval);
-  }, []);
+  const mejoras = [
+    // POS Y CAJA
+    {
+      categoria: "POS y caja",
+      icon: "solar:wallet-money-bold",
+      titulo: "Movimientos de caja por fecha y empresa",
+      descripcion:
+        "Nuevo apartado para consultar las entradas y salidas de caja filtradas por fecha y empresa.",
+    },
+    {
+      categoria: "POS y caja",
+      icon: "solar:document-text-bold",
+      titulo: "Entradas y salidas en PDF",
+      descripcion:
+        "Se corrigió la generación y visualización de los documentos PDF correspondientes a los movimientos.",
+    },
+    {
+      categoria: "POS y caja",
+      icon: "solar:calculator-minimalistic-bold",
+      titulo: "Total y vuelto al finalizar la venta",
+      descripcion:
+        "Ahora el sistema muestra claramente el total de la venta, el dinero recibido y el vuelto que se debe entregar.",
+    },
+    {
+      categoria: "POS y caja",
+      icon: "solar:card-bold",
+      titulo: "Cobro con precio ingresado",
+      descripcion:
+        "El proceso de cobro cuenta con un campo específico para ingresar el valor recibido por el cliente.",
+    },
+    {
+      categoria: "POS y caja",
+      icon: "solar:lock-keyhole-minimalistic-unlocked-bold",
+      titulo: "Cierre de caja detallado",
+      descripcion:
+        "El cierre de caja ahora permite identificar los nombres de las entradas y salidas registradas.",
+    },
+    {
+      categoria: "POS y caja",
+      icon: "solar:printer-minimalistic-bold",
+      titulo: "Abrir cajón sin imprimir",
+      descripcion:
+        "Ahora es posible abrir el cajón de dinero sin necesidad de generar una impresión.",
+    },
+    {
+      categoria: "POS y caja",
+      icon: "solar:bill-list-bold",
+      titulo: "Flujo de venta renovado",
+      descripcion:
+        "Después de confirmar la venta se abre la caja sin necesidad de imprimir inmediatamente.",
+    },
+    // CRÉDITOS
+    {
+      categoria: "Créditos",
+      icon: "solar:card-2-bold",
+      titulo: "Movimientos de crédito",
+      descripcion:
+        "Nuevo apartado para visualizar y consultar los movimientos realizados sobre los créditos.",
+    },
+    {
+      categoria: "Créditos",
+      icon: "solar:document-text-bold",
+      titulo: "Historial de crédito por cliente",
+      descripcion:
+        "Consulta el historial de crédito de cada cliente y sus facturas asociadas.",
+    },
+    {
+      categoria: "Créditos",
+      icon: "solar:bill-check-bold",
+      titulo: "Factura individual del crédito",
+      descripcion:
+        "Cada factura asociada puede abrirse para consultar el comprobante completo.",
+    },
+    {
+      categoria: "Créditos",
+      icon: "solar:hand-money-bold",
+      titulo: "Abonos registrados como entradas",
+      descripcion:
+        "Los abonos realizados se reflejan correctamente como entradas de dinero.",
+    },
+    // DASHBOARD
+    {
+      categoria: "Dashboard",
+      icon: "solar:buildings-2-bold",
+      titulo: "Dashboard por sucursal",
+      descripcion:
+        "La información del dashboard puede consultarse según la sucursal correspondiente.",
+    },
+    {
+      categoria: "Dashboard",
+      icon: "solar:chart-2-bold",
+      titulo: "Entradas y salidas integradas",
+      descripcion:
+        "Las operaciones de caja ahora forman parte del análisis general del dashboard.",
+    },
+    {
+      categoria: "Dashboard",
+      icon: "solar:wallet-money-bold",
+      titulo: "Ganancias protegidas por permisos",
+      descripcion:
+        "Información sensible disponible únicamente para usuarios autorizados.",
+    },
+    {
+      categoria: "Dashboard",
+      icon: "solar:graph-up-bold",
+      titulo: "Correcciones en ganancias",
+      descripcion:
+        "Revisión del cálculo de ganancias y merma por productos dañados.",
+    },
+    {
+      categoria: "Dashboard",
+      icon: "solar:card-2-bold",
+      titulo: "Créditos diferenciados de ventas",
+      descripcion:
+        "Separación clara entre operaciones a crédito y ventas al contado.",
+    },
+    {
+      categoria: "Dashboard",
+      icon: "solar:tag-price-bold",
+      titulo: "Precio de compra histórico",
+      descripcion:
+        "Ajuste para evitar que cambios actuales alteren registros pasados.",
+    },
+    // INVENTARIO
+    {
+      categoria: "Inventario",
+      icon: "solar:magnifer-bold",
+      titulo: "Buscador adaptado a modo oscuro",
+      descripcion:
+        "Mantiene contraste y legibilidad perfecta al usar el tema oscuro.",
+    },
+    {
+      categoria: "Inventario",
+      icon: "solar:tag-bold",
+      titulo: "Categorías adaptadas al tema",
+      descripcion:
+        "Las categorías respetan los colores y superficies según el tema dinámico.",
+    },
+    {
+      categoria: "Inventario",
+      icon: "solar:magnifer-bold",
+      titulo: "Buscador general renovado",
+      descripcion:
+        "Rediseño visual de buscadores en múltiples módulos del sistema.",
+    },
+    {
+      categoria: "Inventario",
+      icon: "solar:box-bold",
+      titulo: "Stock bajo en el POS",
+      descripcion:
+        "Identifica alertas de stock bajo directamente desde la pantalla de venta.",
+    },
+    {
+      categoria: "Inventario",
+      icon: "solar:minus-square-bold",
+      titulo: "Corrección al retirar stock",
+      descripcion:
+        "Comportamiento corregido al descontar existencias durante el registro.",
+    },
+    {
+      categoria: "Inventario",
+      icon: "solar:calendar-bold",
+      titulo: "Fechas de inventario corregidas",
+      descripcion:
+        "Normalización en el manejo de fechas para evitar inconsistencias.",
+    },
+    // USUARIOS Y SEGURIDAD
+    {
+      categoria: "Usuarios y seguridad",
+      icon: "solar:user-edit-bold",
+      titulo: "Sucursal y caja al editar usuarios",
+      descripcion:
+        "Permite reasignar fácilmente la sucursal y caja de cualquier usuario.",
+    },
+    {
+      categoria: "Usuarios y seguridad",
+      icon: "solar:shield-check-bold",
+      titulo: "Permisos para visualizar ganancias",
+      descripcion:
+        "Control granular para proteger métricas financieras sensibles.",
+    },
+    // EXPERIENCIA
+    {
+      categoria: "Experiencia",
+      icon: "solar:logout-2-bold",
+      titulo: "Confirmación al cerrar sesión",
+      descripcion:
+        "Modal interactivo para prevenir cierres accidentales en producción.",
+    },
+    {
+      categoria: "Experiencia",
+      icon: "solar:magic-stick-3-bold",
+      titulo: "Animaciones renovadas",
+      descripcion:
+        "Transiciones fluidas para pestañas, formularios, cards y páneles.",
+    },
+    {
+      categoria: "Experiencia",
+      icon: "solar:code-bold",
+      titulo: "Limpieza del código",
+      descripcion:
+        "Optimización de componentes e infraestructura para mayor velocidad.",
+    },
+    {
+      categoria: "Experiencia",
+      icon: "solar:ghost-bold",
+      titulo: "Halloween Edition",
+      descripcion:
+        "Nueva identidad visual temática adaptada tanto a modo claro como oscuro.",
+    },
+  ];
 
-  const triggerMonarchAttack = () => {
-    setIsSlashing(true);
-    setCombo((prev) => prev + 7);
-    setLogIndex((prev) => (prev + 1) % COMBAT_LOGS.length);
-    setBossHp((prev) => (prev <= 5 ? 100 : prev - 14));
-    setTimeout(() => setIsSlashing(false), 650);
+  const categorias = [
+    "Todas",
+    "POS y caja",
+    "Créditos",
+    "Dashboard",
+    "Inventario",
+    "Usuarios y seguridad",
+    "Experiencia",
+  ];
+
+  const mejorasFiltradas = useMemo(() => {
+    if (categoria === "Todas") return mejoras;
+    return mejoras.filter((item) => item.categoria === categoria);
+  }, [categoria]);
+
+  const novedadesVisibles = useMemo(() => {
+    return mejorasFiltradas.slice(0, limite);
+  }, [mejorasFiltradas, limite]);
+
+  const handleTabChange = (cat) => {
+    setCategoria(cat);
+    setLimite(6);
   };
-
-  const currentLog = COMBAT_LOGS[logIndex];
 
   return (
     <Container>
-      {/* PARTÍCULAS Y EMOJIS REALES EN MOVIMIENTO */}
-      <AmbientLayer aria-hidden="true">
-        {FLOATING_EMOJIS.map((item, i) => (
-          <FloatingEmoji
+      {/* ---------- FONDO Y EFECTOS DE HALLOWEEN (LOGIN STYLE) ---------- */}
+      <FondoHalloween>
+        <div className="estrellas-a" />
+        <div className="estrellas-b" />
+
+        <Telarana className="web web-esq-izq" />
+        <Telarana className="web web-esq-der" />
+
+        {MURCIELAGOS.map((m, i) => (
+          <MurcielagoWrapper
             key={i}
-            style={{
-              left: item.x,
-              top: item.y,
-              fontSize: item.size,
-              animationDuration: item.dur,
-              animationDelay: item.delay,
-            }}
+            className="bat"
+            $y={m.y}
+            $time={m.t}
+            $delay={m.d}
+            $w={m.w}
+            $rev={m.rev}
           >
-            {item.emoji}
-          </FloatingEmoji>
+            <MurcielagoSvg />
+          </MurcielagoWrapper>
         ))}
-      </AmbientLayer>
 
+        <AranasContenedor>
+          {ARANAS.map((a, i) => (
+            <AranaHilo
+              key={i}
+              $x={a.x}
+              $largo={a.largo}
+              $ancho={a.ancho}
+              $t={a.t}
+              $d={a.d}
+            >
+              <AranaSvg />
+            </AranaHilo>
+          ))}
+        </AranasContenedor>
+
+        <CementerioHalloween />
+      </FondoHalloween>
+
+      {/* ---------- CONTENIDO PRINCIPAL DE LA LANDING ---------- */}
       <Content>
-        {/* ================= HERO SOLO LEVELING & EFICIENCIA ================= */}
-        <HeroGrid>
-          <HeroLeft>
-            <SystemQuestBanner>
-              <span className="sys-icon">ǃ</span>
-              <span className="sys-text">
-                SISTEMA: MODO EFICIENCIA RANGO S-MONARCA ACTIVADO
-              </span>
-              <span className="sys-emoji">⚡</span>
-            </SystemQuestBanner>
-
-            <LogoShowcaseBox>
-              <img
-                src={v.logoFull || v.logo}
-                alt="SoftCreate POS Solo Leveling"
-                className="monarch-logo"
-              />
-              <div className="aura-ring" />
-            </LogoShowcaseBox>
+        {/* HERO & SHOWCASE */}
+        <HeroSection>
+          <HeroInfo>
+            <HeroBadge>
+              <Icon icon="solar:ghost-bold" />
+              EDICIÓN ESPECIAL
+            </HeroBadge>
 
             <HeroTitle>
-              <span>¡SURGE!</span> Domina tu Negocio con{" "}
-              <em className="gradient-stroke">Eficiencia Letal</em> ⚡
+              Halloween <span>2026</span>
             </HeroTitle>
 
-            <HeroSubtitle>
-              Mientras otros sistemas se congelan, tú ya cobraste, abriste el
-              cajón, descontaste inventario y multiplicaste tu rentabilidad.{" "}
-              <strong>SoftCreate POS</strong> convierte cada segundo en pura
-              potencia comercial. 🔥
-            </HeroSubtitle>
+            <HeroSubtitle>SoftCreate POS</HeroSubtitle>
 
-            <ActionButtons>
-              <PrimaryBattleBtn to="/pos">
-                <span className="emoji-btn">⚔️</span>
-                <span>Entrar al POS Ahora</span>
-                <Icon icon="lucide:zap" />
-              </PrimaryBattleBtn>
+            <HeroDescription>
+              Descubre las novedades en caja, créditos, inventario, dashboard y
+              una experiencia de interfaz optimizada.
+            </HeroDescription>
 
-              <SecondaryBattleBtn to="/dashboard">
-                <span className="emoji-btn">👑</span>
-                <span>Trono Financiero</span>
-              </SecondaryBattleBtn>
+            <HeroStats>
+              <Stat>
+                <strong>{mejoras.length}</strong>
+                <span>Novedades</span>
+              </Stat>
 
-              <SecondaryBattleBtn to="/inventario">
-                <span className="emoji-btn">🗡️</span>
-                <span>Arsenal de Stock</span>
-              </SecondaryBattleBtn>
-            </ActionButtons>
+              <Stat>
+                <strong>6</strong>
+                <span>Áreas</span>
+              </Stat>
 
-            <EfficiencyMetricsRow>
-              <MetricPill>
-                <span className="m-emoji">⚡</span>
+              <Stat>
+                <strong>☀ / ◐</strong>
+                <span>Temas</span>
+              </Stat>
+            </HeroStats>
+          </HeroInfo>
+
+          <CompactShowcase>
+            <PreviewCardHeader>
+              <div>
+                <PreviewSmall>SOFTCREATE POS</PreviewSmall>
+                <PreviewTitle>Resumen de versión</PreviewTitle>
+              </div>
+              <Icon icon="solar:stars-bold" className="star-icon" />
+            </PreviewCardHeader>
+
+            <PreviewGrid>
+              <MiniFeature>
+                <Icon icon="solar:wallet-money-bold" />
                 <div>
-                  <strong>0.2 Segundos</strong>
-                  <span>Tiempo de respuesta en cobro</span>
+                  <strong>POS y Caja</strong>
+                  <span>Flujo de cobro</span>
                 </div>
-              </MetricPill>
+              </MiniFeature>
 
-              <MetricPill>
-                <span className="m-emoji">🔥</span>
+              <MiniFeature>
+                <Icon icon="solar:card-2-bold" />
                 <div>
-                  <strong>99.99% Precisión</strong>
-                  <span>En arqueos y cortes de caja</span>
+                  <strong>Créditos</strong>
+                  <span>Historiales</span>
                 </div>
-              </MetricPill>
+              </MiniFeature>
 
-              <MetricPill>
-                <span className="m-emoji">💎</span>
+              <MiniFeature>
+                <Icon icon="solar:chart-2-bold" />
                 <div>
-                  <strong>Nivel Monarca</strong>
-                  <span>Rendimiento sin límites</span>
+                  <strong>Dashboard</strong>
+                  <span>Reportes</span>
                 </div>
-              </MetricPill>
-            </EfficiencyMetricsRow>
-          </HeroLeft>
+              </MiniFeature>
 
-          {/* ================= VENTANA DE ESTADO DEL CAZADOR (DERECHA) ================= */}
-          <StatusWindowCard>
-            <StatusHeader>
-              <div className="sys-title">
-                <span className="sys-bracket">[</span>
-                ESTADO DEL OPERADOR
-                <span className="sys-bracket">]</span>
-              </div>
-              <span className="s-rank-badge">👑 RANGO S+</span>
-            </StatusHeader>
-
-            <HunterProfileRow>
-              <div className="avatar-orb">
-                <UserAvatarBadge size={62} />
-                <span className="level-tag">NV. 999</span>
-              </div>
-              <div className="hunter-info">
-                <span className="hunter-class">
-                  ⚔️ MONARCA DE LAS VENTAS • ACTIVO
-                </span>
-                <strong className="hunter-name">
-                  {datausuarios?.nombres || "Cazador Principal"}
-                </strong>
-                <span className="hunter-role">
-                  Rol: {datausuarios?.roles?.nombre || "Super Administrador"}
-                </span>
-              </div>
-              <NavLink to="/miperfil" className="avatar-switch-btn">
-                <span>🎭 Avatar</span>
-              </NavLink>
-            </HunterProfileRow>
-
-            <StatsList>
-              <StatRow>
-                <div className="stat-label">
-                  <span>⚡ VELOCIDAD DE FACTURACIÓN</span>
-                  <strong>999 / 999 (MÁX)</strong>
+              <MiniFeature>
+                <Icon icon="solar:box-bold" />
+                <div>
+                  <strong>Inventario</strong>
+                  <span>Control stock</span>
                 </div>
-                <StatBarTrack>
-                  <StatBarFill $width="100%" $color="#10B981" />
-                </StatBarTrack>
-              </StatRow>
+              </MiniFeature>
+            </PreviewGrid>
+          </CompactShowcase>
+        </HeroSection>
 
-              <StatRow>
-                <div className="stat-label">
-                  <span>🗡️ PRECISIÓN DE ARQUEO Y CAJA</span>
-                  <strong>999 / 999 (MÁX)</strong>
-                </div>
-                <StatBarTrack>
-                  <StatBarFill $width="100%" $color="#8B5CF6" />
-                </StatBarTrack>
-              </StatRow>
+        {/* FILTROS Y CABECERA */}
+        <SectionHeader>
+          <SectionEyebrow>
+            <Icon icon="solar:bolt-bold" />
+            Novedades ({mejorasFiltradas.length})
+          </SectionEyebrow>
 
-              <StatRow>
-                <div className="stat-label">
-                  <span>🔥 CONTROL DE STOCK Y CRÉDITOS</span>
-                  <strong>999 / 999 (MÁX)</strong>
-                </div>
-                <StatBarTrack>
-                  <StatBarFill $width="98%" $color="#3B82F6" />
-                </StatBarTrack>
-              </StatRow>
+          <Tabs>
+            {categorias.map((item) => (
+              <Tab
+                key={item}
+                $active={categoria === item}
+                onClick={() => handleTabChange(item)}
+              >
+                {item}
+              </Tab>
+            ))}
+          </Tabs>
+        </SectionHeader>
 
-              <StatRow>
-                <div className="stat-label">
-                  <span>🛡️ SEGURIDAD DEL SISTEMA</span>
-                  <strong>INQUEBRANTABLE</strong>
-                </div>
-                <StatBarTrack>
-                  <StatBarFill $width="100%" $color="#10B981" />
-                </StatBarTrack>
-              </StatRow>
-            </StatsList>
+        {/* CARDS GRID */}
+        <Cards key={categoria}>
+          {novedadesVisibles.map((mejora, index) => (
+            <ImprovementCard
+              key={`${categoria}-${mejora.titulo}`}
+              style={{
+                "--delay": `${(index % 6) * 40}ms`,
+              }}
+            >
+              <CardHeader>
+                <CardIcon>
+                  <Icon icon={mejora.icon} />
+                </CardIcon>
+                <CardCategory>{mejora.categoria}</CardCategory>
+                <CardNumber>
+                  {(index + 1).toString().padStart(2, "0")}
+                </CardNumber>
+              </CardHeader>
 
-            <PassiveBuffBox>
-              <span className="buff-emoji">🚀</span>
-              <div className="buff-copy">
-                <strong>BENDICIÓN DEL MONARCA ACTIVA:</strong>
-                <span>
-                  Tu negocio opera a máxima eficiencia con sincronización en
-                  tiempo real.
-                </span>
-              </div>
-            </PassiveBuffBox>
-          </StatusWindowCard>
-        </HeroGrid>
-
-        {/* ================= ARENA DE BATALLA ANIME: SOLO LEVELING ================= */}
-        <BattleArenaSection $slashing={isSlashing}>
-          <ArenaTopBar>
-            <div className="arena-title">
-              <span className="live-indicator" />
-              <span>
-                ARENA DE COMBATE EN VIVO: SUNG JIN-WOO (SOFTCREATE POS) VS. LA
-                LENTITUD COMERCIAL
-              </span>
-            </div>
-            <div className="combo-counter">
-              🔥 COMBO DE EFICIENCIA: <strong>x{combo} HIT!</strong>
-            </div>
-          </ArenaTopBar>
-
-          <BattleStage>
-            {/* LUCHADOR IZQUIERDO: MONARCA DE LAS SOMBRAS */}
-            <FighterCard>
-              <div className="fighter-header">
-                <span className="tag-ally">⚔️ MONARCA DE LAS SOMBRAS</span>
-                <strong>SoftCreate POS</strong>
-              </div>
-
-              <MonarchFighterVisual $slashing={isSlashing}>
-                <svg viewBox="0 0 220 190" fill="none">
-                  {/* Aura de Sombra */}
-                  <circle
-                    cx="110"
-                    cy="98"
-                    r="64"
-                    fill="url(#shadowAura)"
-                    className="aura-pulse"
-                  />
-                  {/* Soldados de Sombra detrás */}
-                  <path
-                    d="M42 165 L52 105 L68 92 L82 115 L78 165 Z"
-                    fill="rgba(139, 92, 246, 0.22)"
-                    stroke="#8B5CF6"
-                    strokeWidth="1.2"
-                  />
-                  <circle cx="64" cy="104" r="2.2" fill="#A855F7" />
-                  {/* Silueta Sung Jin-Woo con Dagas Gemelas */}
-                  <path
-                    d="M72 172 L86 102 L110 88 L136 102 L152 172 Z"
-                    fill="#0B0B10"
-                    stroke="#8B5CF6"
-                    strokeWidth="2"
-                  />
-                  {/* Cuello alto de gabardina */}
-                  <path
-                    d="M84 102 L74 76 L98 86 L110 82 L124 86 L146 74 L136 102 Z"
-                    fill="#111118"
-                    stroke="#A855F7"
-                    strokeWidth="1.8"
-                  />
-                  {/* Cabeza y cabello puntiagudo */}
-                  <path
-                    d="M92 78 L86 58 L95 60 L98 44 L108 54 L118 42 L122 56 L134 52 L128 70 L132 78 L110 86 Z"
-                    fill="#09090E"
-                    stroke="#8B5CF6"
-                    strokeWidth="1.6"
-                  />
-                  {/* Ojos brillantes de Monarca */}
-                  <path
-                    d="M104 68 L113 70 L106 73 Z"
-                    fill="#C084FC"
-                    className="glowing-eye"
-                  />
-                  <path
-                    d="M118 68 L125 69 L120 72 Z"
-                    fill="#38BDF8"
-                    className="glowing-eye"
-                  />
-                  {/* Daga Derecha (Ira de Kamish) */}
-                  <g className="dagger-slash">
-                    <path
-                      d="M132 112 L198 68 L178 96 L140 122 Z"
-                      fill="#A855F7"
-                      stroke="#FFFFFF"
-                      strokeWidth="1.5"
-                    />
-                    <path
-                      d="M120 120 L208 58"
-                      stroke="#38BDF8"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                  </g>
-                  {/* Daga Izquierda (Colmillo de Kasaka) */}
-                  <g className="dagger-slash-alt">
-                    <path
-                      d="M90 124 L172 116 L154 134 L94 134 Z"
-                      fill="#10B981"
-                      stroke="#FFFFFF"
-                      strokeWidth="1.4"
-                    />
-                  </g>
-                  <defs>
-                    <radialGradient id="shadowAura" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(110 98) scale(68)">
-                      <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.45" />
-                      <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                </svg>
-                <div className="floating-badge">⚡ VELOCIDAD RANGO S</div>
-              </MonarchFighterVisual>
-            </FighterCard>
-
-            {/* CENTRO: EFECTOS DE PELEA, CORTES Y EMOJIS EN ACCIÓN */}
-            <CombatCenterZone>
-              <SlashEffectBox $slashing={isSlashing}>
-                <svg viewBox="0 0 260 140" className="slash-svg">
-                  <path
-                    d="M15 120 Q 130 15 245 25"
-                    stroke="#A855F7"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                    fill="none"
-                    className="slash-arc-1"
-                  />
-                  <path
-                    d="M25 25 Q 130 125 235 110"
-                    stroke="#10B981"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    fill="none"
-                    className="slash-arc-2"
-                  />
-                  <path
-                    d="M50 70 L110 50 L95 82 L155 62 L135 92 L220 68"
-                    stroke="#38BDF8"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                    className="lightning-bolt"
-                  />
-                </svg>
-                <div className="clash-emojis">
-                  <span className="e1">⚔️</span>
-                  <span className="e2">⚡</span>
-                  <span className="e3">💥</span>
-                  <span className="e4">🔥</span>
-                </div>
-              </SlashEffectBox>
-
-              <DamagePopup key={logIndex + "-" + combo}>
-                <span className="dmg-badge">{currentLog.dmg}</span>
-                <p className="dmg-text">{currentLog.text}</p>
-              </DamagePopup>
-
-              <AttackActionBtn type="button" onClick={triggerMonarchAttack}>
-                <span>⚡ ¡DESATAR ATAQUE DE EFICIENCIA!</span>
-                <span className="btn-emoji">🗡️🔥</span>
-              </AttackActionBtn>
-            </CombatCenterZone>
-
-            {/* JEFE ENEMIGO: EL CAOS Y LA LENTITUD (DERROTADO POR SOFTCREATE POS) */}
-            <BossCard $slashing={isSlashing}>
-              <div className="boss-header">
-                <span className="tag-boss">💀 JEFE DE MAZMORRA DERROTADO</span>
-                <strong>Caos, Filas y Lentitud</strong>
-              </div>
-
-              <div className="hp-bar-wrap">
-                <div className="hp-top">
-                  <span>HP DEL CAOS COMERCIAL</span>
-                  <strong>{bossHp}% (CRÍTICO)</strong>
-                </div>
-                <div className="hp-track">
-                  <div className="hp-fill" style={{ width: `${bossHp}%` }} />
-                </div>
-              </div>
-
-              <BossVisual $slashing={isSlashing}>
-                <div className="boss-hit-marks">
-                  <span>💥 -9,999</span>
-                  <span>⚡ DESTRUIDO</span>
-                </div>
-                <div className="defeated-list">
-                  <div className="defeated-item">
-                    <span>❌ Filas lentas en caja</span>
-                    <strong>ELIMINADO ⚡</strong>
-                  </div>
-                  <div className="defeated-item">
-                    <span>❌ Descuadres de dinero</span>
-                    <strong>ELIMINADO 🗡️</strong>
-                  </div>
-                  <div className="defeated-item">
-                    <span>❌ Pérdida de inventario</span>
-                    <strong>ELIMINADO 🔥</strong>
-                  </div>
-                </div>
-              </BossVisual>
-            </BossCard>
-          </BattleStage>
-        </BattleArenaSection>
-
-        {/* ================= HABILIDADES DE RANGO S (EFICIENCIA PURA) ================= */}
-        <SkillsSectionHeader>
-          <div className="left">
-            <span className="eyebrow">⚡ GRIMORIO DE PODER EMPRESARIAL</span>
-            <h2>Habilidades de Eficiencia Rango S</h2>
-          </div>
-          <p className="right-sub">
-            Cada módulo de <strong>SoftCreate POS</strong> está forjado para
-            multiplicar tu velocidad operativa y eliminar el trabajo manual.
-          </p>
-        </SkillsSectionHeader>
-
-        <SkillsGrid>
-          {SKILLS_MONARCA.map((skill, idx) => (
-            <SkillCard key={idx}>
-              <div className="skill-top">
-                <div className="emoji-orb">{skill.emoji}</div>
-                <div className="skill-meta">
-                  <span className="skill-rank" style={{ color: skill.color }}>
-                    {skill.rank}
-                  </span>
-                  <span className="skill-sub">{skill.subtitulo}</span>
-                </div>
-              </div>
-              <h3>{skill.titulo}</h3>
-              <p>{skill.descripcion}</p>
-              <div className="skill-footer">
-                <span
-                  className="power-dot"
-                  style={{ background: skill.color }}
-                />
-                <strong>{skill.stat}</strong>
-              </div>
-            </SkillCard>
+              <CardTitle>{mejora.titulo}</CardTitle>
+              <CardDescription>{mejora.descripcion}</CardDescription>
+            </ImprovementCard>
           ))}
-        </SkillsGrid>
+        </Cards>
+
+        {/* BOTÓN VER MÁS */}
+        {limite < mejorasFiltradas.length && (
+          <LoadMoreWrapper>
+            <LoadMoreButton onClick={() => setLimite((prev) => prev + 6)}>
+              <span>
+                Ver más novedades ({mejorasFiltradas.length - limite} restantes)
+              </span>
+              <Icon icon="solar:alt-arrow-down-bold" />
+            </LoadMoreButton>
+          </LoadMoreWrapper>
+        )}
       </Content>
     </Container>
   );
 };
 
 /* =========================================================
-   KEYFRAMES & ANIMACIONES
+   ANIMACIONES HALLOWEEN & UI
 ========================================================= */
-const floatEmojiAnim = keyframes`
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-  }
-  33% {
-    transform: translate3d(12px, -18px, 0) rotate(8deg) scale(1.12);
-  }
-  66% {
-    transform: translate3d(-10px, -8px, 0) rotate(-6deg) scale(0.96);
-  }
+const parpadeo = keyframes`
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 `;
 
-const pulseAura = keyframes`
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.45;
-  }
-  50% {
-    transform: scale(1.12);
-    opacity: 0.85;
-  }
+const columpio = keyframes`
+  from { transform: rotate(-7deg); }
+  to { transform: rotate(7deg); }
 `;
 
-const slashDash = keyframes`
-  0% {
-    stroke-dashoffset: 320;
+const caer = keyframes`
+  from { transform: translateY(-70vh); }
+  to { transform: translateY(0); }
+`;
+
+const volar = keyframes`
+  0% { transform: translate(-15vw, var(--y)) rotate(-4deg); }
+  10% { transform: translate(20vw, calc(var(--y) - 6vh)) rotate(4deg); }
+  20% { transform: translate(50vw, calc(var(--y) + 4vh)) rotate(-3deg); }
+  30% { transform: translate(80vw, calc(var(--y) - 5vh)) rotate(3deg); }
+  40%, 100% { transform: translate(118vw, var(--y)) rotate(-2deg); }
+`;
+
+const aletear = keyframes`
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+`;
+
+const fadeUp = keyframes`
+  from {
     opacity: 0;
+    transform: translateY(15px);
   }
-  40% {
+  to {
     opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 0.2;
+    transform: translateY(0);
   }
 `;
 
-const daggerSwing = keyframes`
-  0%, 100% {
-    transform: rotate(0deg) translate(0, 0);
-  }
-  50% {
-    transform: rotate(-14deg) translate(6px, -6px);
-  }
-`;
-
-const popInDamage = keyframes`
-  0% {
+const cardIn = keyframes`
+  from {
     opacity: 0;
-    transform: translateY(10px) scale(0.9);
+    transform: translateY(12px) scale(.98);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 `;
 
-const shakeHit = keyframes`
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-5px) rotate(-1deg); }
-  40% { transform: translateX(5px) rotate(1deg); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
+/* =========================================================
+   ESTILOS DE FONDO HALLOWEEN (LOGIN STYLE)
+========================================================= */
+const capa = css`
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  @media print {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    & * {
+      animation: none !important;
+    }
+    .bat {
+      display: none;
+    }
+  }
+`;
+
+const FondoHalloween = styled.div`
+  ${capa}
+  z-index: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at 85% 15%,
+        ${({ theme }) => theme.halloweenSoft},
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 10% 85%,
+        ${({ theme }) => theme.halloweenSoft2},
+        transparent 30%
+      );
+  }
+
+  .estrellas-a,
+  .estrellas-b {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+  }
+
+  .estrellas-a {
+    box-shadow: ${ESTRELLAS_A};
+    animation: ${parpadeo} 4s ease-in-out infinite;
+  }
+
+  .estrellas-b {
+    box-shadow: ${ESTRELLAS_B};
+    animation: ${parpadeo} 6s ease-in-out infinite 2s;
+  }
+
+  /* Telarañas de esquina */
+  .web {
+    position: absolute;
+    width: min(220px, 30vw);
+    height: auto;
+    color: rgba(255, 122, 24, 0.28);
+    filter: drop-shadow(0 0 6px rgba(255, 122, 24, 0.15));
+    z-index: 1;
+  }
+
+  .web-esq-izq {
+    top: -10px;
+    left: -10px;
+    transform: scaleX(-1);
+  }
+
+  .web-esq-der {
+    top: -10px;
+    right: -10px;
+  }
+`;
+
+const MurcielagoWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: ${(props) => props.$w}px;
+  --y: ${(props) => props.$y};
+  animation: ${volar} ${(props) => props.$time} linear infinite;
+  animation-delay: ${(props) => props.$delay};
+  opacity: 0.7;
+  z-index: 1;
+  transform-origin: center;
+
+  ${(props) =>
+    props.$rev &&
+    css`
+      transform: scaleX(-1);
+    `}
+
+  svg {
+    animation: ${aletear} 0.28s ease-in-out infinite alternate;
+  }
+`;
+
+const AranasContenedor = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+`;
+
+const AranaHilo = styled.div`
+  position: absolute;
+  top: 0;
+  left: ${(props) => props.$x};
+  width: ${(props) => props.$ancho}px;
+  height: ${(props) => props.$largo};
+  transform-origin: top center;
+  animation:
+    ${caer} 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${(props) => props.$d} both,
+    ${columpio} ${(props) => props.$t} ease-in-out infinite alternate;
+
+  svg {
+    display: block;
+  }
+`;
+
+const CementerioHalloween = styled(CementerioSvg)`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  min-height: 80px;
+  max-height: 160px;
+  opacity: 0.65;
+  z-index: 1;
 `;
 
 /* =========================================================
-   ESTILOS GENERALES Y CAPA DE EMOJIS EN MOVIMIENTO
+   ESTILOS DE UI / CONTENEDOR GENERAL
 ========================================================= */
 const Container = styled.div`
   position: relative;
@@ -609,242 +795,172 @@ const Container = styled.div`
   background: ${({ theme }) => theme.bgtotal};
   color: ${({ theme }) => theme.text};
   transition:
-    background 0.25s ease,
-    color 0.25s ease;
-`;
-
-const AmbientLayer = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-`;
-
-const FloatingEmoji = styled.span`
-  position: absolute;
-  user-select: none;
-  opacity: ${({ theme }) => (isDarkTheme(theme) ? 0.55 : 0.45)};
-  filter: drop-shadow(0 6px 14px rgba(139, 92, 246, 0.35));
-  animation: ${floatEmojiAnim} 6s ease-in-out infinite;
+    background 0.35s ease,
+    color 0.35s ease;
 `;
 
 const Content = styled.div`
   position: relative;
   z-index: 2;
-  width: min(1260px, calc(100% - 40px));
+  width: min(1200px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 28px 0 90px;
+  padding: 40px 0 100px;
 
-  @media (max-width: 640px) {
-    width: calc(100% - 24px);
-    padding-top: 18px;
+  @media (max-width: 600px) {
+    width: min(100% - 24px, 1200px);
+    padding-top: 24px;
+    padding-bottom: 80px;
   }
 `;
 
-/* =========================================================
-   HERO IZQUIERDO + LOGO SOLO LEVELING
-========================================================= */
-const HeroGrid = styled.section`
+/* HERO INTEGRADO */
+const HeroSection = styled.section`
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 28px;
-  align-items: stretch;
-  margin-bottom: 32px;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 40px;
 
-  @media (max-width: 980px) {
+  @media (max-width: 900px) {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
 `;
 
-const HeroLeft = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+const HeroInfo = styled.div`
+  animation: ${fadeUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
-const SystemQuestBanner = styled.div`
+const HeroBadge = styled.div`
   display: inline-flex;
   align-items: center;
-  align-self: flex-start;
-  gap: 10px;
-  padding: 7px 14px;
+  gap: 6px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid rgba(139, 92, 246, 0.45);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.18);
-  margin-bottom: 14px;
-
-  .sys-icon {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #8b5cf6;
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 12px;
-  }
-
-  .sys-text {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: ${({ theme }) => theme.text};
-  }
-
-  .sys-emoji {
-    font-size: 14px;
-  }
-`;
-
-const LogoShowcaseBox = styled.div`
-  position: relative;
-  display: inline-flex;
-  align-self: flex-start;
-  margin-bottom: 10px;
-
-  .monarch-logo {
-    width: clamp(220px, 28vw, 310px);
-    height: auto;
-    object-fit: contain;
-    position: relative;
-    z-index: 2;
-    filter: drop-shadow(0 8px 24px rgba(139, 92, 246, 0.35));
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: scale(1.03) translateY(-2px);
-    }
-  }
-
-  .aura-ring {
-    position: absolute;
-    inset: 10% 15%;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      rgba(139, 92, 246, 0.28) 0%,
-      transparent 70%
-    );
-    filter: blur(18px);
-    z-index: 1;
-    animation: ${pulseAura} 3.5s ease-in-out infinite;
-  }
+  background: ${({ theme }) => theme.halloweenSoft};
+  border: 1px solid ${({ theme }) => theme.halloweenBorder};
+  color: ${({ theme }) => theme.halloweenPrimary};
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
 `;
 
 const HeroTitle = styled.h1`
-  margin: 4px 0 0;
-  font-size: clamp(28px, 3.6vw, 42px);
-  line-height: 1.1;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  margin: 12px 0 0;
+  font-size: clamp(36px, 5vw, 58px);
+  line-height: 1;
+  letter-spacing: -2px;
+  font-weight: 900;
   color: ${({ theme }) => theme.text};
 
   span {
-    color: #8b5cf6;
-  }
-
-  .gradient-stroke {
-    font-style: normal;
-    text-decoration: underline;
-    text-decoration-color: #10b981;
-    text-underline-offset: 6px;
+    background: linear-gradient(
+      100deg,
+      ${({ theme }) => theme.halloweenPrimary},
+      ${({ theme }) => theme.halloweenSecondary}
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
   }
 `;
 
-const HeroSubtitle = styled.p`
+const HeroSubtitle = styled.div`
+  margin-top: 6px;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 800;
+  color: ${({ theme }) => theme.halloweenAccent};
+`;
+
+const HeroDescription = styled.p`
   margin: 12px 0 0;
-  font-size: 15px;
-  line-height: 1.6;
   color: ${({ theme }) => theme.colorSubtitle};
-  max-width: 600px;
-
-  strong {
-    color: ${({ theme }) => theme.text};
-  }
+  font-size: 15px;
+  line-height: 1.5;
 `;
 
-const ActionButtons = styled.div`
+const HeroStats = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   margin-top: 20px;
 `;
 
-const PrimaryBattleBtn = styled(NavLink)`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border-radius: 12px;
-  background: #10b981;
-  color: #ffffff !important;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 8px 22px -4px rgba(16, 185, 129, 0.45);
-  transition: all 0.2s ease-out;
-
-  .emoji-btn {
-    font-size: 16px;
-  }
-
-  &:hover {
-    background: #059669;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px -4px rgba(16, 185, 129, 0.6);
-  }
-`;
-
-const SecondaryBattleBtn = styled(NavLink)`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+const Stat = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
   border-radius: 12px;
   background: ${({ theme }) => theme.bgcards};
   border: 1px solid ${({ theme }) => theme.color2};
-  color: ${({ theme }) => theme.text} !important;
-  font-size: 13.5px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease-out;
+  backdrop-filter: blur(8px);
 
-  .emoji-btn {
-    font-size: 15px;
+  strong {
+    color: ${({ theme }) => theme.halloweenPrimary};
+    font-size: 16px;
   }
 
-  &:hover {
-    transform: translateY(-2px);
-    border-color: #8b5cf6;
+  span {
+    color: ${({ theme }) => theme.colorSubtitle};
+    font-size: 11px;
   }
 `;
 
-const EfficiencyMetricsRow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 22px;
+/* SHOWCASE DERECHA */
+const CompactShowcase = styled.div`
+  padding: 20px;
+  border-radius: 20px;
+  background: ${({ theme }) => theme.bgcards};
+  border: 1px solid ${({ theme }) => theme.halloweenBorder};
+  box-shadow: 0 15px 35px ${({ theme }) => theme.bgAlpha};
+  backdrop-filter: blur(8px);
+  animation: ${fadeUp} 0.6s 0.1s both cubic-bezier(0.16, 1, 0.3, 1);
+`;
 
-  @media (max-width: 640px) {
+const PreviewCardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+
+  .star-icon {
+    font-size: 22px;
+    color: ${({ theme }) => theme.halloweenPrimary};
+  }
+`;
+
+const PreviewSmall = styled.div`
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  color: ${({ theme }) => theme.colorSubtitle};
+`;
+
+const PreviewTitle = styled.div`
+  font-size: 18px;
+  font-weight: 800;
+`;
+
+const PreviewGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
 `;
 
-const MetricPill = styled.div`
+const MiniFeature = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 11px 13px;
+  padding: 10px;
   border-radius: 12px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid ${({ theme }) => theme.color2};
+  background: ${({ theme }) => theme.bgAlpha};
 
-  .m-emoji {
-    font-size: 22px;
+  svg {
+    font-size: 18px;
+    color: ${({ theme }) => theme.halloweenPrimary};
     flex-shrink: 0;
   }
 
@@ -854,609 +970,75 @@ const MetricPill = styled.div`
   }
 
   strong {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: ${({ theme }) => theme.text};
+    font-size: 12px;
   }
 
   span {
-    font-size: 11px;
-    color: ${({ theme }) => theme.colorSubtitle};
-  }
-`;
-
-/* =========================================================
-   VENTANA DE ESTADO SOLO LEVELING (DERECHA)
-========================================================= */
-const StatusWindowCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 22px;
-  border-radius: 20px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid ${({ theme }) => theme.color2};
-  box-shadow: ${({ theme }) =>
-    isDarkTheme(theme)
-      ? "0 20px 48px -12px rgba(0, 0, 0, 0.75)"
-      : "0 14px 32px -10px rgba(17, 17, 17, 0.08)"};
-`;
-
-const StatusHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid ${({ theme }) => theme.color2};
-
-  .sys-title {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    color: ${({ theme }) => theme.text};
-
-    .sys-bracket {
-      color: #8b5cf6;
-      margin: 0 4px;
-    }
-  }
-
-  .s-rank-badge {
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(139, 92, 246, 0.14);
-    border: 1px solid rgba(139, 92, 246, 0.35);
-    color: #a855f7;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-  }
-`;
-
-const HunterProfileRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: ${({ theme }) => theme.bgAlpha};
-  border: 1px solid ${({ theme }) => theme.color2};
-  margin-bottom: 16px;
-
-  .avatar-orb {
-    position: relative;
-    flex-shrink: 0;
-
-    .level-tag {
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 1px 7px;
-      border-radius: 999px;
-      background: #10b981;
-      color: #ffffff;
-      font-size: 9px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-  }
-
-  .hunter-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .hunter-class {
     font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: #10b981;
-  }
-
-  .hunter-name {
-    font-size: 16px;
-    font-weight: 800;
-    color: ${({ theme }) => theme.text};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .hunter-role {
-    font-size: 11.5px;
     color: ${({ theme }) => theme.colorSubtitle};
   }
-
-  .avatar-switch-btn {
-    padding: 7px 11px;
-    border-radius: 9px;
-    background: ${({ theme }) => theme.bgcards};
-    border: 1px solid ${({ theme }) => theme.color2};
-    color: ${({ theme }) => theme.text} !important;
-    font-size: 11.5px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border-color: #8b5cf6;
-      transform: translateY(-1px);
-    }
-  }
 `;
 
-const StatsList = styled.div`
+/* FILTROS Y PESTAÑAS */
+const SectionHeader = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 11px;
-  margin-bottom: 16px;
-`;
-
-const StatRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-
-  .stat-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colorSubtitle};
-
-    strong {
-      color: ${({ theme }) => theme.text};
-      font-weight: 700;
-    }
-  }
-`;
-
-const StatBarTrack = styled.div`
-  width: 100%;
-  height: 7px;
-  border-radius: 999px;
-  background: ${({ theme }) => theme.bgAlpha};
-  overflow: hidden;
-`;
-
-const StatBarFill = styled.div`
-  height: 100%;
-  width: ${({ $width }) => $width || "100%"};
-  background: ${({ $color }) => $color || "#10B981"};
-  border-radius: 999px;
-`;
-
-const PassiveBuffBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.24);
-
-  .buff-emoji {
-    font-size: 20px;
-  }
-
-  .buff-copy {
-    display: flex;
-    flex-direction: column;
-    font-size: 11.5px;
-
-    strong {
-      color: #10b981;
-      font-size: 10.5px;
-      letter-spacing: 0.05em;
-    }
-
-    span {
-      color: ${({ theme }) => theme.text};
-    }
-  }
-`;
-
-/* =========================================================
-   ARENA DE BATALLA INTERACTIVA SOLO LEVELING
-========================================================= */
-const BattleArenaSection = styled.section`
-  padding: 22px;
-  border-radius: 20px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid
-    ${({ $slashing, theme }) =>
-      $slashing ? "rgba(139, 92, 246, 0.55)" : theme.color2};
-  box-shadow: ${({ theme }) =>
-    isDarkTheme(theme)
-      ? "0 20px 50px -15px rgba(0, 0, 0, 0.8)"
-      : "0 12px 32px -10px rgba(17, 17, 17, 0.07)"};
-  margin-bottom: 36px;
-  transition: border-color 0.2s ease;
-`;
-
-const ArenaTopBar = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding-bottom: 14px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid ${({ theme }) => theme.color2};
-
-  .arena-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11.5px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    color: ${({ theme }) => theme.text};
-
-    .live-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ef4444;
-      box-shadow: 0 0 10px #ef4444;
-      animation: ${pulseAura} 1.5s infinite;
-    }
-  }
-
-  .combo-counter {
-    padding: 5px 12px;
-    border-radius: 999px;
-    background: ${({ theme }) => theme.bgAlpha};
-    border: 1px solid ${({ theme }) => theme.color2};
-    font-size: 12px;
-    font-weight: 700;
-    color: ${({ theme }) => theme.colorSubtitle};
-
-    strong {
-      color: #10b981;
-    }
-  }
-`;
-
-const BattleStage = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1.15fr 1fr;
-  gap: 18px;
-  align-items: center;
-
-  @media (max-width: 960px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const FighterCard = styled.div`
-  padding: 16px;
-  border-radius: 16px;
-  background: ${({ theme }) => theme.bgAlpha};
-  border: 1px solid ${({ theme }) => theme.color2};
-
-  .fighter-header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 8px;
-
-    .tag-ally {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: #a855f7;
-    }
-
-    strong {
-      font-size: 16px;
-      font-weight: 800;
-      color: ${({ theme }) => theme.text};
-    }
-  }
-`;
-
-const MonarchFighterVisual = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  svg {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-  }
-
-  .aura-pulse {
-    animation: ${pulseAura} 2.8s ease-in-out infinite;
-  }
-
-  .dagger-slash {
-    transform-origin: 130px 110px;
-    animation: ${daggerSwing} 1.4s ease-in-out infinite;
-  }
-
-  .floating-badge {
-    margin-top: 6px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(139, 92, 246, 0.15);
-    border: 1px solid rgba(139, 92, 246, 0.35);
-    color: ${({ theme }) => theme.text};
-    font-size: 11px;
-    font-weight: 700;
-  }
-`;
-
-const CombatCenterZone = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 12px;
-  text-align: center;
+  margin-bottom: 20px;
 `;
 
-const SlashEffectBox = styled.div`
-  position: relative;
-  width: 100%;
-  height: 120px;
+const SectionEyebrow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  .slash-svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
-  .slash-arc-1,
-  .slash-arc-2,
-  .lightning-bolt {
-    stroke-dasharray: 320;
-    animation: ${slashDash} 1.6s ease-out infinite;
-  }
-
-  .slash-arc-2 {
-    animation-delay: 0.35s;
-  }
-
-  .lightning-bolt {
-    animation-delay: 0.7s;
-  }
-
-  .clash-emojis {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    font-size: 28px;
-    pointer-events: none;
-
-    span {
-      animation: ${floatEmojiAnim} 2.4s ease-in-out infinite;
-    }
-    .e2 {
-      animation-delay: 0.4s;
-    }
-    .e3 {
-      animation-delay: 0.8s;
-    }
-    .e4 {
-      animation-delay: 1.2s;
-    }
-  }
+  gap: 6px;
+  color: ${({ theme }) => theme.halloweenPrimary};
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 `;
 
-const DamagePopup = styled.div`
-  padding: 10px 16px;
+const Tabs = styled.div`
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
   border-radius: 12px;
   background: ${({ theme }) => theme.bgAlpha};
   border: 1px solid ${({ theme }) => theme.color2};
-  animation: ${popInDamage} 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
 
-  .dmg-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 6px;
-    background: #10b981;
-    color: #ffffff;
-    font-size: 10.5px;
-    font-weight: 800;
-    margin-bottom: 4px;
-  }
-
-  .dmg-text {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 700;
-    color: ${({ theme }) => theme.text};
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 
-const AttackActionBtn = styled.button`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(139, 92, 246, 0.45);
-  background: ${({ theme }) =>
-    isDarkTheme(theme) ? "#FFFFFF" : "#111111"};
-  color: ${({ theme }) =>
-    isDarkTheme(theme) ? "#050505" : "#FFFFFF"};
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 800;
+const Tab = styled.button`
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  white-space: nowrap;
   cursor: pointer;
-  transition: all 0.18s ease;
+  background: ${({ $active, theme }) =>
+    $active ? theme.halloweenPrimary : "transparent"};
+  color: ${({ $active, theme }) => ($active ? "#FFFFFF" : theme.colorSubtitle)};
+  font-size: 13px;
+  font-weight: ${({ $active }) => ($active ? 700 : 500)};
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 24px rgba(139, 92, 246, 0.3);
-  }
-
-  &:active {
-    transform: scale(0.97);
+    color: ${({ $active, theme }) => ($active ? "#FFFFFF" : theme.text)};
   }
 `;
 
-const BossCard = styled.div`
-  padding: 16px;
-  border-radius: 16px;
-  background: ${({ theme }) => theme.bgAlpha};
-  border: 1px solid ${({ theme }) => theme.color2};
-  ${({ $slashing }) =>
-    $slashing &&
-    css`
-      animation: ${shakeHit} 0.45s ease;
-    `}
-
-  .boss-header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-
-    .tag-boss {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: #ef4444;
-    }
-
-    strong {
-      font-size: 15.5px;
-      font-weight: 800;
-      color: ${({ theme }) => theme.text};
-    }
-  }
-
-  .hp-bar-wrap {
-    margin-bottom: 12px;
-
-    .hp-top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10.5px;
-      font-weight: 700;
-      color: ${({ theme }) => theme.colorSubtitle};
-      margin-bottom: 4px;
-
-      strong {
-        color: #ef4444;
-      }
-    }
-
-    .hp-track {
-      width: 100%;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(239, 68, 68, 0.15);
-      overflow: hidden;
-    }
-
-    .hp-fill {
-      height: 100%;
-      background: #ef4444;
-      border-radius: 999px;
-      transition: width 0.3s ease;
-    }
-  }
-`;
-
-const BossVisual = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  .boss-hit-marks {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11.5px;
-    font-weight: 800;
-    color: #ef4444;
-  }
-
-  .defeated-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .defeated-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 10px;
-    border-radius: 9px;
-    background: ${({ theme }) => theme.bgcards};
-    border: 1px solid ${({ theme }) => theme.color2};
-    font-size: 12px;
-
-    span {
-      color: ${({ theme }) => theme.colorSubtitle};
-      text-decoration: line-through;
-    }
-
-    strong {
-      color: #10b981;
-      font-size: 11px;
-      font-weight: 800;
-    }
-  }
-`;
-
-/* =========================================================
-   GRID DE HABILIDADES DE EFICIENCIA (SKILLS RANGO S)
-========================================================= */
-const SkillsSectionHeader = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 18px;
-
-  .left {
-    .eyebrow {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      color: #10b981;
-    }
-
-    h2 {
-      margin: 4px 0 0;
-      font-size: clamp(22px, 2.6vw, 28px);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      color: ${({ theme }) => theme.text};
-    }
-  }
-
-  .right-sub {
-    margin: 0;
-    max-width: 440px;
-    font-size: 13.5px;
-    line-height: 1.5;
-    color: ${({ theme }) => theme.colorSubtitle};
-  }
-`;
-
-const SkillsGrid = styled.div`
+/* CARDS */
+const Cards = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 
-  @media (max-width: 1040px) {
+  @media (max-width: 960px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1465,99 +1047,115 @@ const SkillsGrid = styled.div`
   }
 `;
 
-const SkillCard = styled.article`
+const ImprovementCard = styled.article`
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 16px;
   border-radius: 16px;
   background: ${({ theme }) => theme.bgcards};
   border: 1px solid ${({ theme }) => theme.color2};
-  transition: all 0.22s ease-out;
+  backdrop-filter: blur(8px);
+  animation: ${cardIn} 0.4s var(--delay) both cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
-    transform: translateY(-4px);
-    border-color: ${({ theme }) =>
-      isDarkTheme(theme) ? "rgba(255, 255, 255, 0.28)" : "rgba(17, 17, 17, 0.28)"};
-    box-shadow: ${({ theme }) =>
-      isDarkTheme(theme)
-        ? "0 16px 32px -10px rgba(0, 0, 0, 0.7)"
-        : "0 14px 28px -10px rgba(17, 17, 17, 0.08)"};
-
-    .emoji-orb {
-      transform: scale(1.14) rotate(6deg);
-    }
+    transform: translateY(-3px);
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    box-shadow: 0 8px 20px ${({ theme }) => theme.bgAlpha};
   }
+`;
 
-  .skill-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+`;
 
-    .emoji-orb {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      background: ${({ theme }) => theme.bgAlpha};
-      border: 1px solid ${({ theme }) => theme.color2};
-      transition: transform 0.25s ease;
-    }
+const CardIcon = styled.div`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.halloweenSoft};
+  color: ${({ theme }) => theme.halloweenPrimary};
+  font-size: 18px;
+  flex-shrink: 0;
+`;
 
-    .skill-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+const CardCategory = styled.span`
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: ${({ theme }) => theme.halloweenPrimary};
+  flex-grow: 1;
+`;
 
-    .skill-rank {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-    }
+const CardNumber = styled.span`
+  font-size: 10px;
+  font-weight: 800;
+  color: ${({ theme }) => theme.colorScroll};
+`;
 
-    .skill-sub {
-      font-size: 10px;
-      font-weight: 700;
-      color: ${({ theme }) => theme.colorSubtitle};
-    }
-  }
+const CardTitle = styled.h3`
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  line-height: 1.3;
+  color: ${({ theme }) => theme.colortitlecard};
+`;
 
-  h3 {
-    margin: 0 0 8px;
+const CardDescription = styled.p`
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: ${({ theme }) => theme.colorSubtitle};
+`;
+
+/* BOTÓN "VER MÁS" */
+const LoadMoreWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+`;
+
+const LoadMoreButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: 1px solid ${({ theme }) => theme.halloweenBorder};
+  background: ${({ theme }) => theme.bgcards};
+  color: ${({ theme }) => theme.text};
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+
+  svg {
     font-size: 16px;
-    font-weight: 800;
-    letter-spacing: -0.015em;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.halloweenPrimary};
+    transition: transform 0.2s ease;
   }
 
-  p {
-    margin: 0 0 16px;
-    font-size: 13px;
-    line-height: 1.55;
-    color: ${({ theme }) => theme.colorSubtitle};
-    flex: 1;
+  &:hover {
+    transform: translateY(-2px);
+    border-color: ${({ theme }) => theme.halloweenPrimary};
+    background: ${({ theme }) => theme.halloweenSoft};
+
+    svg {
+      transform: translateY(2px);
+    }
   }
 
-  .skill-footer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-top: 12px;
-    border-top: 1px solid ${({ theme }) => theme.color2};
-    font-size: 12px;
-
-    .power-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-    }
-
-    strong {
-      color: ${({ theme }) => theme.text};
-    }
+  &:active {
+    transform: scale(0.98);
   }
 `;

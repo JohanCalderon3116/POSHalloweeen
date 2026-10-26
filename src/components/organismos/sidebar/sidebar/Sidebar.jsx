@@ -1,4 +1,4 @@
-import styled, { useTheme } from "styled-components";
+import styled, { keyframes, useTheme } from "styled-components";
 import {
   LinksArray,
   SecondarylinksArray,
@@ -10,31 +10,20 @@ import { Icon } from "@iconify/react";
 import Swal from "sweetalert2";
 import { useCerrarSesion } from "../../../../hooks/useCerrarSesion";
 
-const isDarkTheme = (theme) =>
-  theme?.text === "#FFFFFF" ||
-  theme?.bgtotal === "#050505" ||
-  theme?.bgtotal === "#000000" ||
-  theme?.bgtotal === "#121216" ||
-  theme?.bgtotal === "#09090B" ||
-  theme?.bgtotal === "#101010";
-
 export function Sidebar({ state, setState }) {
   const cerrarSesion = useCerrarSesion();
   const theme = useTheme();
-  const isDark = isDarkTheme(theme);
-
   function cerrarSesionConfirmacion() {
     Swal.fire({
       title: "¿Estás seguro(a)?",
       text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión.",
-      iconHtml:
-        '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#EF4444",
-      cancelButtonColor: isDark ? "#27272F" : "#71717A",
+      confirmButtonColor: theme.halloweenPrimary,
+      cancelButtonColor: theme.halloweenDanger,
       confirmButtonText: "Sí, cerrar sesión",
       cancelButtonText: "Cancelar",
-      background: theme.bgcards,
+      background: theme.bg2,
       color: theme.text,
       customClass: {
         popup: "softcreate-swal-popup",
@@ -53,7 +42,7 @@ export function Sidebar({ state, setState }) {
         $isopen={state.toString()}
         onClick={() => setState(!state)}
       >
-        <Icon icon="lucide:chevron-right" />
+        <Icon icon="solar:alt-arrow-right-bold" />
       </SidebarButton>
       <SidebarContainer
         $isopen={state.toString()}
@@ -101,7 +90,8 @@ export function Sidebar({ state, setState }) {
             <LinkContent $isopen={state.toString()}>
               <StyledIcon
                 className="Linkicon"
-                icon="lucide:log-out"
+                icon="solar:logout-2-bold"
+                $customcolor="#CE82FF"
               />
               <Label $isopen={state.toString()}>Cerrar sesión</Label>
             </LinkContent>
@@ -114,6 +104,15 @@ export function Sidebar({ state, setState }) {
     </Main>
   );
 }
+
+const logoFloat = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+`;
 
 const LogoContent = styled.div`
   display: flex;
@@ -132,32 +131,28 @@ const LogoContent = styled.div`
 
 const LogoWrapper = styled.div`
   flex-shrink: 0;
-  width: 56px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.3s ease-out;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: ${({ $isopen }) =>
+    $isopen === "true" ? "scale(0.9)" : "scale(1.1)"};
   img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: ${({ theme }) =>
-      isDarkTheme(theme)
-        ? "drop-shadow(0 0 8px rgba(139, 92, 246, 0.25))"
-        : "none"};
+    animation: ${logoFloat} 2.4s ease-in-out infinite;
   }
 `;
 
 const LogoTitle = styled.h2`
   margin: 0 0 0 12px;
   white-space: nowrap;
-  color: ${({ theme }) => theme.text};
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.halloweenPrimary};
+  font-size: 18px;
+  font-weight: 800;
   display: ${({ $isopen }) => ($isopen === "true" ? "block" : "none")};
   opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
   transform: ${({ $isopen }) =>
@@ -182,9 +177,9 @@ const SidebarContainer = styled.div`
   background: ${({ theme }) => theme.bgtotal};
   border-right: 1px solid ${({ theme }) => theme.color2};
   transition:
-    width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    background 0.25s ease,
-    border-color 0.25s ease;
+    width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
   &.active {
     width: 260px;
   }
@@ -198,10 +193,17 @@ const SidebarContainer = styled.div`
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    * {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
 `;
 
 const LinkContainer = styled.div`
-  margin: 6px 10px;
+  margin: 7px 8px;
   position: relative;
 `;
 
@@ -210,24 +212,26 @@ const StyledNavLink = styled(NavLink)`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 46px;
+  height: 52px;
   text-decoration: none;
-  color: ${({ theme }) => theme.colorSubtitle};
-  border-radius: 10px;
+  color: ${({ theme }) => theme.text};
+  border-radius: 14px;
   border: 1px solid transparent;
-  transition: all 0.2s ease-out;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.25s ease;
   &:hover {
     background: ${({ theme }) => theme.bgAlpha};
-    color: ${({ theme }) => theme.text};
+    transform: translateX(2px);
   }
   &.active {
-    background: ${({ theme }) =>
-      isDarkTheme(theme) ? "rgba(255, 255, 255, 0.09)" : "rgba(18, 18, 22, 0.07)"};
-    border-color: ${({ theme }) =>
-      isDarkTheme(theme) ? "rgba(255, 255, 255, 0.16)" : "rgba(18, 18, 22, 0.14)"};
-    color: ${({ theme }) => theme.text};
-    font-weight: 600;
-    box-shadow: inset 3px 0 0 ${({ theme }) => theme.text};
+    background: ${({ theme }) => theme.halloweenSoft};
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    color: ${({ theme }) => theme.halloweenPrimary};
+    box-shadow: inset 3px 0 0 ${({ theme }) => theme.halloweenPrimary};
   }
 `;
 
@@ -236,17 +240,20 @@ const LogoutButton = styled.button`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 46px;
+  height: 52px;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 14px;
   background: transparent;
-  color: ${({ theme }) => theme.colorSubtitle};
+  color: ${({ theme }) => theme.text};
   cursor: pointer;
-  transition: all 0.2s ease-out;
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease,
+    border-color 0.25s ease;
   &:hover {
-    background: rgba(239, 68, 68, 0.08);
-    color: #ef4444;
+    background: ${({ theme }) => theme.bgAlpha};
+    transform: translateX(2px);
   }
 `;
 
@@ -257,49 +264,54 @@ const LinkContent = styled.section`
     $isopen === "true" ? "flex-start" : "center"};
   width: 100%;
   height: 100%;
-  gap: ${({ $isopen }) => ($isopen === "true" ? "14px" : "0")};
-  padding: ${({ $isopen }) => ($isopen === "true" ? "0 14px" : "0")};
+  gap: ${({ $isopen }) => ($isopen === "true" ? "16px" : "0")};
+  padding: ${({ $isopen }) => ($isopen === "true" ? "0 16px" : "0")};
   overflow: hidden;
   transition:
-    justify-content 0.25s ease,
-    gap 0.25s ease,
-    padding 0.25s ease;
+    justify-content 0.3s ease,
+    gap 0.3s ease,
+    padding 0.3s ease;
 `;
 
 const StyledIcon = styled(Icon)`
   flex-shrink: 0;
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  color: currentColor;
+  font-size: 26px;
+  color: ${({ $customcolor, theme }) => $customcolor || theme.text};
   transition:
-    transform 0.2s ease-out,
-    color 0.2s ease-out;
+    transform 0.25s ease,
+    color 0.25s ease,
+    filter 0.25s ease;
+  .Links:hover &,
+  button:hover & {
+    transform: scale(1.08);
+  }
 `;
 
 const Label = styled.span`
   white-space: nowrap;
   overflow: hidden;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
   display: ${({ $isopen }) => ($isopen === "true" ? "inline-block" : "none")};
   opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
   transform: ${({ $isopen }) =>
     $isopen === "true" ? "translateX(0)" : "translateX(-8px)"};
   transition:
-    opacity 0.2s ease 0.05s,
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.2s ease 0.08s,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
 const Divider = styled.div`
   width: calc(100% - 24px);
   height: 1px;
-  margin: 16px auto;
+  margin: 18px auto;
   background: ${({ theme }) => theme.color2};
+  opacity: 0.8;
 `;
 
 const ThemeContainer = styled.div`
@@ -321,25 +333,34 @@ const SidebarButton = styled.button`
   top: 67px;
   left: 71px;
   z-index: 30;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.color2};
-  background: ${({ theme }) => theme.bgcards};
+  background: ${({ theme }) => theme.bgtgderecha};
   color: ${({ theme }) => theme.text};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 18px ${({ theme }) => theme.bgAlpha};
   cursor: pointer;
   transform: ${({ $isopen }) =>
     $isopen === "true" ? "translateX(172px) rotate(180deg)" : "translateX(0)"};
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    background 0.2s ease-out,
-    border-color 0.2s ease-out;
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
   &:hover {
-    border-color: ${({ theme }) => theme.text};
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    box-shadow: 0 8px 25px ${({ theme }) => theme.halloweenGlow};
+    color: ${({ theme }) => theme.halloweenPrimary};
+  }
+  &:active {
+    transform: ${({ $isopen }) =>
+      $isopen === "true"
+        ? "translateX(172px) rotate(180deg) scale(.92)"
+        : "scale(.92)"};
   }
 `;

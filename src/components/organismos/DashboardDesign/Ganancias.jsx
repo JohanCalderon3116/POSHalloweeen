@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import { CardTotales } from "./CardTotales";
 import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
@@ -11,7 +11,6 @@ import {
 import { BarLoader } from "react-spinners";
 
 export const Ganacias = () => {
-  const __theme = useTheme();
   const [visible, setVisible] = useState(false);
   const { validarPermiso } = useValidarPermisosOpertivos();
   const { totalGanancias, porcentajeCambioGanancias } = useDetalleVentasStore();
@@ -22,7 +21,7 @@ export const Ganacias = () => {
     setVisible(true);
   };
   if (isLoading) {
-    return <BarLoader color={__theme.text} />;
+    return <BarLoader color="#ff7a18" />;
   }
 
   return (
@@ -30,7 +29,7 @@ export const Ganacias = () => {
       <Tarjeta $oculta={!visible}>
         <CardTotales
           title="Ganancias"
-          icon="lucide:wallet"
+          icon="solar:wallet-money-bold"
           value={FormatearNumeroDineroSinIsoYCurrency(totalGanancias)}
           porcentage={porcentajeCambioGanancias}
         />
@@ -38,9 +37,9 @@ export const Ganacias = () => {
       {!visible && (
         <Candado type="button" onClick={desbloquear}>
           <Icon
-            icon="lucide:lock"
-            width="24"
-            height="24"
+            icon="solar:lock-keyhole-minimalistic-unlocked-bold"
+            width="28"
+            height="28"
           />
           <span>Ver ganancias</span>
         </Candado>
@@ -70,19 +69,18 @@ const Candado = styled.button`
   gap: 6px;
   border: none;
   background: transparent;
-  color: ${({ theme }) => theme.text};
-  font-size: 13px;
-  font-weight: 600;
+  color: ${({ theme }) => theme.halloweenPrimary || theme.text};
+  font-weight: 700;
   cursor: pointer;
   transition:
-    transform 0.2s ease-out,
-    color 0.2s ease-out;
+    transform 0.2s ease,
+    color 0.2s ease;
   svg {
-    color: ${({ theme }) => theme.text};
+    filter: drop-shadow(0 0 6px rgba(255, 122, 24, 0.4));
   }
 
   &:hover {
-    transform: translateY(-1px);
+    transform: scale(1.05);
     color: ${({ theme }) => theme.text};
   }
 `;

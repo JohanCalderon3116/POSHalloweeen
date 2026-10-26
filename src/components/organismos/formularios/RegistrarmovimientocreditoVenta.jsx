@@ -53,7 +53,7 @@ export function RegistrarmovimientocreditoVenta({ onClose }) {
           <span>
             <strong>Guardando</strong>
           </span>
-          <BeatLoader color={theme.color1 || "#8B5CF6"} size={8} />
+          <BeatLoader color={theme.halloweenPrimary || theme.text} size={8} />
         </ConteinerLoader>
       ) : (
         <div className="sub-contenedor">
@@ -124,8 +124,7 @@ export function RegistrarmovimientocreditoVenta({ onClose }) {
                 disabled={!creditosItemSelect?.nombres}
                 icono={<v.iconoguardar />}
                 titulo="Guardar"
-                bgcolor="#18181B"
-                color="#FFFFFF"
+                bgcolor={theme.halloweenPrimary || "#b85c18"}
               />
             </section>
           </form>
@@ -146,18 +145,16 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  background-color: rgba(9, 9, 11, 0.55);
   backdrop-filter: blur(5px);
   overflow: hidden;
   .sub-contenedor {
     position: relative;
     width: 500px;
     max-width: 85%;
-    border-radius: 16px;
-    background: ${({ theme }) => theme.bgcards || theme.body};
-    border: 1px solid ${({ theme }) => theme.color2};
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28);
-    padding: 16px 36px 24px 36px;
+    border-radius: 20px;
+    background: ${({ theme }) => theme.body};
+    box-shadow: -10px 15px 30px rgba(10, 9, 9, 0.4);
+    padding: 13px 36px 20px 36px;
     z-index: 100;
     overflow: hidden;
     .headers {
@@ -208,7 +205,7 @@ const Detalle = styled.span`
   color: ${({ theme }) => theme.text};
 
   strong {
-    color: #8B5CF6;
+    color: ${({ theme }) => theme.halloweenPrimary || "#b85c18"};
     font-weight: 700;
   }
 `;

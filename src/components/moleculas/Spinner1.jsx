@@ -6,8 +6,8 @@ export const Spinner1 = ({ texto }) => {
   return (
     <Container>
       <CircleLoader
-        color={theme?.color1 || "#8B5CF6"}
-        size={64}
+        color={theme?.halloweenAccent || "#F97316"}
+        size={80}
       />
       {texto && <span className="texto">{texto}</span>}
     </Container>
@@ -28,9 +28,10 @@ const Container = styled.div`
 
   .texto {
     font-family: "Poppins", sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
-    letter-spacing: 0.2px;
-    color: ${({ theme }) => theme.colorSubtitle};
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+    color: ${({ theme }) => theme.text};
   }
 `;

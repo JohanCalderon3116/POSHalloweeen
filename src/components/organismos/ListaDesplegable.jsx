@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Device } from "../../index";
 import { useRef, useState } from "react";
-import { Icon } from "@iconify/react";
 
 export function ListaDesplegable({
   data,
@@ -67,9 +66,7 @@ export function ListaDesplegable({
               onClick={() => seleccionar(item)}
               $selected={seleccionado}
             >
-              <span className="icono">
-                <Icon icon="lucide:package" width="16" height="16" />
-              </span>
+              <span className="icono">🌫️</span>
               <span className="nombre">{item?.nombre}</span>
             </ItemContainer>
           );
@@ -83,51 +80,50 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: ${(props) => props.$top || "calc(100% + 6px)"};
-  width: 100%;
+  top: ${(props) => props.$top};
+  width: 95%;
   padding: 10px;
   margin-bottom: 15px;
-  gap: 6px;
-  border-radius: 12px;
-  z-index: 30;
-  background: ${({ theme }) => theme.bgcards};
+  gap: 8px;
+  border-radius: 10px;
+  z-index: 3;
+  background: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
-  border: 1px solid ${({ theme }) => theme.color2};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.055)"};
   box-shadow: ${({ theme }) =>
-    theme.text === "#FFFFFF"
-      ? "0 16px 36px rgba(0, 0, 0, 0.65)"
-      : "0 12px 28px rgba(17, 17, 17, 0.12)"};
+    theme.body === "#fff"
+      ? "0 10px 25px rgba(0,0,0,0.08)"
+      : "0 10px 25px rgba(0,0,0,0.30)"};
   &:focus {
     outline: none;
   }
   @media ${() => Device.tablet} {
-    width: 100%;
+    width: 95%;
   }
   .contentClose {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 22px;
+    height: 24px;
     padding-right: 4px;
     font-weight: 600;
     cursor: pointer;
     font-size: 18px;
     line-height: 1;
-    color: ${({ theme }) => theme.colorSubtitle};
+    opacity: 0.55;
     transition:
       opacity 0.2s ease,
       color 0.2s ease;
     &:hover {
-      color: #ef4444;
+      opacity: 1;
+      color: rgba(197, 106, 32, 0.75);
     }
   }
   .contentItems {
-    overflow-y: ${(props) => props.scroll || "auto"};
-    max-height: 260px;
+    overflow-y: ${(props) => props.scroll};
     padding-right: 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
     &::-webkit-scrollbar {
       width: 5px;
     }
@@ -135,11 +131,19 @@ const Container = styled.div`
       background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-      background: ${({ theme }) => theme.colorScroll};
+      background: ${({ theme }) =>
+        theme.body === "#fff" ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.10)"};
       border-radius: 10px;
       transition: background 0.2s ease;
     }
+    &:hover::-webkit-scrollbar-thumb {
+      background: rgba(197, 106, 32, 0.18);
+    }
     scrollbar-width: thin;
+    scrollbar-color: ${({ theme }) =>
+      theme.body === "#fff"
+        ? "rgba(0,0,0,0.12) transparent"
+        : "rgba(255,255,255,0.10) transparent"};
   }
 `;
 
@@ -147,34 +151,28 @@ const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  border-radius: 9px;
+  padding: 10px 11px;
+  border-radius: 8px;
   cursor: pointer;
   background: ${({ theme, $selected }) =>
     $selected
-      ? theme.text === "#FFFFFF"
-        ? "rgba(255, 255, 255, 0.10)"
-        : "rgba(17, 17, 17, 0.08)"
+      ? theme.body === "#fff"
+        ? "rgba(197,106,32,0.045)"
+        : "rgba(197,106,32,0.055)"
       : "transparent"};
   border: 1px solid
     ${({ theme, $selected }) =>
-      $selected
-        ? theme.text === "#FFFFFF"
-          ? "rgba(255, 255, 255, 0.22)"
-          : "rgba(17, 17, 17, 0.18)"
-        : "transparent"};
+      $selected ? "rgba(197,106,32,0.08)" : "transparent"};
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease,
     transform 0.18s ease;
   .icono {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: ${({ theme, $selected }) =>
-      $selected ? "#10b981" : theme.colorSubtitle};
+    font-size: 16px;
+    opacity: 0.7;
+    filter: grayscale(0.25);
     transition:
-      color 0.18s ease,
+      opacity 0.18s ease,
       transform 0.18s ease;
   }
   .nombre {
@@ -182,24 +180,20 @@ const ItemContainer = styled.div`
     color: ${({ theme }) => theme.text};
     font-size: 14px;
     font-weight: ${({ $selected }) => ($selected ? "600" : "500")};
-    opacity: ${({ $selected }) => ($selected ? 1 : 0.88)};
+    opacity: ${({ $selected }) => ($selected ? 1 : 0.86)};
     transition:
       color 0.18s ease,
       opacity 0.18s ease;
   }
   &:hover {
     background: ${({ theme }) =>
-      theme.text === "#FFFFFF"
-        ? "rgba(255, 255, 255, 0.07)"
-        : "rgba(17, 17, 17, 0.06)"};
+      theme.body === "#fff" ? "rgba(0,0,0,0.035)" : "rgba(255,255,255,0.035)"};
     border-color: ${({ theme }) =>
-      theme.text === "#FFFFFF"
-        ? "rgba(255, 255, 255, 0.16)"
-        : "rgba(17, 17, 17, 0.12)"};
-    transform: translateX(2px);
+      theme.body === "#fff" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.05)"};
+    transform: translateX(1px);
     .icono {
-      color: #10b981;
-      transform: scale(1.05);
+      opacity: 0.9;
+      transform: scale(1.04);
     }
     .nombre {
       opacity: 1;

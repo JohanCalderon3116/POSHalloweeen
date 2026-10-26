@@ -4,6 +4,20 @@ import { Btn1 } from "../moleculas/Btn1";
 import { Toaster } from "sonner";
 import { useCerrarSesion } from "../../hooks/useCerrarSesion";
 import Swal from "sweetalert2";
+import {
+  Telarana,
+  AranaSvg,
+  MurcielagoSvg,
+  Rincon,
+  Colgante,
+  Pendulo,
+  Hilo,
+  Cuerpo,
+  Murcielago,
+  Aleteo,
+  ARANAS,
+  MURCIELAGOS,
+} from "../organismos/LoginDesing/EscenaHalloween";
 
 export const EmpresaTemplate = () => {
   const cerrarSesion = useCerrarSesion();
@@ -12,14 +26,12 @@ export const EmpresaTemplate = () => {
     Swal.fire({
       title: "¿Estás seguro(a)?",
       text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión",
-      iconHtml:
-        '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#18181B",
-      cancelButtonColor: "#71717A",
-      confirmButtonText: "Sí, cerrar sesión",
-      cancelButtonText: "Cancelar",
-      background: theme.bgcards,
+      confirmButtonColor: theme.halloweenPrimary,
+      cancelButtonColor: theme.halloweenDanger,
+      confirmButtonText: "Si, cerrar sesión",
+      background: theme.bg2,
       color: theme.text,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -29,6 +41,52 @@ export const EmpresaTemplate = () => {
   }
   return (
     <Main>
+      <div className="decorations" aria-hidden="true">
+        <Rincon className="izq">
+          <Telarana />
+        </Rincon>
+        <Rincon className="der">
+          <Telarana />
+        </Rincon>
+        {MURCIELAGOS.map((b, i) => (
+          <Murcielago
+            key={i}
+            className="bat"
+            style={{
+              "--y": b.y,
+              width: b.w,
+              animationDuration: b.t,
+              animationDelay: b.d,
+              animationDirection: b.rev ? "reverse" : "normal",
+            }}
+          >
+            <Aleteo>
+              <MurcielagoSvg
+                style={{ transform: b.rev ? "scaleX(-1)" : "none" }}
+              />
+            </Aleteo>
+          </Murcielago>
+        ))}
+        {ARANAS.map((a, i) => (
+          <Colgante
+            key={i}
+            className={a.extra ? "extra" : ""}
+            style={{ left: a.x, animationDelay: a.d }}
+          >
+            <Pendulo
+              style={{
+                animationDuration: a.t,
+                animationDelay: `-${i * 0.9}s`,
+              }}
+            >
+              <Hilo style={{ height: a.largo }} />
+              <Cuerpo style={{ width: a.ancho }}>
+                <AranaSvg />
+              </Cuerpo>
+            </Pendulo>
+          </Colgante>
+        ))}
+      </div>
       <Toaster richColors position="top-center" />
       <PageContainer>
         <Content>
@@ -56,6 +114,13 @@ const Main = styled.div`
   justify-content: center;
   width: 100%;
   display: flex;
+  .decorations {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
 `;
 
 const PageContainer = styled.div`
@@ -84,24 +149,23 @@ const SidebarItem = styled(NavLink)`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 14px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  margin: 4px 0;
-  transition: all 0.2s ease-out;
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+  padding: 0 5%;
   position: relative;
   text-decoration: none;
-  color: ${(props) => props.theme.colorSubtitle};
-  height: 48px;
-  border: 1px solid transparent;
+  color: ${(props) => props.theme.text};
+  height: 60px;
   &:hover {
-    color: ${(props) => props.theme.text};
-    background: ${(props) => props.theme.bgAlpha};
+    color: ${(props) => props.theme.colorSubtitle};
   }
   &.active {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.22);
-    color: #8b5cf6;
+    background: ${(props) => props.theme.bg6};
+    border: 2px solid ${(props) => props.theme.halloweenAccent};
+    color: ${(props) => props.theme.halloweenAccent};
     font-weight: 600;
   }
 `;
@@ -114,15 +178,13 @@ const Content = styled.div`
 `;
 
 const SidebarTitle = styled.h3`
-  margin-bottom: 16px;
-  font-size: 1.15em;
-  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 1.2em;
 `;
 
 const SidebarSection = styled.div`
   margin-bottom: 20px;
-  border-radius: 14px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid ${({ theme }) => theme.color2};
-  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid ${({ theme }) => theme.color2};
+  padding: 12px;
 `;

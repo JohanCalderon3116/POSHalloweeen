@@ -1,4 +1,4 @@
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import {
   BarChart,
   Bar,
@@ -15,10 +15,9 @@ import animacionvacio from "../../../assets/vacioanimation.json.json";
 import { useMostrarTop5MasVendidosXCantidadQueryStack } from "../../../tanstack/VentasStack";
 
 export const ChartProductosTop5 = () => {
-  const __theme = useTheme();
   const { data, isLoading } = useMostrarTop5MasVendidosXCantidadQueryStack();
   if (isLoading) {
-    return <BarLoader color={__theme.text} />;
+    return <BarLoader color="#ff7a18" />;
   }
 
   return (
@@ -53,15 +52,15 @@ export const ChartProductosTop5 = () => {
               }}
             >
               <CartesianGrid
-                strokeOpacity={0.12}
-                stroke="#71717A"
+                strokeOpacity={0.15}
+                stroke="#ff7a18"
                 vertical={false}
               />
               <XAxis
                 dataKey="nombre_producto"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 11, fill: "#71717A" }}
+                tick={{ fontSize: 11, fill: "#9CA3AF" }}
               />
               <YAxis hide />
               <Tooltip content={<CustomTooltip />} />
@@ -69,10 +68,10 @@ export const ChartProductosTop5 = () => {
                 strokeWidth={1.5}
                 type="monotone"
                 dataKey="total_vendido"
-                fill={__theme.text}
+                fill="#ff7a18"
                 activeDot={{ r: 6 }}
-                fillOpacity={0.88}
-                radius={[6, 6, 0, 0]}
+                fillOpacity={0.9}
+                radius={[8, 8, 0, 0]}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -100,21 +99,20 @@ const Stats = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  font-weight: 700;
-  font-size: 13px;
+  font-weight: bold;
   color: ${({ theme }) => theme.text};
 `;
 
 const Value = styled.span`
   font-size: 14px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.text};
+  font-weight: bold;
+  color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
 `;
 
 const Percentage = styled.span`
   font-size: 12px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.text};
+  font-weight: bold;
+  color: ${({ theme }) => theme.halloweenPrimary || "#ff7a18"};
 `;
 
 const Row = styled.div`
@@ -122,10 +120,9 @@ const Row = styled.div`
   align-items: center;
   gap: 15px;
   margin-bottom: 8px;
-  padding: 6px 10px;
+  padding: 4px 8px;
   border-radius: 8px;
-  background: ${({ theme }) => theme.bgAlpha};
-  border: 1px solid ${({ theme }) => theme.color2};
+  background: ${({ theme }) => theme.bgAlpha || "rgba(255, 122, 24, 0.05)"};
 `;
 
 const NameContent = styled.div`
@@ -142,9 +139,9 @@ const Name = styled.span`
 `;
 
 const Subtitle = styled.p`
-  font-size: 13px;
-  color: ${({ theme }) => theme.colorSubtitle};
-  margin: 4px 0 0;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colorSubtitle || "#6b7280"};
+  margin: 5px 0 0;
 `;
 
 const Container = styled.div`
@@ -152,28 +149,29 @@ const Container = styled.div`
 `;
 
 const TooltipContainer = styled.div`
-  background: ${({ theme }) => theme.bgcards};
+  background: ${({ theme }) => theme.body || theme.bg};
   padding: 10px 14px;
   border-radius: 10px;
   font-size: 12px;
-  border: 1px solid ${({ theme }) => theme.color2};
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid
+    ${({ theme }) => theme.halloweenBorder || "rgba(255, 122, 24, 0.3)"};
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
 `;
 
 const Date = styled.div`
-  font-size: 12px;
-  color: ${({ theme }) => theme.colorSubtitle};
+  font-size: 13px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Header = styled.div`
   margin-bottom: 16px;
-  text-align: left;
+  text-align: center;
 `;
 
 const Title = styled.h3`
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
+  font-size: 22px;
+  font-weight: 800;
   color: ${({ theme }) => theme.text};
   margin: 0;
 `;

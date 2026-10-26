@@ -11,32 +11,21 @@ import Swal from "sweetalert2";
 import React from "react";
 import { useCerrarSesion } from "../../../../hooks/useCerrarSesion";
 
-const isDarkTheme = (theme) =>
-  theme?.text === "#FFFFFF" ||
-  theme?.bgtotal === "#050505" ||
-  theme?.bgtotal === "#000000" ||
-  theme?.bgtotal === "#121216" ||
-  theme?.bgtotal === "#09090B" ||
-  theme?.bgtotal === "#101010";
-
 export const MenuMovil = ({ setState }) => {
   const [state, setstate] = React.useState(true);
   const cerrarSesion = useCerrarSesion();
   const theme = useTheme();
-  const isDark = isDarkTheme(theme);
-
   function cerrarSesionConfirmacion() {
     Swal.fire({
       title: "¿Estás seguro(a)?",
       text: "Una vez cerrada la sesión, tendrá que volver a iniciar sesión.",
-      iconHtml:
-        '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#EF4444",
-      cancelButtonColor: isDark ? "#27272F" : "#71717A",
+      confirmButtonColor: theme.halloweenPrimary,
+      cancelButtonColor: theme.halloweenDanger,
       confirmButtonText: "Sí, cerrar sesión",
       cancelButtonText: "Cancelar",
-      background: theme.bgcards,
+      background: theme.bg2,
       color: theme.text,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -62,7 +51,7 @@ export const MenuMovil = ({ setState }) => {
             <LogoTitle>SoftCreate POS</LogoTitle>
           </LogoContent>
           <CloseButton onClick={cerrarMenu} aria-label="Cerrar menú">
-            <Icon icon="lucide:x" />
+            <Icon icon="solar:close-circle-bold" />
           </CloseButton>
         </DrawerHeader>
         <LinksWrapper>
@@ -77,6 +66,7 @@ export const MenuMovil = ({ setState }) => {
               >
                 <MobileLinkContent>
                   <MobileIcon className="Linkicon" icon={icon} />
+
                   <span>{label}</span>
                 </MobileLinkContent>
               </StyledNavLink>
@@ -106,7 +96,7 @@ export const MenuMovil = ({ setState }) => {
           <MobileLinkContainer>
             <LogoutButton onClick={cerrarSesionConfirmacion}>
               <MobileLinkContent>
-                <MobileIcon icon="lucide:log-out" />
+                <MobileIcon icon="solar:logout-2-bold" $customcolor="#CE82FF" />
                 <span>Cerrar sesión</span>
               </MobileLinkContent>
             </LogoutButton>
@@ -120,8 +110,8 @@ export const MenuMovil = ({ setState }) => {
   );
 };
 const itemIn = keyframes`
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
+from{opacity:0;transform:translateX(-15px);}
+to{opacity:1;transform:translateX(0);}
 `;
 
 const Overlay = styled.div`
@@ -132,34 +122,51 @@ const Overlay = styled.div`
   visibility: ${({ $isopen }) => ($isopen === "true" ? "visible" : "hidden")};
   transition: visibility 0s linear
     ${({ $isopen }) => ($isopen === "true" ? "0s" : ".4s")};
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    & * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 `;
 
 const Backdrop = styled.div`
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.38);
   backdrop-filter: blur(2px);
   opacity: ${({ $isopen }) => ($isopen === "true" ? 1 : 0)};
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
 `;
 
 const Drawer = styled.aside`
   position: relative;
   z-index: 2;
-  width: min(88%, 340px);
+  width: min(88%, 360px);
   height: 100%;
   overflow-y: auto;
   padding: 20px 16px 30px;
   background: ${({ theme }) => theme.bgtotal};
   color: ${({ theme }) => theme.text};
   border-right: 1px solid ${({ theme }) => theme.color2};
-  box-shadow: 20px 0 60px rgba(0, 0, 0, 0.2);
+  box-shadow: 20px 0 60px rgba(0, 0, 0, 0.15);
   transform: ${({ $isopen }) =>
     $isopen === "true" ? "translateX(0)" : "translateX(-105%)"};
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    background 0.25s ease,
-    border-color 0.25s ease;
+    transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colorScroll};
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const DrawerHeader = styled.div`
@@ -167,7 +174,7 @@ const DrawerHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  margin-bottom: 26px;
+  margin-bottom: 30px;
 `;
 
 const LogoContent = styled.div`
@@ -181,44 +188,50 @@ const LogoWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
   img {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: ${({ theme }) =>
-      isDarkTheme(theme)
-        ? "drop-shadow(0 0 6px rgba(255, 255, 255, 0.16)) brightness(1.08)"
-        : "none"};
+    animation: mobileLogoFloat 2.5s ease-in-out infinite;
   }
 `;
 
 const LogoTitle = styled.h2`
   margin: 0;
   white-space: nowrap;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: ${({ theme }) => theme.text};
+  font-size: 18px;
+  font-weight: 800;
+  color: ${({ theme }) => theme.halloweenPrimary};
 `;
 
 const CloseButton = styled.button`
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  border-radius: 10px;
+  border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.color2};
   background: ${({ theme }) => theme.bgAlpha};
   color: ${({ theme }) => theme.text};
-  font-size: 18px;
+  font-size: 24px;
   cursor: pointer;
-  transition: all 0.2s ease-out;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+  &:hover {
+    color: ${({ theme }) => theme.halloweenPrimary};
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    transform: rotate(90deg);
+  }
+  &:active {
+    transform: scale(0.92);
+  }
 `;
 
 const LinksWrapper = styled.div`
@@ -228,42 +241,67 @@ const LinksWrapper = styled.div`
 `;
 
 const MobileLinkContainer = styled.div`
-  animation: ${itemIn} 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: ${itemIn} 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  &:nth-child(1) {
+    animation-delay: 0.04s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.12s;
+  }
+  &:nth-child(4) {
+    animation-delay: 0.16s;
+  }
+  &:nth-child(5) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(6) {
+    animation-delay: 0.24s;
+  }
+  &:nth-child(7) {
+    animation-delay: 0.28s;
+  }
 `;
 
 const StyledNavLink = styled(NavLink)`
   display: block;
   width: 100%;
-  min-height: 48px;
-  border-radius: 10px;
+  min-height: 56px;
+  border-radius: 14px;
   text-decoration: none;
-  color: ${({ theme }) => theme.colorSubtitle};
+  color: ${({ theme }) => theme.text};
   border: 1px solid transparent;
-  transition: all 0.2s ease-out;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
   &:hover {
     background: ${({ theme }) => theme.bgAlpha};
-    color: ${({ theme }) => theme.text};
+    transform: translateX(3px);
   }
   &.active {
-    background: ${({ theme }) =>
-      isDarkTheme(theme) ? "rgba(255, 255, 255, 0.09)" : "rgba(18, 18, 22, 0.07)"};
-    color: ${({ theme }) => theme.text};
-    border-color: ${({ theme }) =>
-      isDarkTheme(theme) ? "rgba(255, 255, 255, 0.16)" : "rgba(18, 18, 22, 0.14)"};
-    box-shadow: inset 3px 0 0 ${({ theme }) => theme.text};
-    font-weight: 600;
+    background: ${({ theme }) => theme.halloweenSoft};
+    color: ${({ theme }) => theme.halloweenPrimary};
+    border-color: ${({ theme }) => theme.halloweenBorder};
+    box-shadow: inset 3px 0 0 ${({ theme }) => theme.halloweenPrimary};
   }
 `;
 
 const MobileLinkContent = styled.section`
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 17px;
   width: 100%;
-  min-height: 48px;
-  padding: 0 14px;
-  font-weight: 500;
-  font-size: 15px;
+  min-height: 56px;
+  padding: 0 16px;
+  font-weight: 600;
+  .Linkicon {
+    font-size: 28px;
+  }
   span {
     white-space: nowrap;
   }
@@ -271,34 +309,44 @@ const MobileLinkContent = styled.section`
 
 const MobileIcon = styled(Icon)`
   flex-shrink: 0;
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
-  color: currentColor;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  color: ${({ $customcolor, theme }) => $customcolor || "currentColor"};
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+  .Links:hover & {
+    transform: scale(1.08);
+  }
 `;
 
 const LogoutButton = styled.button`
   display: block;
   width: 100%;
-  min-height: 48px;
+  min-height: 56px;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 14px;
   background: transparent;
-  color: ${({ theme }) => theme.colorSubtitle};
+  color: ${({ theme }) => theme.text};
   cursor: pointer;
   text-align: left;
-  transition: all 0.2s ease-out;
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease,
+    border-color 0.25s ease;
   &:hover {
-    background: rgba(239, 68, 68, 0.08);
-    color: #ef4444;
+    background: ${({ theme }) => theme.bgAlpha};
+    transform: translateX(3px);
+    border-color: ${({ theme }) => theme.color2};
   }
 `;
 
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  margin: 16px 0;
+  margin: 18px 0;
   background: ${({ theme }) => theme.color2};
 `;
 

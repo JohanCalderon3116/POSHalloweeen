@@ -15,11 +15,10 @@ import {
   useMostrarVentasMetodoPagoMovCajaQueryStack,
   useMostrarDetalleEfectivoSinVentasMovCajasQueryStack,
 } from "../../../../tanstack/MovimientosCajaStack";
-
-const ACCENT = {
-  primary: "#10B981",
-  border: "rgba(16, 185, 129, 0.35)",
-  divider: "rgba(128, 128, 128, 0.22)",
+const HALLOWEEN = {
+  primary: "#b86627",
+  border: "rgba(184,102,39,0.11)",
+  divider: "rgba(184,102,39,0.08)",
 };
 
 export const PantallaCierreCaja = () => {
@@ -42,7 +41,7 @@ export const PantallaCierreCaja = () => {
   const { dataempresa } = useEmpresaStore();
   const fechaInicioFormateada = format(
     new Date(dataCierreCaja?.fechainicio),
-    "yyyy-MM-dd HH:mm:ss",
+    "dd/MM/yyyy:HH:mm:ss",
   );
   const { isLoading: isLoading1 } =
     useMostrarEfectivoSinVentasMovCajasQueryStack();
@@ -224,9 +223,9 @@ export const PantallaCierreCaja = () => {
       <Btn1
         funcion={() => setStateConteoCaja(true)}
         titulo="Cerrar caja"
-        color="255,255,255"
-        border="1px"
-        bgcolor="#18181B"
+        color="#ffffff"
+        border="2px"
+        bgcolor={HALLOWEEN.primary}
       />
       {stateConteoCaja && <PantallaConteoCaja />}
     </Container>
@@ -236,7 +235,8 @@ export const PantallaCierreCaja = () => {
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  background: ${({ theme }) => theme.color2};
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"};
   margin-right: 10px;
 `;
 
@@ -246,7 +246,9 @@ const DivisionY = styled.span`
   margin: 20px 0;
   position: relative;
   display: none;
-  border-left: 1px dashed ${({ theme }) => theme.color2};
+  border-left: 1px dashed
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.09)" : "rgba(255,255,255,0.07)"};
 
   @media ${Device.tablet} {
     display: block;
@@ -254,63 +256,67 @@ const DivisionY = styled.span`
 `;
 
 const Division = styled.span`
-  width: min(960px, 94%);
+  width: 95%;
   height: 1px;
-  margin: 8px 0;
+  margin: 20px 0;
   border-radius: 15px;
-  background: ${({ theme }) => theme.color2};
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"};
   position: relative;
-  flex-shrink: 0;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 35%;
+    right: 35%;
+    top: 0;
+    height: 1px;
+    background: ${HALLOWEEN.divider};
+  }
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 18px;
-  position: fixed;
-  inset: 0;
+  justify-content: center;
+  gap: 20px;
+  position: absolute;
   width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-height: 100vh;
   box-sizing: border-box;
-  padding: 36px 24px 48px;
-  background-color: ${({ theme }) => theme.bgtotal};
+  padding: 20px;
+  background-color: ${({ theme }) => theme.bgtotal || "#fff"};
   color: ${({ theme }) => theme.text};
-  z-index: 50;
+  z-index: 10;
   & > button {
-    flex-shrink: 0;
-    transition: all 0.2s ease-out;
+    transition:
+      transform 0.18s ease,
+      filter 0.18s ease,
+      box-shadow 0.18s ease;
     &:hover {
       transform: translateY(-2px);
+      filter: brightness(1.03);
+      box-shadow: 0 6px 16px rgba(184, 102, 39, 0.07);
     }
     &:active {
       transform: scale(0.98);
     }
   }
   @media (max-width: 768px) {
-    padding: 24px 14px 40px;
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding-top: 30px;
+    padding-bottom: 30px;
   }
 `;
 
 const Fechas = styled.p`
   margin: 0;
-  font-size: 13.5px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-size: 14px;
   text-align: center;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid ${({ theme }) => theme.color2};
-  color: ${({ theme }) => theme.colorSubtitle};
-  flex-shrink: 0;
+  opacity: 0.7;
   @media (max-width: 768px) {
-    border-radius: 12px;
-    padding: 8px 12px;
-    font-size: 12.5px;
+    padding: 0 10px;
   }
 `;
 
@@ -318,31 +324,32 @@ const Datos = styled.div`
   display: flex;
   justify-content: center;
   align-items: stretch;
-  gap: 16px;
-  width: min(960px, 94%);
-  flex-shrink: 0;
+  gap: 12px;
+  width: min(900px, 92%);
   section {
     flex: 1;
-    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-    padding: 16px 20px;
-    border-radius: 14px;
+    padding: 13px 16px;
+    border-radius: 10px;
     font-size: 14px;
-    background: ${({ theme }) => theme.bgcards};
-    border: 1px solid ${({ theme }) => theme.color2};
+    background: ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.018)" : "rgba(255,255,255,0.015)"};
+    border: 1px solid
+      ${({ theme }) =>
+        theme.body === "#fff" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.05)"};
     span {
       font-weight: 700;
-      font-size: 15px;
       white-space: nowrap;
-      color: ${({ theme }) => theme.text};
+      color: ${HALLOWEEN.primary};
+      opacity: 0.9;
     }
   }
   @media (max-width: 768px) {
     flex-direction: column;
-    width: 94%;
+    width: 92%;
   }
 `;
 
@@ -351,7 +358,6 @@ const Resumen = styled.div`
   justify-content: center;
   width: 100%;
   gap: 20px;
-  flex-shrink: 0;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -362,13 +368,12 @@ const Tablas = styled.div`
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: 24px;
-  width: min(960px, 94%);
-  @media (max-width: 820px) {
+  gap: 30px;
+  width: min(900px, 92%);
+  @media (max-width: 768px) {
     flex-direction: column;
-    align-items: center;
-    width: 94%;
-    gap: 16px;
+    width: 92%;
+    gap: 12px;
   }
 `;
 
@@ -376,18 +381,19 @@ const Tabla = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex: 1;
-  min-width: 0;
   width: 100%;
-  max-width: 468px;
-  padding: 20px 22px;
+  max-width: 410px;
+  padding: 15px;
   box-sizing: border-box;
-  border-radius: 14px;
-  background: ${({ theme }) => theme.bgcards};
-  border: 1px solid ${({ theme }) => theme.color2};
+  border-radius: 10px;
+  background: ${({ theme }) =>
+    theme.body === "#fff" ? "rgba(0,0,0,0.012)" : "rgba(255,255,255,0.01)"};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.body === "#fff" ? "rgba(0,0,0,0.055)" : "rgba(255,255,255,0.045)"};
   h4 {
-    margin: 0 0 14px;
-    font-size: 17px;
+    margin: 0 0 12px;
+    font-size: 18px;
     font-weight: 700;
     color: ${({ theme }) => theme.text};
   }
@@ -401,18 +407,18 @@ const Tabla = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 8px;
+    gap: 15px;
+    margin-bottom: 6px;
     font-size: 14px;
-    color: ${({ theme }) => theme.colorSubtitle};
+    color: ${({ theme }) => theme.text};
+    opacity: 0.8;
     span {
       white-space: nowrap;
       font-weight: 600;
-      color: ${({ theme }) => theme.text};
     }
   }
   li .gasto {
-    color: #ef4444;
+    color: #c95858;
     font-weight: 700;
   }
   .total {
@@ -420,52 +426,40 @@ const Tabla = styled.div`
     align-items: flex-end;
     justify-content: flex-end;
     width: 100%;
-    margin-top: 12px;
+    margin-top: 9px;
     font-weight: 700;
-    font-size: 15px;
-    color: ${({ theme }) => theme.text};
+    color: ${HALLOWEEN.primary};
+    opacity: 1;
   }
 `;
 
 const DetalleList = styled.ul`
   width: 100%;
-  box-sizing: border-box;
-  padding: 4px 0 6px 12px !important;
-  margin: 0 0 8px !important;
+  padding: 0 0 6px 10px !important;
+  margin: -2px 0 6px !important;
   list-style: none;
-  border-left: 2px solid ${ACCENT.border};
+  border-left: 2px solid ${HALLOWEEN.border};
   li {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 12.5px;
-    margin-bottom: 6px;
-    width: 100%;
-    box-sizing: border-box;
+    align-items: center;
+    font-size: 12px;
+    opacity: 0.75;
+    margin-bottom: 4px;
   }
   .concepto {
-    flex: 1;
-    min-width: 0;
+    opacity: 0.85;
     font-weight: 400;
-    line-height: 1.4;
-    white-space: normal !important;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    text-align: left;
-    color: ${({ theme }) => theme.colorSubtitle} !important;
   }
   .monto {
-    flex-shrink: 0;
     font-weight: 600;
     white-space: nowrap;
-    text-align: right;
   }
   .monto.ingreso {
-    color: #10b981 !important;
+    color: #4caf83;
   }
   .monto.gasto {
-    color: #ef4444 !important;
+    color: #c95858;
   }
 `;
 
